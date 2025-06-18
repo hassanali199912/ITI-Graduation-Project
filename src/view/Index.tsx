@@ -1,13 +1,14 @@
 import type React from "react";
 import AsyncBoundry from "../providers/AsyncBoundry";
 import { ToastContainer } from "react-toastify";
+import UIIndex from "../shared/components/ui";
 
 
 const Index: React.FC = () => {
 
     return <>
         <AsyncBoundry>
-            <h1>This Is Index </h1>
+            <UIIndex />
         </AsyncBoundry>
         <ToastContainer />
     </>
