@@ -1,7 +1,8 @@
-import { useEffect } from "react"
-import { toast } from "react-toastify"
-import Index from "./view/Index"
-import { BrowserRouter } from "react-router-dom"
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+//import Index from "./view/Index";
+import { BrowserRouter } from "react-router-dom";
+import RegisterLearner from "./features/Auth/RegisterLearner/RegisterLearner";
 function App() {
 
   // useEffect(() => {
@@ -12,7 +13,8 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Index />
+        
+        <RegisterLearner/>
       </BrowserRouter>
     </>
   )
