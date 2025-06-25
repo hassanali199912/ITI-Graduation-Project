@@ -295,6 +295,9 @@ module.exports = {
           990: "#6C737F",
           1000:"#858585"
         },
+        yellow:{
+          500:'#DBA507'
+        },
         primary: {
           25: "#F7FDF9",
           50: "#F3FCF6",
