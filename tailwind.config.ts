@@ -23,6 +23,7 @@ module.exports = {
     extend: {
       fontFamily: {
 				primary: ["IBM Plex Sans Arabic", "sans-serif"],
+        zain: ['"Zain"', 'sans-serif'],
 			},
       screens: {
         xs: "480px",

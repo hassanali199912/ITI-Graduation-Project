@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { BrowserRouter } from "react-router-dom";
 import RegisterLearner from "./features/Auth/RegisterLearner/RegisterLearner";
 import RegisterMentor from "./features/Auth/RegisterMentor/RegisterMentor";
+import './assets/styles/fonts.css'
 function App() {
 
   return (
