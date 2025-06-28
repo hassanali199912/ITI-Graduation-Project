@@ -8,10 +8,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   borderRadius: 5,
   transform: 'scaleX(-1)',
   [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor: '#FFFFFF',
-    // ...theme.applyStyles('dark', {
-    //   backgroundColor: theme.palette.grey[800],
-    // }),
+    backgroundColor: '#F2F4F8',
   },
   [`& .${linearProgressClasses.bar}`]: {
     borderRadius: 5,
