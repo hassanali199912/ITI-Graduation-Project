@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import logger from "./logger";
-
+import { createApi, type BaseQueryFn } from "@reduxjs/toolkit/query/react"
 
 
 
@@ -27,7 +27,7 @@ axiosInterseptor.interceptors.request.use((config) => {
 });
 
 
-axiosInterseptor.interceptors.request.use((response) => response,
+axiosInterseptor.interceptors.response.use((response) => response,
     (error) => {
 
         const lang: string = localStorage.getItem("lang") || "en";
@@ -62,6 +62,49 @@ const trnaslateError = (msg: string, lang: string): string => {
             return lang === "en" ? 'Something went wrong' : 'حدث خطأ ما';
     }
 }
+
+
+const axiosBaseQuery =
+    (): BaseQueryFn<
+        {
+            url: string;
+            method?: AxiosRequestConfig['method'];
+            data?: AxiosRequestConfig['data'];
+            params?: AxiosRequestConfig['params'];
+        },
+        unknown,
+        unknown
+    > =>
+        async ({ url, method = 'GET', data, params }) => {
+            try {
+                const result = await axiosInterseptor({
+                    url,
+                    method,
+                    data,
+                    params,
+                });
+
+                return { data: result.data };
+            } catch (axiosError) {
+                const err = axiosError as AxiosError;
+
+                return {
+                    error: {
+                        status: err.response?.status,
+                        data: err.response?.data || err.message,
+                    },
+                };
+            }
+        };
+
+
+export const api = createApi({
+    baseQuery: axiosBaseQuery(),
+    endpoints: () => ({})
+})
+
+
+
 
 
 
