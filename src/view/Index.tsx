@@ -11,6 +11,8 @@ import Loader from "../shared/components/loader";
 
 import LoginPage from "./auth/loginPage"
 import CreateAccount from "../features/Auth/createAccount";
+import RegesterAsmentor from "../features/Auth/RegisterMentor/RegisterMentor";
+import RegesterAsTrainee from "../features/Auth/RegisterLearner/RegisterLearner";
 import HomePage from "./home/HomePage";
 
 const LazyLoader = ({ children }: { children: React.ReactNode }) => (
@@ -62,6 +64,22 @@ const routesConfig: RouteObject[] = [
                 element: (
                     <LazyLoader>
                         <CreateAccount />
+                    </LazyLoader>
+                ),
+            },
+            {
+                path: "mentor",
+                element: (
+                    <LazyLoader>
+                        <RegesterAsmentor />
+                    </LazyLoader>
+                ),
+            },
+            {
+                path: "tranner",
+                element: (
+                    <LazyLoader>
+                        <RegesterAsTrainee />
                     </LazyLoader>
                 ),
             },

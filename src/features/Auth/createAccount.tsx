@@ -11,7 +11,7 @@ const CreateAccount = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center min-h-screen bg-white flex gap-30 border border-gray-200 shadow-md w-full">
+            <div className="flex items-center justify-center min-h-screen bg-white  gap-30 border border-gray-200 shadow-md w-full">
                 <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-4xl">
                     <h1 className="text-2xl font-bold mb-6 text-center text-gray-700">   Guidor!   اهلا بك فى
                         <br></br>كيف تحب ان تبدا رحلتك معنا</h1>
