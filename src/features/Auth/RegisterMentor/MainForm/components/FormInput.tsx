@@ -5,10 +5,11 @@ type FormInputProps = {
   label: string;
   placeholder: string;
   value?: string;
+  hint?:string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function FormInput({ id, label, placeholder, value, onChange }: FormInputProps) {
+export default function FormInput({ id, label, placeholder, value,hint, onChange }: FormInputProps) {
   return (
     <div className="form-control mb-8">
       <label htmlFor={id} className="block text-right mb-2 font-bold">
@@ -22,6 +23,7 @@ export default function FormInput({ id, label, placeholder, value, onChange }: F
         className="bg-blue-50 p-2 w-full rounded"
         placeholder={placeholder}
       />
+      <small className="mb-8 text-gray-400 font-bold">{hint}</small>
     </div>
   );
 }
