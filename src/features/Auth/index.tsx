@@ -38,7 +38,7 @@ const Login = () => {
   return (
     <>
 
-      <div className="flex items-center justify-between min-h-screen bg-white flex gap-30 border border-gray-200 shadow-md w-full ">
+      <div className="flex items-center justify-between min-h-screen bg-white  gap-30 border border-gray-200 shadow-md w-full ">
         <div className='bg-blue-50 w-[30%] min-h-screen border border-gray-300 shadow-lg flex flex-col items-center justify-center ' style={{
           borderTopRightRadius: "7rem",
           borderBottomRightRadius: "7rem"
