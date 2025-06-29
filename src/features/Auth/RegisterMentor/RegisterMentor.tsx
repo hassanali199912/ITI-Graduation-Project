@@ -1,6 +1,6 @@
 import React, { act, useState } from "react";
-import CustomizedProgressBars from "./ProgressBar";
-import CircularSteps from "./CircularSteps";
+import CustomizedProgressBars from "../ProgressBar";
+import CircularSteps from "../CircularSteps";
 import MainForm from "./MainForm/MainForm";
 import SimpleSlider from "./SliderImages";
 
