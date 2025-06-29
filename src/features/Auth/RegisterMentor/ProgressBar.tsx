@@ -25,7 +25,7 @@ interface Props {
 
 
 export default function CustomizedProgressBars({activeStep}: Props) {
-  let totalSteps:number = 4;
+  let totalSteps:number = 5;
   const progressValue = ( activeStep / totalSteps) * 100;
   return (
     <>
