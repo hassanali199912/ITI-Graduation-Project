@@ -362,7 +362,6 @@
 // };
 
 // export default MainForm;
-import React from "react";
 
 export default function StepOne() {
   return (
@@ -450,7 +449,7 @@ export default function StepOne() {
               النوع
             </label>
             <select
-              className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 py-1 text-sm text-gray-600 bg-white custom-select"
+              className="appearance-none border w-full mt-2 border-gray-300 rounded px-4  py-1 text-sm text-gray-600 bg-white custom-select"
               defaultValue=""
             >
               <option value="" disabled>
@@ -468,7 +467,7 @@ export default function StepOne() {
               من اي بلد ؟
             </label>
             <select
-              className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 py-1 text-sm text-gray-600 bg-white custom-select"
+              className="appearance-none border w-full mt-2 border-gray-300 rounded px-4  py-1 text-sm text-gray-600 bg-white custom-select"
               defaultValue=""
             >
               <option value="" disabled>
@@ -483,7 +482,7 @@ export default function StepOne() {
               اللغة التى تتحدث بها
             </label>
             <select
-              className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 py-1 text-sm text-gray-600 bg-white custom-select"
+              className="appearance-none border w-full mt-2 border-gray-300 rounded px-4  py-1 text-sm text-gray-600 bg-white custom-select"
               defaultValue=""
             >
               <option value="" disabled>
