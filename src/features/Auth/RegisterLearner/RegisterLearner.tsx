@@ -3,8 +3,9 @@ import Step1PersonalInfo from "./Step1PersonalInfo";
 import Step2EducationInfo from "./Step2EducationInfo";
 import Step3Skills from "./Step3Skills";
 import Step4Intro from "./Step4Intro";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "../ProgressBar";
 import StepSidebar from "./StepSidebar";
+import CircularSteps from '../CircularSteps';
 
 const RegisterLearner = () => {
   const [step, setStep] = useState(1);
@@ -31,16 +32,14 @@ const RegisterLearner = () => {
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <ProgressBar step={step} />
-      </div>
-
-      <div className="max-w-6xl mx-auto flex bg-white shadow-md rounded-lg overflow-hidden">
-        
-        <StepSidebar data={formData} />
-
-        <div className="flex-1 p-8">
+    <div className=" min-h-screen" dir='rtl'>
+      
+      <ProgressBar activeStep={step} />
+      
+      
+      <div className=" mx-auto flex bg-white overflow-hidden ">
+        <CircularSteps  activeStep={step}/>
+        <div className="flex-1 p-8" >
           {step === 1 && (
             <Step1PersonalInfo
               data={formData}
@@ -72,6 +71,7 @@ const RegisterLearner = () => {
             />
           )}
         </div>
+        <StepSidebar data={formData} />
       </div>
     </div>
   );

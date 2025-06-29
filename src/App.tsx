@@ -10,8 +10,8 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <RegisterMentor/>
-        {/* <RegisterLearner/> */}
+         
+        <RegisterLearner/>
       </BrowserRouter>
     </>
   )
