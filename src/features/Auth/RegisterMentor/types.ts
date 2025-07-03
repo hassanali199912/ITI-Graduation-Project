@@ -22,23 +22,48 @@ export const stepOneSchema = z
   });
 
 export const stepTwoSchema = z.object({
-  education: z.array(
-    z.object({
-      qualification: z.string().min(1, { message: 'المؤهل الدراسي مطلوب' }),
-      org: z.string().min(1, { message: 'المؤسسة التعليمية مطلوبة' }),
-      spec: z.string().min(1, { message: 'التخصص الدراسي مطلوب' }),
-      startMonth: z.string().min(1, { message: 'شهر البداية مطلوب' }),
-      startYear: z.string().min(1, { message: 'سنة البداية مطلوبة' }),
-      endMonth: z.string().min(1, { message: 'شهر النهاية مطلوب' }),
-      endYear: z.string().min(1, { message: 'سنة النهاية مطلوبة' }),
-    })
-  ).min(1, { message: 'يجب إضافة مؤهل دراسي واحد على الأقل' }),
+  education: z
+    .array(
+      z.object({
+        qualification: z.string().min(1, { message: 'المؤهل الدراسي مطلوب' }),
+        org: z.string().min(1, { message: 'المؤسسة التعليمية مطلوبة' }),
+        spec: z.string().min(1, { message: 'التخصص الدراسي مطلوب' }),
+        startMonth: z.string().min(1, { message: 'شهر البداية مطلوب' }),
+        startYear: z.string().min(1, { message: 'سنة البداية مطلوبة' }),
+        endMonth: z.string().min(1, { message: 'شهر النهاية مطلوب' }),
+        endYear: z.string().min(1, { message: 'سنة النهاية مطلوبة' }),
+      })
+    )
+    .min(1, { message: 'يجب إضافة مؤهل دراسي واحد على الأقل' }),
+});
+
+export const stepThreeSchema = z.object({
+  certificates: z
+    .array(
+      z.object({
+        skill: z.string().min(1, { message: 'المهارة مطلوبة' }),
+        certificate: z.string().min(1, { message: 'اسم الشهادة مطلوب' }),
+        file: z
+          .any()
+          .optional()
+          .refine(
+            (file) =>
+              !file || (file instanceof File && file.size <= 5 * 1024 * 1024 && ['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)),
+            { message: 'يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 5 ميجابايت' }
+          ),
+        organisation: z.string().min(1, { message: 'الجهة المانحة مطلوبة' }),
+        certificateDate: z.string().min(1, { message: 'تاريخ الشهادة مطلوب' }),
+      })
+    )
+    .min(1, { message: 'يجب إضافة شهادة واحدة على الأقل' }),
 });
 
 export type StepOneData = z.infer<typeof stepOneSchema>;
 export type StepTwoData = z.infer<typeof stepTwoSchema>;
+export type StepThreeData = z.infer<typeof stepThreeSchema>;
 
 export interface FormData {
   stepOne: StepOneData;
   stepTwo: StepTwoData;
+  stepThree: StepThreeData;
 }

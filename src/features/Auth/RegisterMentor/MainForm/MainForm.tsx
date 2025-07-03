@@ -1,7 +1,9 @@
 import React from 'react';
 import StepOne from './StepOne';
-import { type FormData } from '../types';
 import StepTwo from './StepTwo';
+import StepThree from './StepThree';
+import StepFour from './StepFour';
+import { type FormData } from '../types';
 
 type Props = {
   activeStep: number;
@@ -11,6 +13,7 @@ type Props = {
 };
 
 export default function MainForm({ activeStep, formData, updateFormData, triggerSubmit }: Props) {
+  console.log('Rendering MainForm with activeStep:', activeStep);
   return (
     <>
       {activeStep === 1 && (
@@ -27,6 +30,14 @@ export default function MainForm({ activeStep, formData, updateFormData, trigger
           triggerSubmit={(submitFn) => triggerSubmit(2, submitFn)}
         />
       )}
+      {activeStep === 3 && (
+        <StepThree
+          data={formData.stepThree}
+          updateData={(data) => updateFormData('stepThree', data)}
+          triggerSubmit={(submitFn) => triggerSubmit(3, submitFn)}
+        />
+      )}
+      
     </>
   );
 }
