@@ -1,6 +1,7 @@
 import React from 'react';
 import StepOne from './StepOne';
 import { type FormData } from '../types';
+import StepTwo from './StepTwo';
 
 type Props = {
   activeStep: number;
@@ -19,7 +20,13 @@ export default function MainForm({ activeStep, formData, updateFormData, trigger
           triggerSubmit={(submitFn) => triggerSubmit(1, submitFn)}
         />
       )}
-      
+      {activeStep === 2 && (
+        <StepTwo
+          data={formData.stepTwo}
+          updateData={(data) => updateFormData('stepTwo', data)}
+          triggerSubmit={(submitFn) => triggerSubmit(2, submitFn)}
+        />
+      )}
     </>
   );
 }

@@ -78,7 +78,7 @@ export default function StepTwo({ data, updateData, triggerSubmit }: Props) {
   return (
     <div className="step-two mx-4">
       <div className="mt-8">
-        <p className="text-3xl font-bold">التعليم</p>
+        <p className="text-3xl font-bold">بيانات التعليم</p>
       </div>
       <form className="my-16">
         {fields.map((field, index) => (

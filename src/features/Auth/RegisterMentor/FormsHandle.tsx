@@ -20,9 +20,12 @@ export default function FormsHandle({ backFun, nextFun, isLastStep }: Props) {
       <button
         type="button"
         onClick={nextFun}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
+        className="flex gap-2 items-center px-4 py-2 bg-blue-500 text-white rounded"
+        >
         {isLastStep ? 'إرسال' : 'استمرار'}
+          <span>
+            <img src="/public/arrow-left.png" alt="" />
+          </span>
       </button>
     </div>
   );

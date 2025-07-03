@@ -53,7 +53,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
       </div>
 
       <form className="mb-10 mt-4">
-        {/* <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <div className="my-8">
             <img
               src={avatarFile instanceof File ? URL.createObjectURL(avatarFile) : '/avatar.png'}
@@ -77,7 +77,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
             />
             {errors.avatar?.message && <span className="error">{String(errors.avatar.message)}</span>}
           </div>
-        </div> */}
+        </div>
 
         <div className="form-control mb-8">
           <label htmlFor="name" className="block text-right mb-2 font-bold">
