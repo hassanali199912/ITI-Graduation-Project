@@ -45,7 +45,9 @@ const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
       //navigate('/sendotp')
     })
 
-    navigate('/sendotp')
+    
+    navigate('/sendotp', { state: { email: formData.email } });
+
 if (validate()) {
       console.log('Form is valid ', formData);
       

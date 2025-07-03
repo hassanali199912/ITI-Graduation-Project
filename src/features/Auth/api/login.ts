@@ -25,6 +25,16 @@ export const authApi = api.injectEndpoints({
                 },
             }),
         }),
+         verifyEmial: builder.query<any, any>({
+            query: ({ email,otp }) => ({
+                url: `api/auth/verify-email`,
+                method: "POST",
+                data: {
+                    email:email,
+                    otp:otp
+                },
+            }),
+        }),
 
 
 
@@ -54,5 +64,7 @@ export const {
     useLazyRejesterQuery,
     useRejesterQuery,
     useForgetPasswordQuery, 
-    useLazyForgetPasswordQuery
+    useLazyForgetPasswordQuery,
+    useVerifyEmialQuery,
+    useLazyVerifyEmialQuery
 } = authApi;
