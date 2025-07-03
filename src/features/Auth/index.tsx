@@ -80,7 +80,7 @@ const Login = () => {
                   onClick={togglePassword}
                   className="absolute left-3 top-3 cursor-pointer text-gray-600 "
                 >
-                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                  <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
                 </span>
               </div>
 
@@ -90,7 +90,7 @@ const Login = () => {
                   <p className="text-gray-400 text-left">تذكرنى</p>
                   <input type='checkbox' className='mb-4'></input>
                 </div>
-                <p className=" mb-6 text-gray-400 text-right">نسيت كلمة السر؟</p>
+               <a href='/changepassword'><p className=" mb-6  text-right text-blue-400">نسيت كلمة السر؟</p></a> 
 
               </div>
 
@@ -98,6 +98,7 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+               
               >
                 سجل الدخول
               </button>
@@ -116,7 +117,7 @@ const Login = () => {
               </button>
               <hr />
               <p className='text-gray-500 text-center'>ليس لديك حساب ؟
-                <a href='#' > انشاء حساب كمتعلم او متدرب</a>
+                <a href='/createAccount' className='text-blue-400'> انشاء حساب كمتعلم او متدرب</a>
                 </p>
             </form>
           </div>

@@ -1,13 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 
 import { FcCheckmark } from 'react-icons/fc';
 import img2 from '../../assets/images/learner.png'
 import img3 from '../../assets/images/trainer.png'
 import { useState } from 'react';
+
+
 const CreateAccount = () => {
 
     const [accountType, setAccountType] = useState<string | null>(null);
 
-
+const navigate = useNavigate();
 
     return (
         <>
@@ -23,6 +26,7 @@ const CreateAccount = () => {
                             className='size-10 mt-10 ml-5'
                             checked={accountType === 'learner'}
                             onChange={() => setAccountType('learner')}
+                            
                         />
                         <img src={img3} className='w-40 h-40 bg-gray-300 rounded-2xl' />
                         <div className='px-5'>
@@ -74,14 +78,20 @@ const CreateAccount = () => {
                     </div>
                     <div className='flex gap-70 mt-10 justify-between'>
                         <button
-                            disabled={!accountType}
-                            className={`py-2 px-6 rounded-lg transition duration-200 
-                                ${accountType ? 'bg-blue-800 text-white hover:bg-blue-700' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
-
-                        >
-                            استمرار
-                        </button>
-                        <p>لديك حساب ؟ <a className='text-blue-500' href='#'>سجل دخول</a></p>
+  disabled={!accountType}
+  onClick={() => {
+    if (accountType === 'learner') {
+      navigate('/registerlearner');
+    } else if (accountType === 'mentor') {
+      navigate('/registermentor');
+    }
+  }}
+  className={`py-2 px-6 rounded-lg transition duration-200 
+    ${accountType ? 'bg-blue-800 text-white hover:bg-blue-700' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
+>
+  استمرار
+</button>
+                        <p>لديك حساب ؟ <a className='text-blue-500' href='/home'>سجل دخول</a></p>
                     </div>
 
                 </div>
