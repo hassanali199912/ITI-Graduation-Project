@@ -20,6 +20,17 @@ const ChangePassword = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
 
+ const validate = () => {
+    const newErrors: typeof errors = {};
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -34,6 +45,13 @@ const ChangePassword = () => {
       //navigate('/sendotp')
     })
 
+    navigate('/sendotp')
+if (validate()) {
+      console.log('Form is valid ', formData);
+      
+    } else {
+      console.log('Form has errors ', errors);
+    }
   };
 
 

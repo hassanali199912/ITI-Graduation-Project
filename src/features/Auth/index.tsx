@@ -20,10 +20,37 @@ const Login = () => {
 
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const handleChange = (e: { target: { name: any; value: any; }; }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+const validate = () => {
+    const newErrors: typeof errors = {};
 
+   
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+  
+   if (!formData.password) {
+  newErrors.password = 'Password is required';
+} else if (formData.password.length < 8) {
+  newErrors.password = 'Password must be at least 8 characters';
+} else if (!/[A-Za-z]/.test(formData.password)) {
+  newErrors.password = 'Password must include at least one letter';
+} else if (!/[0-9]/.test(formData.password)) {
+  newErrors.password = 'Password must include at least one number';
+} else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password)) {
+  newErrors.password = 'Password must include at least one symbol';
+}
+
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     console.log('Login Data:', formData);
@@ -34,6 +61,12 @@ const Login = () => {
       console.log("this is res ", res);
     })
 
+if (validate()) {
+      console.log('Form is valid ', formData);
+      
+    } else {
+      console.log('Form has errors ', errors);
+    }
   };
   const togglePassword = () => {
     setShowPassword(!showPassword);
