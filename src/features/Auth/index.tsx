@@ -9,9 +9,7 @@ const Login = () => {
 
   const [triger, { data }] = useLazyLoginQuery()
 
-  useEffect(() => {
-    triger({});
-  }, []);
+
 
   useEffect(() => {
     if (data) {
@@ -29,6 +27,12 @@ const Login = () => {
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     console.log('Login Data:', formData);
+    triger({
+      email: formData.email,
+      password: formData.password,
+    }).then((res) => {
+      console.log("this is res ", res);
+    })
 
   };
   const togglePassword = () => {
@@ -90,7 +94,7 @@ const Login = () => {
                   <p className="text-gray-400 text-left">تذكرنى</p>
                   <input type='checkbox' className='mb-4'></input>
                 </div>
-               <a href='/changepassword'><p className=" mb-6  text-right text-blue-400">نسيت كلمة السر؟</p></a> 
+                <a href='/changepassword'><p className=" mb-6  text-right text-blue-400">نسيت كلمة السر؟</p></a>
 
               </div>
 
@@ -98,7 +102,7 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-               
+
               >
                 سجل الدخول
               </button>
@@ -118,7 +122,7 @@ const Login = () => {
               <hr />
               <p className='text-gray-500 text-center'>ليس لديك حساب ؟
                 <a href='/createAccount' className='text-blue-400'> انشاء حساب كمتعلم او متدرب</a>
-                </p>
+              </p>
             </form>
           </div>
         </div>

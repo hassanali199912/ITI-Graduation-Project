@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import Login from "./features/Auth";
 import ChangePassword from "./features/Auth/changepassword"
 import CreateAccount from "./features/Auth/createAccount";
@@ -10,24 +11,20 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 function App() {
   return (
     <>
-      {/* <Index /> */}
-  {/* <ChangePassword></ChangePassword> */}
-  {/* <OtpPage></OtpPage> */}
-  {/* <ResetPassword></ResetPassword> */}
-  
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login></Login>} />
-        <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path="/sendotp" element={<OtpPage></OtpPage>} />
-        <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login></Login>} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/sendotp" element={<OtpPage></OtpPage>} />
+          <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
           <Route path="/home" element={<Login></Login>} />
-           <Route path="/createAccount" element={<CreateAccount></CreateAccount>} />
-           <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
-            <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
+          <Route path="/createAccount" element={<CreateAccount></CreateAccount>} />
+          <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
+          <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
 
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+      <ToastContainer />
     </>
   );
 }
