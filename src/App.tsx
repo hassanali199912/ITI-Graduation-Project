@@ -11,7 +11,7 @@ function App() {
     <>
       <BrowserRouter>
         <RegisterMentor/>
-        <RegisterLearner/>
+        {/* <RegisterLearner/> */}
       </BrowserRouter>
     </>
   )

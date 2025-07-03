@@ -11,3 +11,10 @@ select.custom-select {
     background-position: left 10px center;
     padding-left: 30px;
   }
+.error {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  display: block;
+  text-align: right;
+}

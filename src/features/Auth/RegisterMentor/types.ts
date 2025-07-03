@@ -1,0 +1,44 @@
+import { z } from 'zod';
+
+export const stepOneSchema = z
+  .object({
+    avatar: z
+      .any()
+      .optional()
+      .refine((file) => !file || (file instanceof File && file.size <= 2 * 1024 * 1024), {
+        message: 'حجم الصورة يجب ألا يتجاوز 2 ميجابايت',
+      }),
+    name: z.string().min(1, { message: 'الإسم بالكامل مطلوب' }),
+    email: z.string().min(1, { message: 'البريد الإلكتروني مطلوب' }).email({ message: 'صيغة البريد الإلكتروني غير صحيحة' }),
+    password1: z.string().min(6, { message: 'كلمة المرور يجب أن تكون 6 أحرف على الأقل' }),
+    password2: z.string().min(1, { message: 'تأكيد كلمة المرور مطلوب' }),
+    type: z.enum(['ذكر', 'أنثى'], { message: 'النوع مطلوب' }),
+    country: z.string().min(1, { message: 'البلد مطلوب' }),
+    lang: z.string().min(1, { message: 'اللغة مطلوبة' }),
+  })
+  .refine((data) => data.password1 === data.password2, {
+    message: 'كلمتا المرور غير متطابقتين',
+    path: ['password2'],
+  });
+
+export const stepTwoSchema = z.object({
+  education: z.array(
+    z.object({
+      qualification: z.string().min(1, { message: 'المؤهل الدراسي مطلوب' }),
+      org: z.string().min(1, { message: 'المؤسسة التعليمية مطلوبة' }),
+      spec: z.string().min(1, { message: 'التخصص الدراسي مطلوب' }),
+      startMonth: z.string().min(1, { message: 'شهر البداية مطلوب' }),
+      startYear: z.string().min(1, { message: 'سنة البداية مطلوبة' }),
+      endMonth: z.string().min(1, { message: 'شهر النهاية مطلوب' }),
+      endYear: z.string().min(1, { message: 'سنة النهاية مطلوبة' }),
+    })
+  ).min(1, { message: 'يجب إضافة مؤهل دراسي واحد على الأقل' }),
+});
+
+export type StepOneData = z.infer<typeof stepOneSchema>;
+export type StepTwoData = z.infer<typeof stepTwoSchema>;
+
+export interface FormData {
+  stepOne: StepOneData;
+  stepTwo: StepTwoData;
+}

@@ -1,40 +1,114 @@
-import React, { act, useState } from "react";
+import React, { useState, useRef } from "react";
 import CustomizedProgressBars from "../ProgressBar";
 import CircularSteps from "../CircularSteps";
 import MainForm from "./MainForm/MainForm";
 import SimpleSlider from "./SliderImages";
 import FormsHandle from "./FormsHandle";
+import type { FormData, StepOneData, StepTwoData } from "./types";
 
 export default function RegisterMentor() {
-  let [active, setActive] = useState(1);
-  let continueFunction = () => {
-    if(active!=5){
-      active++;
-      setActive(active);
+  const [activeStep, setActiveStep] = useState(1);
+  const [formData, setFormData] = useState<FormData>({
+    stepOne: {
+      avatar: undefined,
+      name: "",
+      email: "",
+      password1: "",
+      password2: "",
+      type: "" as any,
+      country: "",
+      lang: "",
+    },
+    stepTwo: {
+      education: [
+        {
+          qualification: "",
+          org: "",
+          spec: "",
+          startMonth: "",
+          startYear: "",
+          endMonth: "",
+          endYear: "",
+        },
+      ],
+    },
+  });
+
+  const formRefs = useRef<{ [key: number]: () => Promise<boolean> }>({});
+
+  const handleNext = async () => {
+    console.log("handleNext called for step:", activeStep);
+    if (formRefs.current[activeStep]) {
+      const isValid = await formRefs.current[activeStep]();
+      console.log("Step valid:", isValid, "Current formData:", formData);
+      if (isValid && activeStep < 5) {
+        setActiveStep((prev) => {
+          const nextStep = prev + 1;
+          console.log("Advancing to step:", nextStep);
+          return nextStep;
+        });
+      } else if (isValid && activeStep === 5) {
+        console.log("Final Form Data:", formData);
+        // Submit to API
+        // await fetch('/api/submit', { method: 'POST', body: JSON.stringify(formData) });
+      } else {
+        console.log("Validation failed, staying on step:", activeStep);
+      }
+    } else {
+      console.log("No submit function registered for step:", activeStep);
+      if (activeStep < 5) {
+        setActiveStep((prev) => {
+          const nextStep = prev + 1;
+          console.log("Advancing to step:", nextStep);
+          return nextStep;
+        });
+      }
     }
-  }
-  let backFun= ()=>{
-    if(active!=1){
-      active--;
-      setActive(active)
+  };
+
+  const handleBack = () => {
+    if (activeStep > 1) {
+      setActiveStep((prev) => {
+        const prevStep = prev - 1;
+        console.log("Going back to step:", prevStep);
+        return prevStep;
+      });
     }
-  }
+  };
+
+  const updateFormData = (
+    step: keyof FormData,
+    data: Partial<FormData[keyof FormData]>
+  ) => {
+    console.log("Updating formData for step:", step, "with data:", data);
+    setFormData((prev) => ({
+      ...prev,
+      [step]: { ...prev[step], ...data },
+    }));
+  };
+
   return (
     <>
-      <CustomizedProgressBars activeStep={active} />
-
+      <CustomizedProgressBars activeStep={activeStep} />
       <div className="">
         <div className="flex w-full items-start" dir="rtl">
-          <CircularSteps activeStep={active} />
-
+          <CircularSteps activeStep={activeStep} />
           <div className="flex-1 p-4">
-            <MainForm activeStep={active}/>
-           <FormsHandle
-           backFun={backFun}
-           nextFun={continueFunction}
-           />
+            <MainForm
+              activeStep={activeStep}
+              formData={formData}
+              updateFormData={updateFormData}
+              triggerSubmit={(step, submitFn) => {
+                console.log("Registering submit function for step:", step);
+                formRefs.current[step] = submitFn;
+              }}
+            />
+            <FormsHandle
+              backFun={handleBack}
+              nextFun={handleNext}
+              isLastStep={activeStep === 5}
+            />
           </div>
-
           <div className="w-[40%] min-w-[250px] max-w-[500px] p-2 my-4 text-center">
             <SimpleSlider />
           </div>
