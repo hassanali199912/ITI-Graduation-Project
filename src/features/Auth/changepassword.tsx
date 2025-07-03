@@ -19,7 +19,7 @@ const ChangePassword = () => {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
-
+const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
  const validate = () => {
     const newErrors: typeof errors = {};
     if (!formData.email) {
