@@ -50,8 +50,7 @@ const navigate=useNavigate();
         <input
           key={index}
           type="text"
-          inputMode="numeric"
-          required                              
+          inputMode="numeric"                            
           maxLength={1}
           value={digit}
           onChange={(e) => handleChange(e, index)}
@@ -59,6 +58,7 @@ const navigate=useNavigate();
          ref={(el) => {
   inputsRef.current[index] = el;
 }}
+ required  
 
           className="w-12 h-12 text-center border border-gray-400 rounded-lg text-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -71,7 +71,13 @@ const navigate=useNavigate();
               <button
                 type="submit"
                 className="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-                onClick={() => navigate('/resetpassword')}
+               onClick={() => {
+    if (otp.every((digit) => digit !== '')) {
+      navigate('/resetpassword');
+    } else {
+      alert('من فضلك أدخل رمز التحقق بالكامل');
+    }
+  }}
                
               >
                تاكيد الرمز 
