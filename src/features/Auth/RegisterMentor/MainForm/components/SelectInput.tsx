@@ -9,7 +9,7 @@ type SelectInputProps = {
 const SelectInput = React.forwardRef<HTMLSelectElement, SelectInputProps>(
   ({ id, label, options, placeholder, ...rest }, ref) => {
     return (
-      <div className="form-control mb-8">
+      <div className="form-control mb-4">
         <label htmlFor={id} className="block text-right mb-2 font-bold">
           {label}
         </label>

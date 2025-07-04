@@ -14,7 +14,8 @@ select.custom-select {
 .error {
   color: red;
   font-size: 0.8rem;
-  margin-top: 0.2rem;
+  /* margin-top: 0.2rem; */
   display: block;
   text-align: right;
+  margin-bottom: 10px;
 }

@@ -4,7 +4,7 @@ import CircularSteps from '../CircularSteps';
 import MainForm from './MainForm/MainForm';
 import SimpleSlider from './SliderImages';
 import FormsHandle from './FormsHandle';
-import type{ FormData, StepOneData, StepTwoData, StepThreeData } from './types';
+import type{ FormData, StepOneData, StepTwoData, StepThreeData, StepFourData, StepFiveData } from './types';
 
 export default function RegisterMentor() {
   const [activeStep, setActiveStep] = useState(1);
@@ -21,6 +21,8 @@ export default function RegisterMentor() {
     },
     stepTwo: { education: [{ qualification: '', org: '', spec: '', startMonth: '', startYear: '', endMonth: '', endYear: '' }] },
     stepThree: { certificates: [{ skill: '', certificate: '', file: undefined, organisation: '', certificateDate: '' }] },
+    stepFour: { interests: [{ field: '', yearCategory: '', connect: '', timeNum: '', lang: '' }] },
+    stepFive: { hasExams: '' as any, exams: [{ examName: '', rate: '', givingOrg: '', examCertificates: '', certificateFile: undefined, examMonth: '', examYear: '' }] },
   });
 
   const formRefs = useRef<{ [key: number]: () => Promise<boolean> }>({});
@@ -29,7 +31,7 @@ export default function RegisterMentor() {
     console.log('handleNext called for step:', activeStep);
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
-      console.log('Step valid:', isValid, 'Current formData:', formData);
+      console.log('Step valid:', isValid, 'Current formData:', JSON.stringify(formData, null, 2));
       if (isValid && activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
@@ -37,7 +39,7 @@ export default function RegisterMentor() {
           return nextStep;
         });
       } else if (isValid && activeStep === 5) {
-        console.log('Final Form Data:', formData);
+        console.log('Final Form Data:', JSON.stringify(formData, null, 2));
         // Submit to API
         // await fetch('/api/submit', { method: 'POST', body: JSON.stringify(formData) });
       } else {
@@ -66,7 +68,7 @@ export default function RegisterMentor() {
   };
 
   const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
-    console.log('Updating formData for step:', step, 'with data:', data);
+    console.log('Updating formData for step:', step, 'with data:', JSON.stringify(data, null, 2));
     setFormData((prev) => ({
       ...prev,
       [step]: { ...prev[step], ...data },
@@ -95,7 +97,7 @@ export default function RegisterMentor() {
               isLastStep={activeStep === 5}
             />
           </div>
-          <div className="w-[40%] min-w-[250px] max-w=[500px] p-2 my-4 text-center">
+          <div className="w-[40%] min-w-[250px] max-w-[500px] p-2 my-4 text-center">
             <SimpleSlider />
           </div>
         </div>

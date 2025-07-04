@@ -3,14 +3,15 @@ import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
+import StepFive from './StepFive';
 import { type FormData } from '../types';
 
-type Props = {
+interface Props {
   activeStep: number;
   formData: FormData;
   updateFormData: (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => void;
   triggerSubmit: (step: number, submitFn: () => Promise<boolean>) => void;
-};
+}
 
 export default function MainForm({ activeStep, formData, updateFormData, triggerSubmit }: Props) {
   console.log('Rendering MainForm with activeStep:', activeStep);
@@ -37,7 +38,20 @@ export default function MainForm({ activeStep, formData, updateFormData, trigger
           triggerSubmit={(submitFn) => triggerSubmit(3, submitFn)}
         />
       )}
-      
+      {activeStep === 4 && (
+        <StepFour
+          data={formData.stepFour}
+          updateData={(data) => updateFormData('stepFour', data)}
+          triggerSubmit={(submitFn) => triggerSubmit(4, submitFn)}
+        />
+      )}
+      {activeStep === 5 && (
+        <StepFive
+          data={formData.stepFive}
+          updateData={(data) => updateFormData('stepFive', data)}
+          triggerSubmit={(submitFn) => triggerSubmit(5, submitFn)}
+        />
+      )}
     </>
   );
 }
