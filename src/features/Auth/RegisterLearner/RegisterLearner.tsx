@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import Step1PersonalInfo from "./Step1PersonalInfo";
 import Step2EducationInfo from "./Step2EducationInfo";
 import Step3Skills from "./Step3Skills";
@@ -6,6 +8,9 @@ import Step4Intro from "./Step4Intro";
 import ProgressBar from "../ProgressBar";
 import StepSidebar from "./StepSidebar";
 import CircularSteps from '../CircularSteps';
+import { validateStep } from "./stepValidation";
+
+const MySwal = withReactContent(Swal);
 
 const RegisterLearner = () => {
   const [step, setStep] = useState(1);
@@ -22,13 +27,25 @@ const RegisterLearner = () => {
     nationality: "",
     specialization: "",
     educationLevel: "",
-    track: "",
-    tools: [],
     about: "",
     github: "",
   });
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
+  const nextStep = () => {
+    const error = validateStep(step, formData);
+    if (error) {
+      MySwal.fire({
+        title: 'تنبيه',
+        text: error,
+        icon: 'warning',
+        confirmButtonText: 'حسنًا',
+        confirmButtonColor: '#0003C7',
+      });
+      return;
+    }
+    setStep((prev) => Math.min(prev + 1, 4));
+  };
+  
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (

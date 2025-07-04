@@ -1,5 +1,6 @@
 import { useState } from "react";
 //import image1 from "../assets/images/Avatar1.png"
+
 interface Props {
   data: any;
 }
@@ -21,7 +22,7 @@ const StepSidebar = ({ data }: Props) => {
       <div className="p-6">
         <div className="flex gap-4 mt-[-60px]">
           <img
-            src={data.avatar || " 🤖 AI Generated Avatars_ Rohan Sharma.png"}
+            src={data.avatar || " /🤖 AI Generated Avatars_ Rohan Sharma.png"}
             alt="avatar"
             className="w-40 h-40 rounded-full border-4 border-white object-cover shadow-md"
           />
@@ -41,7 +42,7 @@ const StepSidebar = ({ data }: Props) => {
               <p className="text-lg text-gray-500 mt-2">{data.specialization}</p>
             ) : (
               <img
-                src="Rectangle 40.png"
+                src="/Rectangle 40.png"
                 alt="bar"
                 className="mt-2 w-70 h-12 object-contain"
               />
@@ -81,9 +82,9 @@ const StepSidebar = ({ data }: Props) => {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                  <img src="Rectangle 40.png" alt="loading bar 1" className="w-80 h-14 object-contain" />
-                  <img src="Rectangle 40.png" alt="loading bar 2" className="w-80 h-14 object-contain" />
-                  <img src="Rectangle 40.png" alt="loading bar 3" className="w-80 h-14 object-contain" />
+                  <img src="/Rectangle 40.png" alt="loading bar 1" className="w-80 h-14 object-contain" />
+                  <img src="/Rectangle 40.png" alt="loading bar 2" className="w-80 h-14 object-contain" />
+                  <img src="/Rectangle 40.png" alt="loading bar 3" className="w-80 h-14 object-contain" />
                 </div>
               )}
             </div>
@@ -96,7 +97,7 @@ const StepSidebar = ({ data }: Props) => {
                   <p className="text-lg text-gray-500 ">{data.email}</p>
                 ) : (
                   <img
-                    src="Rectangle 40.png"
+                    src="/Rectangle 40.png"
                     alt="bar"
                     className="mt-2 w-45 h-2 object-contain"
                   />
@@ -107,7 +108,7 @@ const StepSidebar = ({ data }: Props) => {
                   <p className="text-lg text-gray-500 ">{data.gender}</p>
                 ) : (
                   <img
-                    src="Rectangle 40.png"
+                    src="/Rectangle 40.png"
                     alt="bar"
                     className="mt-2 w-45 h-2 object-contain"
                   />
@@ -118,7 +119,7 @@ const StepSidebar = ({ data }: Props) => {
                   <p className="text-lg text-gray-500 ">{data.country}</p>
                 ) : (
                   <img
-                    src="Rectangle 40.png"
+                    src="/Rectangle 40.png"
                     alt="bar"
                     className="mt-2 w-45 h-2 object-contain"
                   />
@@ -129,7 +130,7 @@ const StepSidebar = ({ data }: Props) => {
                   <p className="text-lg text-gray-500 ">{data.specialization}</p>
                 ) : (
                   <img
-                    src="Rectangle 40.png"
+                    src="/Rectangle 40.png"
                     alt="bar"
                     className="mt-2 w-45 h-2 object-contain"
                   />
@@ -140,7 +141,7 @@ const StepSidebar = ({ data }: Props) => {
                   <p className="text-lg text-gray-500 ">{data.educationLevel}</p>
                 ) : (
                   <img
-                    src="Rectangle 40.png"
+                    src="/Rectangle 40.png"
                     alt="bar"
                     className="mt-2 w-45 h-2 object-contain"
                   />
@@ -161,7 +162,7 @@ const StepSidebar = ({ data }: Props) => {
                   </div>
                 ) : (
                   <img
-                    src="Rectangle 40.png"
+                    src="/Rectangle 40.png"
                     alt="bar"
                     className="mt-2 w-45 h-2 object-contain"
                   />
