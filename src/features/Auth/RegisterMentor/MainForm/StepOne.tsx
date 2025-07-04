@@ -365,6 +365,7 @@
 
 export default function StepOne() {
   return (
+<<<<<<< Updated upstream
     <>
       <div className="step-one mx-4">
         <div className="mt-8">
@@ -372,6 +373,53 @@ export default function StepOne() {
             ابدأ رحلتك معنا: لنبدأ بالتعرّف عليك!
           </p>
           <p className="text-3xl font-bold">معلومات أساسية</p>
+=======
+    <div className="step-one mx-4">
+      <div className="mt-8">
+        <p className="text-3xl font-bold">ابدأ رحلتك معنا: لنبدأ بالتعرّف عليك!</p>
+        <p className="text-3xl font-bold">معلومات أساسية</p>
+      </div>
+
+      <form className="mb-10 mt-4">
+        <div className="flex items-center gap-4">
+          <div className="my-8">
+            <img
+              src={avatarFile instanceof File ? URL.createObjectURL(avatarFile) : '/avatar.png'}
+              alt="Avatar"
+              className="h-20 w-20 rounded-full"
+            />
+          </div>
+          <div>
+            <p className="font-bold text-base text-blue-500">حدد الصورة (اختياري)</p>
+            <p className="text-base text-gray-500">تأكد أن حجم الصورة لا يتعدى 2MB</p>
+            <input
+              type="file"
+              accept="image/*"
+              {...register('avatar')}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  setValue('avatar', file, { shouldValidate: true });
+                }
+              }}
+            />
+            {errors.avatar?.message && <span className="error">{String(errors.avatar.message)}</span>}
+          </div>
+        </div>
+
+        <div className="form-control mb-8">
+          <label htmlFor="name" className="block text-right mb-2 font-bold">
+            الإسم بالكامل
+          </label>
+          <input
+            type="text"
+            id="name"
+            className="bg-blue-50 p-2 w-full rounded"
+            placeholder="محمد جمال أحمد"
+            {...register('name')}
+          />
+          {errors.name?.message && <span className="error">{String(errors.name.message)}</span>}
+>>>>>>> Stashed changes
         </div>
 
         <form action="" className="mb-10 mt-4">
