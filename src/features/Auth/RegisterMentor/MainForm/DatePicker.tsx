@@ -1,28 +1,17 @@
-import * as React from 'react';
-import dayjs, { Dayjs } from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+type DatePickerProps = {
+  selectedDate: Date | null;
+  onChange: (date: Date | null) => void;
+  onBlur?: () => void;
+};
 
-export default function DatePickerValue() {
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs('2022-04-17'));
-
+export default function DatePicker({ selectedDate, onChange, onBlur }: DatePickerProps) {
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-       
-      <DemoContainer components={['DatePicker', 'DatePicker']}>
-        <DatePicker
-          label="تاريخ الإصدار"
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-          
-          slotProps={{
-    textField: { inputProps: { dir: 'rtl' } }
-  }}
-        />
-      </DemoContainer>
-    
-    </LocalizationProvider>
+    <input
+      type="date"
+      value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
+      onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : null)}
+      onBlur={onBlur}
+      className="bg-blue-50 p-2 w-full rounded"
+    />
   );
 }
