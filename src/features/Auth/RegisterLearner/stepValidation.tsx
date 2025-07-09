@@ -43,8 +43,7 @@ export const validateStep = (step: number, data: Record<string, any>): string | 
       break;
 
     case 4:
-      // النبذة اختيارية، لكن لو عايزاها إجبارية:
-      // if (!data.about) return "يرجى كتابة نبذة عنك.";
+      // if (!data.about) return "يرجى كتابة نبذة عنك";
       break;
 
     default:
