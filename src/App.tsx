@@ -25,7 +25,6 @@ function App() {
            <Route path="/createAccount" element={<CreateAccount></CreateAccount>} />
            <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
             <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
-
       </Routes>
     </Router>
     </>

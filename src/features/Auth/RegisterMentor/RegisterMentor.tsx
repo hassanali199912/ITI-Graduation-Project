@@ -4,25 +4,27 @@ import CircularSteps from '../CircularSteps';
 import MainForm from './MainForm/MainForm';
 import SimpleSlider from './SliderImages';
 import FormsHandle from './FormsHandle';
-import type{ FormData, StepOneData, StepTwoData, StepThreeData, StepFourData, StepFiveData } from './types';
+import type{ FormData, StepOneData, StepTwoData, StepThreeData, StepFourData } from './types';
 
 export default function RegisterMentor() {
   const [activeStep, setActiveStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     stepOne: {
-      avatar: undefined,
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password1: '',
       password2: '',
-      type: '' as any,
-      country: '',
+      phoneNumber: '',
+      gender: 0,
+      bio: '',
       lang: '',
+      profilePictureUrl: undefined,
+      countryId: '',
     },
-    stepTwo: { education: [{ qualification: '', org: '', spec: '', startMonth: '', startYear: '', endMonth: '', endYear: '' }] },
-    stepThree: { certificates: [{ skill: '', certificate: '', file: undefined, organisation: '', certificateDate: '' }] },
-    stepFour: { interests: [{ field: '', yearCategory: '', connect: '', timeNum: '', lang: '' }] },
-    stepFive: { hasExams: '' as any, exams: [{ examName: '', rate: '', givingOrg: '', examCertificates: '', certificateFile: undefined, examMonth: '', examYear: '' }] },
+    stepTwo: { educations: [{ institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' }] },
+    stepThree: { certificates: [{ name: '', certificateUrl: undefined, issuedBy: '', issuedDate: '', examResult: '' }] },
+    stepFour: { teachingAreaIds: [], ageGroupIds: [], communicationMethodIds: [], teachingLanguageIds: [], additionalInterests: [] },
   });
 
   const formRefs = useRef<{ [key: number]: () => Promise<boolean> }>({});
@@ -32,22 +34,52 @@ export default function RegisterMentor() {
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
       console.log('Step valid:', isValid, 'Current formData:', JSON.stringify(formData, null, 2));
-      if (isValid && activeStep < 5) {
+      if (isValid && activeStep < 4) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
           console.log('Advancing to step:', nextStep);
           return nextStep;
         });
-      } else if (isValid && activeStep === 5) {
+      } else if (isValid && activeStep === 4) {
         console.log('Final Form Data:', JSON.stringify(formData, null, 2));
-        // Submit to API
-        // await fetch('/api/submit', { method: 'POST', body: JSON.stringify(formData) });
+        try {
+          const firstName = formData.stepOne.firstName;
+          const lastName = formData.stepOne.lastName;
+
+          const finalData = {
+            email: formData.stepOne.email,
+            password: formData.stepOne.password1,
+            firstName,
+            lastName,
+            phoneNumber: formData.stepOne.phoneNumber,
+            gender: formData.stepOne.gender,
+            bio: formData.stepOne.bio,
+            profilePictureUrl: formData.stepOne.profilePictureUrl ? await uploadFile(formData.stepOne.profilePictureUrl) : '',
+            countryId: formData.stepOne.countryId,
+            educations: formData.stepTwo.educations,
+            certificates: await Promise.all(
+              formData.stepThree.certificates.map(async (cert) => ({
+                ...cert,
+                certificateUrl: cert.certificateUrl ? await uploadFile(cert.certificateUrl) : '',
+              }))
+            ),
+            teachingAreaIds: formData.stepFour.teachingAreaIds,
+            ageGroupIds: formData.stepFour.ageGroupIds,
+            communicationMethodIds: formData.stepFour.communicationMethodIds,
+            teachingLanguageIds: formData.stepOne.lang ? [formData.stepOne.lang] : formData.stepFour.teachingLanguageIds,
+            additionalInterests: formData.stepFour.additionalInterests,
+          };
+          console.log('Submitting to API:', JSON.stringify(finalData, null, 2));
+          // await fetch('/api/submit', { method: 'POST', body: JSON.stringify(finalData) });
+        } catch (error) {
+          console.error('Submission error:', error);
+        }
       } else {
         console.log('Validation failed, staying on step:', activeStep);
       }
     } else {
       console.log('No submit function registered for step:', activeStep);
-      if (activeStep < 5) {
+      if (activeStep < 4) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
           console.log('Advancing to step:', nextStep);
@@ -75,12 +107,17 @@ export default function RegisterMentor() {
     }));
   };
 
+  // Mock file upload function
+  const uploadFile = async (file: File): Promise<string> => {
+    return `https://example.com/uploads/${file.name}`;
+  };
+
   return (
     <>
-      <CustomizedProgressBars activeStep={activeStep} />
+      <CustomizedProgressBars activeStep={activeStep}  />
       <div className="">
         <div className="flex w-full items-start" dir="rtl">
-          <CircularSteps activeStep={activeStep} />
+          <CircularSteps activeStep={activeStep}  />
           <div className="flex-1 p-4">
             <MainForm
               activeStep={activeStep}
@@ -94,7 +131,7 @@ export default function RegisterMentor() {
             <FormsHandle
               backFun={handleBack}
               nextFun={handleNext}
-              isLastStep={activeStep === 5}
+              isLastStep={activeStep === 4}
             />
           </div>
           <div className="w-[40%] min-w-[250px] max-w-[500px] p-2 my-4 text-center">

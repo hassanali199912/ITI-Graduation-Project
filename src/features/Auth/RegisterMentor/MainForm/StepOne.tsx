@@ -1,7 +1,13 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { stepOneSchema, type StepOneData } from '../types';
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { stepOneSchema, type StepOneData } from "../types";
+import FormInput from "./components/FormInput";
+import SelectInput from "./components/SelectInput";
+import {
+  useLazyGetCountriesQuery,
+  useLazyGetGenderQuery,
+} from "../../api/lookups";
 
 type Props = {
   data: StepOneData;
@@ -20,174 +26,208 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
   } = useForm<StepOneData>({
     resolver: zodResolver(stepOneSchema),
     defaultValues: data,
-    mode: 'onChange', // Validate on every input change
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
-  // Watch avatar file for preview
-  const avatarFile = watch('avatar');
+  const [triggerCountries, { data: countries }] = useLazyGetCountriesQuery();
+  const [triggerGender, { data: gender }] = useLazyGetGenderQuery();
+
+  // Fetch lookups
+  useEffect(() => {
+    triggerCountries();
+    triggerGender();
+  }, [triggerCountries, triggerGender]);
+
+  // Log errors and form data
+  const formData = watch();
+  useEffect(() => {
+    // console.log('StepOne Errors:', JSON.stringify(errors, null, 2));
+    console.log("StepOne Form Data:", JSON.stringify(formData, null, 2));
+    console.log("Countries:", JSON.stringify(countries, null, 2));
+    console.log("Gender:", JSON.stringify(gender, null, 2));
+  }, [errors, formData, countries, gender]);
 
   // Handle form submission
   const onSubmit = async (formData: StepOneData) => {
-    updateData(formData); // Update parent state
-    return true; // Indicate successful validation
+    console.log("StepOne onSubmit:", JSON.stringify(formData, null, 2));
+    updateData(formData);
+    return true;
   };
 
-  // Register validation and submission function
-  React.useEffect(() => {
+  // Register validation and submission
+  useEffect(() => {
+    console.log("Registering triggerSubmit for StepOne");
     triggerSubmit(async () => {
-      const isValid = await trigger(); // Validate all fields
-      if (isValid) {
-        const formData = watch(); // Get current form values
-        await handleSubmit(onSubmit)({ target: { elements: [] } } as any); // Trigger submission
-        updateData(formData); // Update parent state
+      console.log("Validating StepOne...");
+      const isValid = await trigger();
+      console.log("StepOne isValid:", isValid);
+      if (!isValid) {
+        // console.log('StepOne Validation Errors:', JSON.stringify(errors, null, 2));
       }
-      return isValid; // Return validation status
+      if (isValid) {
+        const currentData = watch();
+        await handleSubmit(onSubmit)({ target: { elements: [] } } as any);
+      }
+      return isValid;
     });
-  }, [triggerSubmit, trigger, handleSubmit, updateData, watch]);
+  }, [triggerSubmit, trigger, handleSubmit, watch, errors]);
+
+  // Handle file upload
+  const handleFileChange = (file: File | undefined) => {
+    setValue("profilePictureUrl", file, { shouldValidate: true });
+    trigger("profilePictureUrl");
+  };
+
+  const avatarFile = watch("profilePictureUrl");
 
   return (
     <div className="step-one mx-4">
       <div className="mt-8">
-        <p className="text-3xl font-bold">ابدأ رحلتك معنا: لنبدأ بالتعرّف عليك!</p>
+        <p className="text-3xl font-bold">
+          ابدأ رحلتك معنا: لنبدأ بالتعرّف عليك!
+        </p>
         <p className="text-3xl font-bold">معلومات أساسية</p>
       </div>
 
       <form className="mb-10 mt-4">
-        {/* <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <div className="my-8">
             <img
-              src={avatarFile instanceof File ? URL.createObjectURL(avatarFile) : '/avatar.png'}
+              src={
+                avatarFile instanceof File
+                  ? URL.createObjectURL(avatarFile)
+                  : "/avatar.png"
+              }
               alt="Avatar"
               className="h-20 w-20 rounded-full"
             />
           </div>
           <div>
-            <p className="font-bold text-base text-blue-500">حدد الصورة (اختياري)</p>
-            <p className="text-base text-gray-500">تأكد أن حجم الصورة لا يتعدى 2MB</p>
+            <p className="font-bold text-base text-blue-500">
+              حدد الصورة (اختياري)
+            </p>
+            <p className="text-base text-gray-500">
+              تأكد أن حجم الصورة لا يتعدى 2MB
+            </p>
             <input
               type="file"
-              accept="image/*"
-              {...register('avatar')}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  setValue('avatar', file, { shouldValidate: true });
-                }
-              }}
+              accept="image/jpeg,image/png"
+              onChange={(e) => handleFileChange(e.target.files?.[0])}
+              className="border rounded px-4 py-2"
             />
-            {errors.avatar?.message && <span className="error">{String(errors.avatar.message)}</span>}
+            {errors.profilePictureUrl?.message && (
+              <span className="error">
+                {String(errors.profilePictureUrl.message)}
+              </span>
+            )}
           </div>
-        </div> */}
-
-        <div className="form-control mb-8">
-          <label htmlFor="name" className="block text-right mb-2 font-bold">
-            الإسم بالكامل
-          </label>
-          <input
-            type="text"
-            id="name"
-            className="bg-blue-50 p-2 w-full rounded"
-            placeholder="محمد جمال أحمد"
-            {...register('name')}
-          />
-          {errors.name?.message && <span className="error">{String(errors.name.message)}</span>}
         </div>
 
-        <div className="form-control mb-8">
-          <label htmlFor="email" className="block text-right mb-2 font-bold">
-            البريد الإلكتروني
-          </label>
-          <input
-            type="email"
-            id="email"
-            className="bg-blue-50 p-2 w-full rounded"
-            placeholder="Example@gmail.com"
-            {...register('email')}
-          />
-          {errors.email?.message && <span className="error">{String(errors.email.message)}</span>}
-        </div>
+        <FormInput
+          id="firstName"
+          label="الإسم بالكامل"
+          placeholder="محمد جمال أحمد"
+          {...register("firstName", { onChange: () => trigger("firstName") })}
+        />
+        {errors.firstName?.message && (
+          <span className="error">{String(errors.firstName.message)}</span>
+        )}
+        <FormInput
+          id="lastName"
+          label="اسم العائلة"
+          placeholder="أدخل اسم العائلة"
+          {...register("lastName", { onChange: () => trigger("lastName") })}
+        />
+        {errors.lastName?.message && (
+          <span className="error">{String(errors.lastName.message)}</span>
+        )}
+        <FormInput
+          id="email"
+          label="البريد الإلكتروني"
+          placeholder="Example@gmail.com"
+          {...register("email", { onChange: () => trigger("email") })}
+        />
+        {errors.email?.message && (
+          <span className="error">{String(errors.email.message)}</span>
+        )}
 
         <div className="flex gap-4">
-          <div className="form-control mb-8 w-1/2">
-            <label htmlFor="password1" className="block text-right mb-2 font-bold">
-              كلمة المرور
-            </label>
-            <input
-              type="password"
-              id="password1"
-              className="bg-blue-50 p-2 w-full rounded"
-              placeholder="ادخل رقمك السري"
-              {...register('password1')}
-            />
-            {errors.password1?.message && <span className="error">{String(errors.password1.message)}</span>}
-          </div>
-          <div className="form-control mb-8 w-1/2">
-            <label htmlFor="password2" className="block text-right mb-2 font-bold">
-              أعد كتابة كلمة المرور
-            </label>
-            <input
-              type="password"
-              id="password2"
-              className="bg-blue-50 p-2 w-full rounded"
-              placeholder="أعد كتابة كلمة السر"
-              {...register('password2')}
-            />
-            {errors.password2?.message && <span className="error">{String(errors.password2.message)}</span>}
-          </div>
+          <FormInput
+            id="password1"
+            label="كلمة المرور"
+            placeholder="ادخل رقمك السري"
+            type="password"
+            {...register("password1", { onChange: () => trigger("password1") })}
+          />
+          {errors.password1?.message && (
+            <span className="error">{String(errors.password1.message)}</span>
+          )}
+          <FormInput
+            id="password2"
+            label="أعد كتابة كلمة المرور"
+            placeholder="أعد كتابة كلمة السر"
+            type="password"
+            {...register("password2", { onChange: () => trigger("password2") })}
+          />
+          {errors.password2?.message && (
+            <span className="error">{String(errors.password2.message)}</span>
+          )}
         </div>
 
-        <div className="form-control mb-8">
-          <label htmlFor="type" className="block text-right mb-2 font-bold">
-            النوع
-          </label>
-          <select
-            id="type"
-            className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-            {...register('type')}
-          >
-            <option value="" disabled>
-              النوع
-            </option>
-            <option value="ذكر">ذكر</option>
-            <option value="أنثى">أنثى</option>
-          </select>
-          {errors.type?.message && <span className="error">{String(errors.type.message)}</span>}
-        </div>
+        <FormInput
+          id="phoneNumber"
+          label="رقم الهاتف"
+          placeholder="أدخل رقم الهاتف"
+          {...register("phoneNumber", {
+            onChange: () => trigger("phoneNumber"),
+          })}
+        />
+        {errors.phoneNumber?.message && (
+          <span className="error">{String(errors.phoneNumber.message)}</span>
+        )}
 
-        <div className="form-control mb-8">
-          <label htmlFor="country" className="block text-right mb-2 font-bold">
-            من أي بلد؟
-          </label>
-          <select
-            id="country"
-            className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-            {...register('country')}
-          >
-            <option value="" disabled>
-              مصر
-            </option>
-            <option value="السعودية">السعودية</option>
-            <option value="الإمارات">الإمارات</option>
-          </select>
-          {errors.country?.message && <span className="error">{String(errors.country.message)}</span>}
-        </div>
+        <FormInput
+          id="bio"
+          label="السيرة الذاتية"
+          placeholder="أدخل سيرتك الذاتية"
+          {...register("bio", { onChange: () => trigger("bio") })}
+        />
+        {errors.bio?.message && (
+          <span className="error">{String(errors.bio.message)}</span>
+        )}
 
-        <div className="form-control mb-8">
-          <label htmlFor="lang" className="block text-right mb-2 font-bold">
-            اللغة التي تتحدث بها
-          </label>
-          <select
-            id="lang"
-            className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-            {...register('lang')}
-          >
-            <option value="" disabled>
-              Arabic
-            </option>
-            <option value="English">English</option>
-          </select>
-          {errors.lang?.message && <span className="error">{String(errors.lang.message)}</span>}
-        </div>
+        <SelectInput
+          id="gender"
+          label="النوع"
+          options={gender?.value || []}
+          register={(name) => register(name, { valueAsNumber: true })}
+        />
+        {errors.gender?.message && (
+          <span className="error">{String(errors.gender.message)}</span>
+        )}
+        <SelectInput
+          id="countryId"
+          label="من أي بلد؟"
+          options={countries?.value || []}
+          register={register}
+        />
+        {errors.countryId?.message && (
+          <span className="error">{String(errors.countryId.message)}</span>
+        )}
+
+        <SelectInput
+          id="lang"
+          label="اللغة التي تتحدث بها"
+          options={[
+            { id: "Arabic", name: "Arabic" },
+            { id: "English", name: "English" },
+          ]}
+          register={register}
+        />
+        {errors.lang?.message && (
+          <span className="error">{String(errors.lang.message)}</span>
+        )}
       </form>
     </div>
   );

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField, MenuItem } from "@mui/material";
+// import { useLazyGetLookupDataQuery } from "../../Auth/api/lookups";
 
 interface Props {
   data: any;
@@ -9,9 +10,8 @@ interface Props {
 
 const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
   const genders = ["ذكر", "أنثى"];
-  const countries = ["مصر", "السعودية", "الإمارات", "الأردن"];
+  // const countries = ["مصر", "السعودية", "الإمارات", "الأردن"];
   const nationalities = ["مصري", "سعودي", "إماراتي", "أردني"];
-
   const [preview, setPreview] = useState<string>(data.avatar || "");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -261,11 +261,12 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               },
             }}
           >
-            {countries.map((country) => (
+            {/* {countries.values.map((country) => (
               <MenuItem key={country} value={country}>
                 {country}
               </MenuItem>
-            ))}
+            ))} */}
+            {/* {countries.value} */}
           </TextField>
         </div>
 
