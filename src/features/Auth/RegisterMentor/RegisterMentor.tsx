@@ -32,46 +32,46 @@ export default function RegisterMentor() {
     ),
     defaultValues: {
       stepOne: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        password1: "",
-        password2: "",
-        phoneNumber: "",
-        gender: 0,
-        bio: "",
-        lang: "",
-        profilePictureUrl: undefined,
-        countryId: "",
+        firstName: "John",
+        lastName: "Doe",
+        email: "johndoe@example.com",
+        password1: "password",
+        password2: "password",
+        phoneNumber: "1234567890",
+        gender: 1,
+        bio: "I am a mentor",
+        lang: "English",
+        profilePictureUrl: "https://example.com/profile.jpg",
+        countryId: "US",
       },
       stepTwo: {
         educations: [
           {
-            institution: "",
-            degree: "",
-            field: "",
-            startDate: "",
-            endDate: "",
-            description: "",
+            institution: "University of Example",
+            degree: "Bachelor's",
+            field: "Computer Science",
+            startDate: "2020-01-01",
+            endDate: "2024-01-01",
+            description: "Studied computer science",
           },
         ],
       },
       stepThree: {
         certificates: [
           {
-            name: "",
-            certificateUrl: undefined,
-            issuedBy: "",
-            issuedDate: "",
-            examResult: "",
+            name: "Certificate of Example",
+            certificateUrl: "https://example.com/certificate.pdf",
+            issuedBy: "Example Organization",
+            issuedDate: "2022-01-01",
+            examResult: "Pass",
           },
         ],
       },
       stepFour: {
-        teachingAreaIds: [],
-        ageGroupIds: [],
-        communicationMethodIds: [],
-        teachingLanguageIds: [],
+        teachingAreaIds: ["1", "2", "3"],
+        ageGroupIds: ["4", "5", "6"],
+        communicationMethodIds: ["7", "8", "9"],
+        teachingLanguageIds: ["10", "11", "12"],
         additionalInterests: [],
       },
     },
@@ -85,23 +85,15 @@ export default function RegisterMentor() {
     console.log("handleNext called for step:", activeStep);
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
-      console.log(
-        "Step valid:",
-        isValid,
-        "Current formData:",
-        JSON.stringify(formMethods.getValues(), null, 2)
-      );
-      if (isValid && activeStep < 4) {
+      
+      if (isValid && activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
           console.log("Advancing to step:", nextStep);
           return nextStep;
         });
-      } else if (isValid && activeStep === 4) {
-        console.log(
-          "Final Form Data:",
-          JSON.stringify(formMethods.getValues(), null, 2)
-        );
+      } else if (isValid && activeStep === 5) {
+
         try {
           const firstName = formMethods.getValues("stepOne.firstName");
           const lastName = formMethods.getValues("stepOne.lastName");

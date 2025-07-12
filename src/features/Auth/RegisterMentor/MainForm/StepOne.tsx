@@ -36,14 +36,6 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
     triggerGender();
   }, [triggerCountries, triggerGender]);
 
-  // Log errors and form data
-  const formData = watch();
-  useEffect(() => {
-    // console.log('StepOne Errors:', JSON.stringify(errors, null, 2));
-    console.log('StepOne Form Data:', JSON.stringify(formData, null, 2));
-    console.log('Countries:', JSON.stringify(countries, null, 2));
-    console.log('Gender:', JSON.stringify(gender, null, 2));
-  }, [errors, formData, countries, gender]);
 
   // Handle form submission
   const onSubmit = async (formData: StepOneData) => {

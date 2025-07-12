@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-import { stepTwoSchema, type StepTwoData, type FormData } from '../types';
+import { useFieldArray, useFormContext, useForm } from 'react-hook-form';
 import FormInput from './components/FormInput';
 import AddIcon from '@mui/icons-material/Add';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { stepTwoSchema, type StepTwoData } from '../types';
 
 interface Props {
   data: StepTwoData;
@@ -11,49 +12,67 @@ interface Props {
 }
 
 export default function StepTwo({ data, updateData, triggerSubmit }: Props) {
-  const { control, handleSubmit, formState: { errors }, trigger, watch, setValue } = useFormContext<FormData>();
+  //  const { control, handleSubmit, formState: { errors }, trigger, watch, setValue } = useFormContext<FormData>();
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'stepTwo.educations',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+    trigger,
+  } = useForm<StepTwoData>({
+    resolver: zodResolver(stepTwoSchema),
+    defaultValues: data,
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
+  const { fields, append, remove } = useFieldArray({
+    name: 'educations',
+  });
+
+  useEffect(() => {
+    // if (data.educations && data.educations.length > 0) {
+    //   setValue('educations', data.educations);
+    // }
+
+    if (data.educations && data.educations.length === 0) {
+      append({ institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' })
+    }
+  }, [])
+
+
 
   const formData = watch();
   React.useEffect(() => {
-    console.log('StepTwo Form Data:', JSON.stringify(formData, null, 2));
-    console.log('Fields length:', fields.length);
-    console.log('Full Errors:', JSON.stringify(errors, null, 2));
-    const currentEducations = watch('stepTwo.educations');
+    const currentEducations = watch('educations');
     if (data.educations && data.educations.length > 0 && JSON.stringify(currentEducations) !== JSON.stringify(data.educations)) {
-      setValue('stepTwo.educations', data.educations);
+      setValue('educations', data.educations);
     }
   }, [data.educations, setValue, watch]);
 
-  const onSubmit = async (formData: FormData) => {
+  const onSubmit = async (formData: StepTwoData) => {
     console.log('StepTwo onSubmit - Form Data:', JSON.stringify(formData, null, 2));
     console.log('StepTwo Errors at Submit:', JSON.stringify(errors, null, 2));
-    updateData(formData.stepTwo);
+    updateData(formData);
     return true;
   };
+
 
   React.useEffect(() => {
     triggerSubmit(async () => {
       // Trigger validation for all educations fields separately
       const validationPromises = fields.map((_, index) => [
-        trigger(`stepTwo.educations[${index}].institution`),
-        trigger(`stepTwo.educations[${index}].degree`),
-        trigger(`stepTwo.educations[${index}].field`),
-        trigger(`stepTwo.educations[${index}].startDate`),
-        trigger(`stepTwo.educations[${index}].endDate`),
-        trigger(`stepTwo.educations[${index}].description`),
-      ].every(p => p === true)); // This is incorrect, see below fix
+        trigger(`educations`)
+      ].every(p => p));
 
       const results = await Promise.all(validationPromises);
       const isValid = results.every(result => result === true);
-      console.log('Validation Result for each field:', isValid);
+
       if (isValid) {
         await handleSubmit(onSubmit)({ target: { elements: [] } } as any);
       }
+
       return isValid;
     });
   }, [triggerSubmit, trigger, handleSubmit, fields]);
@@ -68,51 +87,51 @@ export default function StepTwo({ data, updateData, triggerSubmit }: Props) {
           {fields.map((field, index) => (
             <div key={field.id} className="mb-8 border-b pb-4">
               <FormInput
-                id={`stepTwo.educations[${index}].institution`}
+                id={`educations[${index}].institution`}
                 label="المؤسسة التعليمية"
                 placeholder="أدخل اسم المؤسسة"
-                register={control.register}
-                onChange={() => trigger(`stepTwo.educations.${index}.institution`)}
+                register={register}
+                onChange={() => trigger(`educations.${index}.institution`)}
               />
-              {errors.stepTwo?.educations?.[index]?.institution?.message && <span className="error">{String(errors.stepTwo.educations[index].institution.message)}</span>}
+              {errors?.educations?.[index]?.institution?.message && <span className="error">{String(errors.educations[index].institution.message)}</span>}
               <FormInput
-                id={`stepTwo.educations[${index}].degree`}
+                id={`educations[${index}].degree`}
                 label="الدرجة العلمية"
                 placeholder="أدخل الدرجة العلمية"
-                register={control.register}
-                onChange={() => trigger(`stepTwo.educations.${index}.degree`)}
+                register={register}
+                onChange={() => trigger(`educations.${index}.degree`)}
               />
-              {errors.stepTwo?.educations?.[index]?.degree?.message && <span className="error">{String(errors.stepTwo.educations[index].degree.message)}</span>}
+              {errors?.educations?.[index]?.degree?.message && <span className="error">{String(errors.educations[index].degree.message)}</span>}
               <FormInput
-                id={`stepTwo.educations[${index}].field`}
+                id={`educations[${index}].field`}
                 label="التخصص"
                 placeholder="أدخل التخصص"
-                register={control.register}
-                onChange={() => trigger(`stepTwo.educations.${index}.field`)}
+                register={register}
+                onChange={() => trigger(`educations.${index}.field`)}
               />
-              {errors.stepTwo?.educations?.[index]?.field?.message && <span className="error">{String(errors.stepTwo.educations[index].field.message)}</span>}
+              {errors?.educations?.[index]?.field?.message && <span className="error">{String(errors.educations[index].field.message)}</span>}
               <FormInput
-                id={`stepTwo.educations[${index}].startDate`}
+                id={`educations[${index}].startDate`}
                 label="تاريخ البداية"
                 type="date"
-                register={control.register}
-                onChange={() => trigger(`stepTwo.educations.${index}.startDate`)}
+                register={register}
+                onChange={() => trigger(`educations.${index}.startDate`)}
               />
-              {errors.stepTwo?.educations?.[index]?.startDate?.message && <span className="error">{String(errors.stepTwo.educations[index].startDate.message)}</span>}
+              {errors?.educations?.[index]?.startDate?.message && <span className="error">{String(errors.educations[index].startDate.message)}</span>}
               <FormInput
-                id={`stepTwo.educations[${index}].endDate`}
+                id={`educations[${index}].endDate`}
                 label="تاريخ النهاية"
                 type="date"
-                register={control.register}
-                onChange={() => trigger(`stepTwo.educations.${index}.endDate`)}
+                register={register}
+                onChange={() => trigger(`educations.${index}.endDate`)}
               />
-              {errors.stepTwo?.educations?.[index]?.endDate?.message && <span className="error">{String(errors.stepTwo.educations[index].endDate.message)}</span>}
+              {errors?.educations?.[index]?.endDate?.message && <span className="error">{String(errors.educations[index].endDate.message)}</span>}
               <FormInput
-                id={`stepTwo.educations[${index}].description`}
+                id={`educations[${index}].description`}
                 label="الوصف"
                 placeholder="أدخل وصفًا (اختياري)"
-                register={control.register}
-                onChange={() => trigger(`stepTwo.educations.${index}.description`)}
+                register={register}
+                onChange={() => trigger(`educations.${index}.description`)}
               />
               {fields.length > 1 && <button type="button" className="text-red-500 mt-2" onClick={() => remove(index)}>إزالة</button>}
             </div>

@@ -296,9 +296,8 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
               id={`certificates[${index}].name`}
               label="اسم الشهادة"
               placeholder="أدخل اسم الشهادة"
-              {...register(`certificates.${index}.name` as const, {
-                onChange: () => trigger(`certificates.${index}.name`),
-              })}
+              register={register}
+              onChange={() => trigger(`certificates.${index}.name`)}
             />
             {errors.certificates?.[index]?.name?.message && (
               <span className="error">{String(errors.certificates[index].name.message)}</span>
@@ -319,9 +318,8 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
               id={`certificates[${index}].issuedBy`}
               label="الجهة المانحة"
               placeholder="أدخل الجهة المانحة"
-              {...register(`certificates.${index}.issuedBy` as const, {
-                onChange: () => trigger(`certificates.${index}.issuedBy`),
-              })}
+              register={register}
+              onChange={() => trigger(`certificates.${index}.issuedBy`)}
             />
             {errors.certificates?.[index]?.issuedBy?.message && (
               <span className="error">{String(errors.certificates[index].issuedBy.message)}</span>
@@ -330,9 +328,8 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
               id={`certificates[${index}].issuedDate`}
               label="تاريخ الإصدار"
               type="date"
-              {...register(`certificates.${index}.issuedDate` as const, {
-                onChange: () => trigger(`certificates.${index}.issuedDate`),
-              })}
+              register={register}
+              onChange={() => trigger(`certificates.${index}.issuedDate`)}
             />
             {errors.certificates?.[index]?.issuedDate?.message && (
               <span className="error">{String(errors.certificates[index].issuedDate.message)}</span>
@@ -341,9 +338,8 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
               id={`certificates[${index}].examResult`}
               label="نتيجة الامتحان"
               placeholder="أدخل النتيجة (اختياري)"
-              {...register(`certificates.${index}.examResult` as const, {
-                onChange: () => trigger(`certificates.${index}.examResult`),
-              })}
+              register={register}
+              onChange={() => trigger(`certificates.${index}.examResult`)}
             />
             {fields.length > 1 && (
               <button
