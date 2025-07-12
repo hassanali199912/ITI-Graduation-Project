@@ -1,88 +1,160 @@
-import React, { useState, useRef } from 'react';
-import CustomizedProgressBars from '../ProgressBar';
-import CircularSteps from '../CircularSteps';
-import MainForm from './MainForm/MainForm';
-import SimpleSlider from './SliderImages';
-import FormsHandle from './FormsHandle';
-import type{ FormData, StepOneData, StepTwoData, StepThreeData, StepFourData } from './types';
+import React, { useState, useRef } from "react";
+import { useForm, FormProvider, type UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  type FormData,
+  type StepOneData,
+  type StepTwoData,
+  type StepThreeData,
+  type StepFourData,
+  stepOneSchema,
+  stepTwoSchema,
+  stepThreeSchema,
+  stepFourSchema,
+} from "./types";
+import CustomizedProgressBars from "../ProgressBar";
+import CircularSteps from "../CircularSteps";
+import MainForm from "./MainForm/MainForm";
+import SimpleSlider from "./SliderImages";
+import FormsHandle from "./FormsHandle";
+import { z } from "zod"; // Import z for schema combination
 
 export default function RegisterMentor() {
   const [activeStep, setActiveStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({
-    stepOne: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password1: '',
-      password2: '',
-      phoneNumber: '',
-      gender: 0,
-      bio: '',
-      lang: '',
-      profilePictureUrl: undefined,
-      countryId: '',
+  const formMethods: UseFormReturn<FormData> = useForm<FormData>({
+    resolver: zodResolver(
+      z.object({
+        stepOne: stepOneSchema,
+        stepTwo: stepTwoSchema,
+        stepThree: stepThreeSchema,
+        stepFour: stepFourSchema,
+      })
+    ),
+    defaultValues: {
+      stepOne: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        password1: "",
+        password2: "",
+        phoneNumber: "",
+        gender: 0,
+        bio: "",
+        lang: "",
+        profilePictureUrl: undefined,
+        countryId: "",
+      },
+      stepTwo: {
+        educations: [
+          {
+            institution: "",
+            degree: "",
+            field: "",
+            startDate: "",
+            endDate: "",
+            description: "",
+          },
+        ],
+      },
+      stepThree: {
+        certificates: [
+          {
+            name: "",
+            certificateUrl: undefined,
+            issuedBy: "",
+            issuedDate: "",
+            examResult: "",
+          },
+        ],
+      },
+      stepFour: {
+        teachingAreaIds: [],
+        ageGroupIds: [],
+        communicationMethodIds: [],
+        teachingLanguageIds: [],
+        additionalInterests: [],
+      },
     },
-    stepTwo: { educations: [{ institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' }] },
-    stepThree: { certificates: [{ name: '', certificateUrl: undefined, issuedBy: '', issuedDate: '', examResult: '' }] },
-    stepFour: { teachingAreaIds: [], ageGroupIds: [], communicationMethodIds: [], teachingLanguageIds: [], additionalInterests: [] },
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const formRefs = useRef<{ [key: number]: () => Promise<boolean> }>({});
 
   const handleNext = async () => {
-    console.log('handleNext called for step:', activeStep);
+    console.log("handleNext called for step:", activeStep);
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
-      console.log('Step valid:', isValid, 'Current formData:', JSON.stringify(formData, null, 2));
+      console.log(
+        "Step valid:",
+        isValid,
+        "Current formData:",
+        JSON.stringify(formMethods.getValues(), null, 2)
+      );
       if (isValid && activeStep < 4) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
-          console.log('Advancing to step:', nextStep);
+          console.log("Advancing to step:", nextStep);
           return nextStep;
         });
       } else if (isValid && activeStep === 4) {
-        console.log('Final Form Data:', JSON.stringify(formData, null, 2));
+        console.log(
+          "Final Form Data:",
+          JSON.stringify(formMethods.getValues(), null, 2)
+        );
         try {
-          const firstName = formData.stepOne.firstName;
-          const lastName = formData.stepOne.lastName;
+          const firstName = formMethods.getValues("stepOne.firstName");
+          const lastName = formMethods.getValues("stepOne.lastName");
 
           const finalData = {
-            email: formData.stepOne.email,
-            password: formData.stepOne.password1,
+            email: formMethods.getValues("stepOne.email"),
+            password: formMethods.getValues("stepOne.password1"),
             firstName,
             lastName,
-            phoneNumber: formData.stepOne.phoneNumber,
-            gender: formData.stepOne.gender,
-            bio: formData.stepOne.bio,
-            profilePictureUrl: formData.stepOne.profilePictureUrl ? await uploadFile(formData.stepOne.profilePictureUrl) : '',
-            countryId: formData.stepOne.countryId,
-            educations: formData.stepTwo.educations,
+            phoneNumber: formMethods.getValues("stepOne.phoneNumber"),
+            gender: formMethods.getValues("stepOne.gender"),
+            bio: formMethods.getValues("stepOne.bio"),
+            profilePictureUrl: formMethods.getValues("stepOne.profilePictureUrl")
+              ? await uploadFile(formMethods.getValues("stepOne.profilePictureUrl"))
+              : "",
+            countryId: formMethods.getValues("stepOne.countryId"),
+            educations: formMethods.getValues("stepTwo.educations"),
             certificates: await Promise.all(
-              formData.stepThree.certificates.map(async (cert) => ({
-                ...cert,
-                certificateUrl: cert.certificateUrl ? await uploadFile(cert.certificateUrl) : '',
-              }))
+              formMethods
+                .getValues("stepThree.certificates")
+                .map(async (cert) => ({
+                  ...cert,
+                  certificateUrl: cert.certificateUrl
+                    ? await uploadFile(cert.certificateUrl)
+                    : "",
+                }))
             ),
-            teachingAreaIds: formData.stepFour.teachingAreaIds,
-            ageGroupIds: formData.stepFour.ageGroupIds,
-            communicationMethodIds: formData.stepFour.communicationMethodIds,
-            teachingLanguageIds: formData.stepOne.lang ? [formData.stepOne.lang] : formData.stepFour.teachingLanguageIds,
-            additionalInterests: formData.stepFour.additionalInterests,
+            teachingAreaIds: formMethods.getValues("stepFour.teachingAreaIds"),
+            ageGroupIds: formMethods.getValues("stepFour.ageGroupIds"),
+            communicationMethodIds: formMethods.getValues(
+              "stepFour.communicationMethodIds"
+            ),
+            teachingLanguageIds: formMethods.getValues("stepOne.lang")
+              ? [formMethods.getValues("stepOne.lang")]
+              : formMethods.getValues("stepFour.teachingLanguageIds"),
+            additionalInterests: formMethods.getValues(
+              "stepFour.additionalInterests"
+            ),
           };
-          console.log('Submitting to API:', JSON.stringify(finalData, null, 2));
+          console.log("Submitting to API:", JSON.stringify(finalData, null, 2));
           // await fetch('/api/submit', { method: 'POST', body: JSON.stringify(finalData) });
         } catch (error) {
-          console.error('Submission error:', error);
+          console.error("Submission error:", error);
         }
       } else {
-        console.log('Validation failed, staying on step:', activeStep);
+        console.log("Validation failed, staying on step:", activeStep);
       }
     } else {
-      console.log('No submit function registered for step:', activeStep);
+      console.log("No submit function registered for step:", activeStep);
       if (activeStep < 4) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
-          console.log('Advancing to step:', nextStep);
+          console.log("Advancing to step:", nextStep);
           return nextStep;
         });
       }
@@ -93,41 +165,50 @@ export default function RegisterMentor() {
     if (activeStep > 1) {
       setActiveStep((prev) => {
         const prevStep = prev - 1;
-        console.log('Going back to step:', prevStep);
+        console.log("Going back to step:", prevStep);
         return prevStep;
       });
     }
   };
 
-  const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
-    console.log('Updating formData for step:', step, 'with data:', JSON.stringify(data, null, 2));
-    setFormData((prev) => ({
-      ...prev,
-      [step]: { ...prev[step], ...data },
-    }));
+  const updateFormData = (
+    step: keyof FormData,
+    data: Partial<FormData[keyof FormData]>
+  ) => {
+    console.log(
+      "Updating formData for step:",
+      step,
+      "with data:",
+      JSON.stringify(data, null, 2)
+    );
+    formMethods.setValue(step as any, {
+      ...formMethods.getValues(step as any),
+      ...data,
+    });
   };
 
-  // Mock file upload function
   const uploadFile = async (file: File): Promise<string> => {
     return `https://example.com/uploads/${file.name}`;
   };
 
   return (
     <>
-      <CustomizedProgressBars activeStep={activeStep}  />
+      <CustomizedProgressBars activeStep={activeStep} />
       <div className="">
         <div className="flex w-full items-start" dir="rtl">
-          <CircularSteps activeStep={activeStep}  />
+          <CircularSteps activeStep={activeStep} />
           <div className="flex-1 p-4">
-            <MainForm
-              activeStep={activeStep}
-              formData={formData}
-              updateFormData={updateFormData}
-              triggerSubmit={(step, submitFn) => {
-                console.log('Registering submit function for step:', step);
-                formRefs.current[step] = submitFn;
-              }}
-            />
+            <FormProvider {...formMethods}>
+              <MainForm
+                activeStep={activeStep}
+                formData={formMethods.getValues()}
+                updateFormData={updateFormData}
+                triggerSubmit={(step, submitFn) => {
+                  console.log("Registering submit function for step:", step);
+                  formRefs.current[step] = submitFn;
+                }}
+              />
+            </FormProvider>
             <FormsHandle
               backFun={handleBack}
               nextFun={handleNext}

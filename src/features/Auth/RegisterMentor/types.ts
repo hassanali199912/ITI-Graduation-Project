@@ -2,8 +2,12 @@ import { z } from "zod";
 
 export const stepOneSchema = z
   .object({
-    firstName: z.string().min(1, { message: "الاسم الأول مطلوب" }),
-    lastName: z.string().min(1, { message: "اسم العائلة مطلوب" }),
+    firstName: z
+      .string()
+      .min(1, { message: "الإسم الأول مطلوب" }),
+    lastName: z
+      .string()
+      .min(1, { message: "الإسم الثانى مطلوب" }),
     email: z
       .string()
       .min(1, { message: "البريد الإلكتروني مطلوب" })
@@ -16,11 +20,13 @@ export const stepOneSchema = z
       .string()
       .min(1, { message: "رقم الهاتف مطلوب" })
       .regex(/^\+?\d{7,15}$/, { message: "رقم الهاتف غير صحيح" }),
-    gender: z.number().int().min(0).max(1, { message: "النوع مطلوب" }), // 0: Male, 1: Female
+    gender: z.number().int().min(0).max(1, { message: "النوع مطلوب" }),
     bio: z.string().min(1, { message: "السيرة الذاتية مطلوبة" }),
-    lang: z.string().refine((val) => ["Arabic", "English"].includes(val), {
-      message: "يرجى اختيار اللغة",
-    }),
+    lang: z
+      .string()
+      .refine((val) => ["Arabic", "English"].includes(val), {
+        message: "يرجى اختيار اللغة",
+      }),
     profilePictureUrl: z
       .any()
       .optional()
@@ -30,9 +36,7 @@ export const stepOneSchema = z
           (file instanceof File &&
             file.size <= 2 * 1024 * 1024 &&
             ["image/jpeg", "image/png"].includes(file.type)),
-        {
-          message: "يجب أن تكون الصورة JPEG أو PNG بحجم أقل من 2 ميجابايت",
-        }
+        { message: "يجب أن تكون الصورة JPEG أو PNG بحجم أقل من 2 ميجابايت" }
       ),
     countryId: z.string().uuid({ message: "البلد مطلوب" }),
   })
@@ -42,28 +46,16 @@ export const stepOneSchema = z
   });
 
 export const stepTwoSchema = z.object({
-  educations: z
-    .array(
-      z.object({
-        institution: z.string().min(1, { message: "المؤسسة التعليمية مطلوبة" }),
-        degree: z.string().min(1, { message: "الدرجة العلمية مطلوبة" }),
-        field: z.string().min(1, { message: "التخصص الدراسي مطلوب" }),
-        startDate: z
-          .string()
-          .min(1, { message: "تاريخ البداية مطلوب" })
-          .refine((val) => !isNaN(Date.parse(val)), {
-            message: "تاريخ البداية غير صحيح",
-          }),
-        endDate: z
-          .string()
-          .min(1, { message: "تاريخ النهاية مطلوب" })
-          .refine((val) => !isNaN(Date.parse(val)), {
-            message: "تاريخ النهاية غير صحيح",
-          }),
-        description: z.string().optional(),
-      })
-    )
-    .min(1, { message: "يجب إضافة مؤهل دراسي واحد على الأقل" }),
+  educations: z.array(
+    z.object({
+      institution: z.string().min(1, "المؤسسة مطلوبة"),
+      degree: z.string().min(1, "الدرجة العلمية مطلوبة"),
+      field: z.string().min(1, "التخصص مطلوب"),
+      startDate: z.string().optional(), // أو z.date().optional().transform(String)
+      endDate: z.string().optional(),   // أو z.date().optional().transform(String)
+      description: z.string().optional(),
+    })
+  ),
 });
 
 export const stepThreeSchema = z.object({
@@ -113,7 +105,13 @@ export const stepFourSchema = z.object({
   teachingLanguageIds: z
     .array(z.string().uuid({ message: "اللغة مطلوبة" }))
     .min(1, { message: "يجب اختيار لغة واحدة على الأقل" }),
-  additionalInterests: z.array(z.string()).optional(),
+  additionalInterests: z
+    .array(
+      z.object({
+        value: z.string().min(1, { message: "لا تترك الحقل فارغًا" }),
+      })
+    )
+    .optional(),
 });
 
 export type StepOneData = z.infer<typeof stepOneSchema>;

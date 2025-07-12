@@ -1,13 +1,10 @@
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { stepOneSchema, type StepOneData } from "../types";
-import FormInput from "./components/FormInput";
-import SelectInput from "./components/SelectInput";
-import {
-  useLazyGetCountriesQuery,
-  useLazyGetGenderQuery,
-} from "../../api/lookups";
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { stepOneSchema, type StepOneData } from '../types';
+import FormInput from './components/FormInput';
+import SelectInput from './components/SelectInput';
+import { useLazyGetCountriesQuery, useLazyGetGenderQuery } from '../../api/lookups';
 
 type Props = {
   data: StepOneData;
@@ -26,8 +23,8 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
   } = useForm<StepOneData>({
     resolver: zodResolver(stepOneSchema),
     defaultValues: data,
-    mode: "onChange",
-    reValidateMode: "onChange",
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
 
   const [triggerCountries, { data: countries }] = useLazyGetCountriesQuery();
@@ -43,25 +40,25 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
   const formData = watch();
   useEffect(() => {
     // console.log('StepOne Errors:', JSON.stringify(errors, null, 2));
-    console.log("StepOne Form Data:", JSON.stringify(formData, null, 2));
-    console.log("Countries:", JSON.stringify(countries, null, 2));
-    console.log("Gender:", JSON.stringify(gender, null, 2));
+    console.log('StepOne Form Data:', JSON.stringify(formData, null, 2));
+    console.log('Countries:', JSON.stringify(countries, null, 2));
+    console.log('Gender:', JSON.stringify(gender, null, 2));
   }, [errors, formData, countries, gender]);
 
   // Handle form submission
   const onSubmit = async (formData: StepOneData) => {
-    console.log("StepOne onSubmit:", JSON.stringify(formData, null, 2));
+    console.log('StepOne onSubmit:', JSON.stringify(formData, null, 2));
     updateData(formData);
     return true;
   };
 
   // Register validation and submission
   useEffect(() => {
-    console.log("Registering triggerSubmit for StepOne");
+    console.log('Registering triggerSubmit for StepOne');
     triggerSubmit(async () => {
-      console.log("Validating StepOne...");
+      console.log('Validating StepOne...');
       const isValid = await trigger();
-      console.log("StepOne isValid:", isValid);
+      console.log('StepOne isValid:', isValid);
       if (!isValid) {
         // console.log('StepOne Validation Errors:', JSON.stringify(errors, null, 2));
       }
@@ -75,11 +72,11 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
 
   // Handle file upload
   const handleFileChange = (file: File | undefined) => {
-    setValue("profilePictureUrl", file, { shouldValidate: true });
-    trigger("profilePictureUrl");
+    setValue('profilePictureUrl', file, { shouldValidate: true });
+    trigger('profilePictureUrl');
   };
 
-  const avatarFile = watch("profilePictureUrl");
+  const avatarFile = watch('profilePictureUrl');
 
   return (
     <div className="step-one mx-4">
@@ -94,63 +91,49 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
         <div className="flex items-center gap-4">
           <div className="my-8">
             <img
-              src={
-                avatarFile instanceof File
-                  ? URL.createObjectURL(avatarFile)
-                  : "/avatar.png"
-              }
+              src={avatarFile instanceof File ? URL.createObjectURL(avatarFile) : '/avatar.png'}
               alt="Avatar"
               className="h-20 w-20 rounded-full"
             />
           </div>
           <div>
-            <p className="font-bold text-base text-blue-500">
-              حدد الصورة (اختياري)
-            </p>
-            <p className="text-base text-gray-500">
-              تأكد أن حجم الصورة لا يتعدى 2MB
-            </p>
+            <p className="font-bold text-base text-blue-500">حدد الصورة (اختياري)</p>
+            <p className="text-base text-gray-500">تأكد أن حجم الصورة لا يتعدى 2MB</p>
             <input
               type="file"
               accept="image/jpeg,image/png"
               onChange={(e) => handleFileChange(e.target.files?.[0])}
               className="border rounded px-4 py-2"
             />
-            {errors.profilePictureUrl?.message && (
-              <span className="error">
-                {String(errors.profilePictureUrl.message)}
-              </span>
-            )}
+            {errors.profilePictureUrl?.message && <span className="error">{String(errors.profilePictureUrl.message)}</span>}
           </div>
         </div>
 
         <FormInput
           id="firstName"
-          label="الإسم بالكامل"
-          placeholder="محمد جمال أحمد"
-          {...register("firstName", { onChange: () => trigger("firstName") })}
+          label="الإسم الأول"
+          placeholder="محمد  "
+          register={register}
+          onChange={() => trigger("firstName")}
         />
-        {errors.firstName?.message && (
-          <span className="error">{String(errors.firstName.message)}</span>
-        )}
+        {errors.firstName?.message && <span className="error">{String(errors.firstName.message)}</span>}
         <FormInput
           id="lastName"
-          label="اسم العائلة"
-          placeholder="أدخل اسم العائلة"
-          {...register("lastName", { onChange: () => trigger("lastName") })}
+          label="الإسم الأخير"
+          placeholder="أحمد"
+          register={register}
+          onChange={() => trigger("lastName")}
         />
-        {errors.lastName?.message && (
-          <span className="error">{String(errors.lastName.message)}</span>
-        )}
+        {errors.lastName?.message && <span className="error">{String(errors.lastName.message)}</span>}
+
         <FormInput
           id="email"
           label="البريد الإلكتروني"
           placeholder="Example@gmail.com"
-          {...register("email", { onChange: () => trigger("email") })}
+          register={register}
+          onChange={() => trigger("email")}
         />
-        {errors.email?.message && (
-          <span className="error">{String(errors.email.message)}</span>
-        )}
+        {errors.email?.message && <span className="error">{String(errors.email.message)}</span>}
 
         <div className="flex gap-4">
           <FormInput
@@ -158,76 +141,67 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
             label="كلمة المرور"
             placeholder="ادخل رقمك السري"
             type="password"
-            {...register("password1", { onChange: () => trigger("password1") })}
+            register={register}
+            onChange={() => trigger("password1")}
           />
-          {errors.password1?.message && (
-            <span className="error">{String(errors.password1.message)}</span>
-          )}
+          {errors.password1?.message && <span className="error">{String(errors.password1.message)}</span>}
           <FormInput
             id="password2"
             label="أعد كتابة كلمة المرور"
             placeholder="أعد كتابة كلمة السر"
             type="password"
-            {...register("password2", { onChange: () => trigger("password2") })}
+            register={register}
+            onChange={() => trigger("password2")}
           />
-          {errors.password2?.message && (
-            <span className="error">{String(errors.password2.message)}</span>
-          )}
+          {errors.password2?.message && <span className="error">{String(errors.password2.message)}</span>}
         </div>
 
         <FormInput
           id="phoneNumber"
           label="رقم الهاتف"
           placeholder="أدخل رقم الهاتف"
-          {...register("phoneNumber", {
-            onChange: () => trigger("phoneNumber"),
-          })}
+          register={register}
+          onChange={() => trigger("phoneNumber")}
         />
-        {errors.phoneNumber?.message && (
-          <span className="error">{String(errors.phoneNumber.message)}</span>
-        )}
+        {errors.phoneNumber?.message && <span className="error">{String(errors.phoneNumber.message)}</span>}
 
         <FormInput
           id="bio"
           label="السيرة الذاتية"
           placeholder="أدخل سيرتك الذاتية"
-          {...register("bio", { onChange: () => trigger("bio") })}
+          register={register}
+          onChange={() => trigger("bio")}
         />
-        {errors.bio?.message && (
-          <span className="error">{String(errors.bio.message)}</span>
-        )}
+        {errors.bio?.message && <span className="error">{String(errors.bio.message)}</span>}
 
         <SelectInput
           id="gender"
           label="النوع"
           options={gender?.value || []}
-          register={(name) => register(name, { valueAsNumber: true })}
+          register={register}
+          setValueAs={(value) => (value === '' ? undefined : parseInt(value, 10))}
         />
-        {errors.gender?.message && (
-          <span className="error">{String(errors.gender.message)}</span>
-        )}
+        {errors.gender?.message && <span className="error">{String(errors.gender.message)}</span>}
+
+       
         <SelectInput
           id="countryId"
           label="من أي بلد؟"
           options={countries?.value || []}
           register={register}
         />
-        {errors.countryId?.message && (
-          <span className="error">{String(errors.countryId.message)}</span>
-        )}
+        {errors.countryId?.message && <span className="error">{String(errors.countryId.message)}</span>}
 
         <SelectInput
           id="lang"
           label="اللغة التي تتحدث بها"
           options={[
-            { id: "Arabic", name: "Arabic" },
-            { id: "English", name: "English" },
+            { id: 'Arabic', name: 'Arabic' },
+            { id: 'English', name: 'English' },
           ]}
           register={register}
         />
-        {errors.lang?.message && (
-          <span className="error">{String(errors.lang.message)}</span>
-        )}
+        {errors.lang?.message && <span className="error">{String(errors.lang.message)}</span>}
       </form>
     </div>
   );
