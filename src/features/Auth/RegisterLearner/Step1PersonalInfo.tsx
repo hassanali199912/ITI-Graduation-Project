@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField, MenuItem } from "@mui/material";
-//import image1 from "../assets/images/Avatar1.png"
+// import { useLazyGetLookupDataQuery } from "../../Auth/api/lookups";
 
 interface Props {
   data: any;
@@ -10,9 +10,8 @@ interface Props {
 
 const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
   const genders = ["ذكر", "أنثى"];
-  const countries = ["مصر", "السعودية", "الإمارات", "الأردن"];
+  // const countries = ["مصر", "السعودية", "الإمارات", "الأردن"];
   const nationalities = ["مصري", "سعودي", "إماراتي", "أردني"];
-
   const [preview, setPreview] = useState<string>(data.avatar || "");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +41,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
 
       <div className="flex items-center gap-4 mb-6">
         <img
-          src={preview || " 🤖 AI Generated Avatars_ Rohan Sharma.png"}
+          src={preview || " /🤖 AI Generated Avatars_ Rohan Sharma.png"}
           alt="preview"
           className="w-20 h-20 rounded-full object-cover"
         />
@@ -262,11 +261,12 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               },
             }}
           >
-            {countries.map((country) => (
+            {/* {countries.values.map((country) => (
               <MenuItem key={country} value={country}>
                 {country}
               </MenuItem>
-            ))}
+            ))} */}
+            {/* {countries.value} */}
           </TextField>
         </div>
 
@@ -299,16 +299,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
             type="button"
             className="flex items-center gap-2 text-[#0003C7] font-medium"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
+            <img src="/arrow-right.png" alt="" />
             رجوع
           </button>
 
@@ -317,16 +308,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
             className="flex items-center gap-2 bg-[#0003C7] text-white px-6 py-2 rounded hover:bg-blue-800"
           >
             استمرار
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
+            <img src="/arrow-left.png" alt="" />
           </button>
         </div>
         <div className="col-span-2 flex justify-center mt-6">

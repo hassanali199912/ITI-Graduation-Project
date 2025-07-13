@@ -1,8 +1,5 @@
 
 import { api } from "../../../config/apis"
-
-
-
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.query<any, any>({

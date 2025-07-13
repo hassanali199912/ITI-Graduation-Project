@@ -17,6 +17,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@hookform/resolvers": "^5.1.1",
     "@mui/icons-material": "^7.1.2",
     "@mui/material": "^7.1.2",
     "@mui/x-date-pickers": "^8.6.0",
@@ -43,7 +44,10 @@
     "react-toastify": "^11.0.5",
     "recharts": "^3.1.0",
     "slick-carousel": "^1.8.1",
-    "ts-pattern": "^5.7.0"
+    "sweetalert2": "^11.22.2",
+    "sweetalert2-react-content": "^5.1.0",
+    "ts-pattern": "^5.7.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

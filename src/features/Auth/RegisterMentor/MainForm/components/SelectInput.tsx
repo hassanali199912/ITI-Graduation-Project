@@ -1,39 +1,42 @@
-type SelectInputProps = {
-  id: string;
-  label: string;
-  options: string[] | number[];
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  placeholder?: string;
-};
+import React from 'react';
+import { type Path, type UseFormRegister } from 'react-hook-form';
 
-export default function SelectInput({
-  id,
-  label,
-  options,
-  value,
-  onChange,
-  placeholder,
-}: SelectInputProps) {
+interface Option {
+  id: string | number;
+  name: string;
+}
+
+interface SelectInputProps<T> {
+  id: Path<T>;
+  label: string;
+  options: Option[];
+  multiple?: boolean;
+  register: UseFormRegister<any>;
+  setValueAs?: (value: string) => any; // Optional custom value transformation
+}
+
+export default function SelectInput<T>({ id, label, options, multiple, register, setValueAs }: SelectInputProps<T>) {
   return (
-    <div className="form-control mb-8">
+    <div className="mb-4">
       <label htmlFor={id} className="block text-right mb-2 font-bold">
         {label}
       </label>
       <select
         id={id}
-        value={value}
-        onChange={onChange}
+        multiple={multiple}
         className="appearance-none border w-full border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
+        {...register(id, {
+          setValueAs,
+        })}
       >
-        {placeholder && (
+        {!multiple && (
           <option value="" disabled>
-            {placeholder}
+            اختر خيارًا
           </option>
         )}
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.name}
           </option>
         ))}
       </select>
