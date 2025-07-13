@@ -33,7 +33,6 @@ export default function MentorsPage() {
     skills: ['React', 'Next.js', 'TypeScript', 'HTML', 'CSS', 'Jest'],
     salary: 110,
     imgUrl : '/person.jpg'
-
   },
   {
     firstName: 'يوسف',
@@ -43,7 +42,6 @@ export default function MentorsPage() {
     skills: ['Vue', 'Nuxt', 'Pinia', 'Tailwind CSS', 'Node.js', 'MongoDB'],
     salary: 95,
     imgUrl : '/person.jpg'
-
   },
   {
     firstName: 'ليلى',

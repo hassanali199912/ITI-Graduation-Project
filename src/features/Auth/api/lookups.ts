@@ -13,10 +13,48 @@ export const lookupsApi = api.injectEndpoints({
         url:'/api/lookup/gender',
         method: "GET",
       })
-    })
+    }),
+    getSpecialization : builder.query<any,void>({
+      query: () => ({
+        url : '/api/lookup/specialization',
+        method : "GET",
+      })
+    }),
+    getTeachingAgeArea : builder.query<any,void>({
+      query : () => ({
+        url : '/api/lookup/teachingarea',
+        method : "GET"
+      })
+    }),
+      getTeachingLang : builder.query<any,void>({
+      query : () => ({
+        url : '/api/lookup/teachingLanguage',
+        method : "GET"
+      })
+    }),
+    getCommunicationMethod : builder.query<any,void>({
+      query : () => ({
+        url : '/api/lookup/communicationmethod',
+        method : "GET"
+      })
+    }),
+
   }),
 });
 export const {
   useLazyGetCountriesQuery,
-  useLazyGetGenderQuery
+  useLazyGetGenderQuery,
+  //communication method
+  useLazyGetCommunicationMethodQuery,
+  useGetCommunicationMethodQuery,
+  //spec
+  useLazyGetSpecializationQuery,
+  useGetSpecializationQuery,
+  //teaching area 
+  useLazyGetTeachingAgeAreaQuery,
+  useGetTeachingAgeAreaQuery,
+  // teaching language
+  useLazyGetTeachingLangQuery,
+  useGetTeachingLangQuery
+
 } = lookupsApi;
