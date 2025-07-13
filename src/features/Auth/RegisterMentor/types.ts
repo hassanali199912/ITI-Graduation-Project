@@ -51,9 +51,9 @@ export const stepTwoSchema = z.object({
       institution: z.string().min(1, "المؤسسة مطلوبة"),
       degree: z.string().min(1, "الدرجة العلمية مطلوبة"),
       field: z.string().min(1, "التخصص مطلوب"),
-      startDate: z.string().optional(), // أو z.date().optional().transform(String)
-      endDate: z.string().optional(),   // أو z.date().optional().transform(String)
-      description: z.string().optional(),
+      startDate: z.string(), // أو z.date().transform(String)
+      endDate: z.string(),   // أو z.date().transform(String)
+      description: z.string(),
     })
   ),
 });

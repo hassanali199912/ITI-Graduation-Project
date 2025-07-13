@@ -1,147 +1,170 @@
 import React, { useEffect } from 'react';
-import { useFieldArray, useFormContext, useForm } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import FormInput from './components/FormInput';
 import AddIcon from '@mui/icons-material/Add';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { stepTwoSchema, type StepTwoData } from '../types';
+import { type FormData, type StepTwoData } from '../types';
 
 interface Props {
-  data: StepTwoData;
-  updateData: (data: Partial<StepTwoData>) => void;
+  /** بيانات الخطوة يمكن أن تُمرَّر ولكن الكمبوننت لا يعتمد عليها الآن */
+  data?: StepTwoData;
+  /** يمرّر دالة التحقق للـ Wizard */
   triggerSubmit: (submitFn: () => Promise<boolean>) => void;
+  /** موجودة احتياطيًّا لو احتجنا تحديث البيانات فى المستقبل */
+  updateData?: (data: Partial<StepTwoData>) => void;
 }
 
-export default function StepTwo({ data, updateData, triggerSubmit }: Props) {
-  //  const { control, handleSubmit, formState: { errors }, trigger, watch, setValue } = useFormContext<FormData>();
+/* سجل مبدئى فارغ إن لم يوجد تعليم */
+const emptyEducation: StepTwoData['educations'][number] = {
+  institution: '',
+  degree: '',
+  field: '',
+  startDate: '',
+  endDate: '',
+  description: '',
+};
 
+export default function StepTwo({ triggerSubmit }: Props) {
+  /* 1. الاتصال بـ FormProvider (نفس الفورم العام) */
   const {
+    control,
     register,
-    handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
     trigger,
-  } = useForm<StepTwoData>({
-    resolver: zodResolver(stepTwoSchema),
-    defaultValues: data,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-  });
+  } = useFormContext<FormData>();
+
+  /* 2. FieldArray داخل stepTwo.educations */
   const { fields, append, remove } = useFieldArray({
-    name: 'educations',
+    control,
+    name: 'stepTwo.educations',
   });
 
+  /* 3. إضافة صف فارغ مرة واحدة فقط بعد mount */
   useEffect(() => {
-    // if (data.educations && data.educations.length > 0) {
-    //   setValue('educations', data.educations);
-    // }
+    if (fields.length === 0) append({ ...emptyEducation });
+    // intentionally empty dependency array to run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    if (data.educations && data.educations.length === 0) {
-      append({ institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' })
-    }
-  }, [])
+  /* 4. تسجيل دالة التحقق؛ لا نعتمد على updateData لتفادى إعادة الإنشاء */
+  useEffect(() => {
+    triggerSubmit(async () => await trigger('stepTwo'));
+  }, [triggerSubmit, trigger]);
 
-
-
-  const formData = watch();
-  React.useEffect(() => {
-    const currentEducations = watch('educations');
-    if (data.educations && data.educations.length > 0 && JSON.stringify(currentEducations) !== JSON.stringify(data.educations)) {
-      setValue('educations', data.educations);
-    }
-  }, [data.educations, setValue, watch]);
-
-  const onSubmit = async (formData: StepTwoData) => {
-    console.log('StepTwo onSubmit - Form Data:', JSON.stringify(formData, null, 2));
-    console.log('StepTwo Errors at Submit:', JSON.stringify(errors, null, 2));
-    updateData(formData);
-    return true;
-  };
-
-
-  React.useEffect(() => {
-    triggerSubmit(async () => {
-      // Trigger validation for all educations fields separately
-      const validationPromises = fields.map((_, index) => [
-        trigger(`educations`)
-      ].every(p => p));
-
-      const results = await Promise.all(validationPromises);
-      const isValid = results.every(result => result === true);
-
-      if (isValid) {
-        await handleSubmit(onSubmit)({ target: { elements: [] } } as any);
-      }
-
-      return isValid;
-    });
-  }, [triggerSubmit, trigger, handleSubmit, fields]);
-
+  /* ———————————————————————— UI ———————————————————————— */
   return (
     <div className="step-two mx-4">
       <div className="my-8">
         <p className="text-3xl font-bold">التعليم</p>
       </div>
-      <form className="my-16" onSubmit={handleSubmit(onSubmit)}>
+
+      <div className="my-16">
         <div className="education-fields">
           {fields.map((field, index) => (
             <div key={field.id} className="mb-8 border-b pb-4">
+              {/* المؤسسة التعليمية */}
               <FormInput
-                id={`educations[${index}].institution`}
+                id={`stepTwo.educations.${index}.institution`}
                 label="المؤسسة التعليمية"
                 placeholder="أدخل اسم المؤسسة"
                 register={register}
-                onChange={() => trigger(`educations.${index}.institution`)}
+                onChange={() => trigger(`stepTwo.educations.${index}.institution`)}
               />
-              {errors?.educations?.[index]?.institution?.message && <span className="error">{String(errors.educations[index].institution.message)}</span>}
+              {errors.stepTwo?.educations?.[index]?.institution?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].institution?.message)}
+                </span>
+              )}
+
+              {/* الدرجة العلمية */}
               <FormInput
-                id={`educations[${index}].degree`}
+                id={`stepTwo.educations.${index}.degree`}
                 label="الدرجة العلمية"
                 placeholder="أدخل الدرجة العلمية"
                 register={register}
-                onChange={() => trigger(`educations.${index}.degree`)}
+                onChange={() => trigger(`stepTwo.educations.${index}.degree`)}
               />
-              {errors?.educations?.[index]?.degree?.message && <span className="error">{String(errors.educations[index].degree.message)}</span>}
+              {errors.stepTwo?.educations?.[index]?.degree?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].degree?.message)}
+                </span>
+              )}
+
+              {/* التخصص */}
               <FormInput
-                id={`educations[${index}].field`}
+                id={`stepTwo.educations.${index}.field`}
                 label="التخصص"
                 placeholder="أدخل التخصص"
                 register={register}
-                onChange={() => trigger(`educations.${index}.field`)}
+                onChange={() => trigger(`stepTwo.educations.${index}.field`)}
               />
-              {errors?.educations?.[index]?.field?.message && <span className="error">{String(errors.educations[index].field.message)}</span>}
+              {errors.stepTwo?.educations?.[index]?.field?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].field?.message)}
+                </span>
+              )}
+
+              {/* تاريخ البداية */}
               <FormInput
-                id={`educations[${index}].startDate`}
+                id={`stepTwo.educations.${index}.startDate`}
                 label="تاريخ البداية"
                 type="date"
                 register={register}
-                onChange={() => trigger(`educations.${index}.startDate`)}
+                onChange={() => trigger(`stepTwo.educations.${index}.startDate`)}
               />
-              {errors?.educations?.[index]?.startDate?.message && <span className="error">{String(errors.educations[index].startDate.message)}</span>}
+              {errors.stepTwo?.educations?.[index]?.startDate?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].startDate?.message)}
+                </span>
+              )}
+
+              {/* تاريخ النهاية */}
               <FormInput
-                id={`educations[${index}].endDate`}
+                id={`stepTwo.educations.${index}.endDate`}
                 label="تاريخ النهاية"
                 type="date"
                 register={register}
-                onChange={() => trigger(`educations.${index}.endDate`)}
+                onChange={() => trigger(`stepTwo.educations.${index}.endDate`)}
               />
-              {errors?.educations?.[index]?.endDate?.message && <span className="error">{String(errors.educations[index].endDate.message)}</span>}
+              {errors.stepTwo?.educations?.[index]?.endDate?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].endDate?.message)}
+                </span>
+              )}
+
+              {/* الوصف */}
               <FormInput
-                id={`educations[${index}].description`}
+                id={`stepTwo.educations.${index}.description`}
                 label="الوصف"
                 placeholder="أدخل وصفًا (اختياري)"
                 register={register}
-                onChange={() => trigger(`educations.${index}.description`)}
+                onChange={() => trigger(`stepTwo.educations.${index}.description`)}
               />
-              {fields.length > 1 && <button type="button" className="text-red-500 mt-2" onClick={() => remove(index)}>إزالة</button>}
+
+              {/* زر الحذف */}
+              {fields.length > 1 && (
+                <button
+                  type="button"
+                  className="text-red-500 mt-2"
+                  onClick={() => remove(index)}
+                >
+                  إزالة
+                </button>
+              )}
             </div>
           ))}
         </div>
-        <div className="mb-8 add-details rounded border-blue-500 border-1 py-2 items-center justify-center flex cursor-pointer" onClick={() => append({ institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' })}>
-          <span className="p-1 inline-flex items-center justify-center text-white"><AddIcon fontSize="small" className="text-blue-500" /></span>
+
+        {/* زر إضافة صف جديد */}
+        <div
+          className="mb-8 add-details rounded border-blue-500 border-1 py-2 items-center justify-center flex cursor-pointer"
+          onClick={() => append({ ...emptyEducation })}
+        >
+          <span className="p-1 inline-flex items-center justify-center text-white">
+            <AddIcon fontSize="small" className="text-blue-500" />
+          </span>
           <p className="font-bold text-blue-500">إضافة تعليم آخر</p>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
