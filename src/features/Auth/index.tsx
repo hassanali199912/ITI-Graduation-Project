@@ -4,6 +4,10 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FcGoogle } from 'react-icons/fc';
 import img1 from '../../assets/images/amico.png';
 import { useLazyLoginQuery } from './api/login';
+import { useNavigate } from 'react-router-dom';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+
+import {jwtDecode} from 'jwt-decode';
 
 const Login = () => {
 
@@ -17,7 +21,7 @@ const Login = () => {
     }
   }, [data])
 
-
+const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -67,6 +71,7 @@ if (validate()) {
     } else {
       console.log('Form has errors ', errors);
     }
+    navigate('/landingpage')
   };
   const togglePassword = () => {
     setShowPassword(!showPassword);
@@ -74,7 +79,7 @@ if (validate()) {
 
   return (
     <>
-
+<GoogleOAuthProvider clientId="176619199544-avcb45kd4c6erkb9ibhoms3eqd6nhg4u.apps.googleusercontent.com">
       <div className="flex items-center justify-between min-h-screen bg-white  gap-30 border border-gray-200 shadow-md w-full ">
         <div className='bg-blue-50 w-[30%] min-h-screen border border-gray-300 shadow-lg flex flex-col items-center justify-center ' style={{
           borderTopRightRadius: "7rem",
@@ -135,23 +140,27 @@ if (validate()) {
               <button
                 type="submit"
                 className="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-
+onClick={()=>{handleSubmit}}
               >
                 سجل الدخول
               </button>
               <hr>
               </hr>
-              <p className=" mb-6 text-center text-black-500 ">او قم بتسجيل الدخول باستخدام</p>
-              <button
-
-                className="w-full bg-white-800 text-blue-800  rounded-lg border border-blue-900 transition duration-200 flex items-center justify-center gap-3 p-2 "
-              >
-                <a href="https://www.google.com" target="_blank" rel="noopener noreferrer" >
-                  <FcGoogle size={20} />
-                </a>
-
-                Google
-              </button>
+              
+              <div className="bg-white rounded-lg border border-blue-900 p-2 hover:bg-blue-800 transition duration-200">
+  <GoogleLogin
+    onSuccess={(credentialResponse) => {
+  if (credentialResponse.credential) {
+    const userInfo = jwtDecode(credentialResponse.credential);
+    console.log("User info:", userInfo);
+    navigate('/landingpage')
+  } else {
+    console.error("No credential returned from Google");
+  }
+}}
+    width="100%"
+  />
+</div>
               <hr />
               <p className='text-gray-500 text-center'>ليس لديك حساب ؟
                 <a href='/createAccount' className='text-blue-400'> انشاء حساب كمتعلم او متدرب</a>
@@ -162,10 +171,12 @@ if (validate()) {
 
       </div>
 
-
+</GoogleOAuthProvider>
 
     </>
+    
   );
+  
 };
 
 export default Login;
