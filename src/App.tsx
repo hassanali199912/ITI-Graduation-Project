@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import Login from "./features/Auth";
 import ChangePassword from "./features/Auth/changepassword"
 import CreateAccount from "./features/Auth/createAccount";
@@ -8,27 +9,40 @@ import ResetPassword from "./features/Auth/resetPassword"
 import MentorsList from "./features/MentorsPage/components/MentorsList";
 import MentorsPage from './features/MentorsPage/MentorsPage'
 import Index from "./view/Index"
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from "./features/Home/Index";
+import DashboardAdmin from "./features/Home/dashboardAdmin";
+import DashboardMentor from "./features/Home/dashboardMentor";
 function App() {
   return (
     <>
-      {/* <Index /> */}
-  {/* <ChangePassword></ChangePassword> */}
-  {/* <OtpPage></OtpPage> */}
-  {/* <ResetPassword></ResetPassword> */}
-  
-    <Router>
-      <Routes>
-        <Route path="/" element={<MentorsPage></MentorsPage>} />
-        <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path="/sendotp" element={<OtpPage></OtpPage>} />
-        <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
+
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login></Login>} />
+          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/sendotp" element={<OtpPage></OtpPage>} />
+          <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
+
           <Route path="/home" element={<Login></Login>} />
           <Route path="/createAccount" element={<CreateAccount></CreateAccount>} />
           <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
           <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
-      </Routes>
-    </Router>
+
+           <Route path="/landingpage" element={<Home></Home>}></Route>
+              <Route path="/dashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
+               <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
+
+
+        </Routes>
+      </Router>
+      
+      <ToastContainer />
+     
+
+     
+
     </>
   );
 }
