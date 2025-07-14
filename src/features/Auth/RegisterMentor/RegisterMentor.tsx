@@ -17,8 +17,8 @@ import CircularSteps from "../CircularSteps";
 import MainForm from "./MainForm/MainForm";
 import SimpleSlider from "./SliderImages";
 import FormsHandle from "./FormsHandle";
-import { z } from "zod"; // Import z for schema combination
-
+import { z } from "zod";
+import ReviewPage from "./MainForm/ReviewPage";
 export default function RegisterMentor() {
   const [activeStep, setActiveStep] = useState(1);
   const formMethods: UseFormReturn<FormData> = useForm<FormData>({
@@ -85,7 +85,7 @@ export default function RegisterMentor() {
     console.log("handleNext called for step:", activeStep);
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
-      
+
       if (isValid && activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
@@ -93,7 +93,6 @@ export default function RegisterMentor() {
           return nextStep;
         });
       } else if (isValid && activeStep === 5) {
-
         try {
           const firstName = formMethods.getValues("stepOne.firstName");
           const lastName = formMethods.getValues("stepOne.lastName");
@@ -143,7 +142,7 @@ export default function RegisterMentor() {
       }
     } else {
       console.log("No submit function registered for step:", activeStep);
-      if (activeStep < 4) {
+      if (activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
           console.log("Advancing to step:", nextStep);
@@ -185,10 +184,10 @@ export default function RegisterMentor() {
 
   return (
     <>
-      <CustomizedProgressBars activeStep={activeStep} />
+      <CustomizedProgressBars activeStep={activeStep} totalSteps={5} /> {/* Updated to 5 steps */}
       <div className="">
         <div className="flex w-full items-start" dir="rtl">
-          <CircularSteps activeStep={activeStep} />
+          <CircularSteps activeStep={activeStep}  /> {/* Updated to 5 steps */}
           <div className="flex-1 p-4">
             <FormProvider {...formMethods}>
               <MainForm
@@ -204,7 +203,7 @@ export default function RegisterMentor() {
             <FormsHandle
               backFun={handleBack}
               nextFun={handleNext}
-              isLastStep={activeStep === 4}
+              isLastStep={activeStep === 5} // Updated to 5
             />
           </div>
           <div className="w-[40%] min-w-[250px] max-w-[500px] p-2 my-4 text-center">

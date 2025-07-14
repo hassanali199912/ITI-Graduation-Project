@@ -5,7 +5,7 @@ type Props = {
 };
 
 export default function CircularSteps({ activeStep }: Props) {
-  const steps = [1, 2, 3, 4,5]; 
+  const steps = [1, 2, 3, 4 , 5 ]; 
  
   return (
     <div className="flex  flex-col m-16 " dir="rtl">
