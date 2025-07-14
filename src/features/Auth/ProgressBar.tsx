@@ -25,11 +25,12 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 interface Props {
   activeStep: number;
+  totalSteps : number;
 }
 
 
-export default function CustomizedProgressBars({activeStep}: Props) {
-  let totalSteps:number = 4;
+export default function CustomizedProgressBars({activeStep , totalSteps}: Props) {
+  
   const progressValue = ( activeStep / totalSteps) * 100;
   return (
     <>

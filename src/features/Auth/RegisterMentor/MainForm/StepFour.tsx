@@ -152,15 +152,7 @@ export default function StepFour({ data, updateData, triggerSubmit }: Props) {
             )}
           </div>
         ))}
-        <div
-          className="mb-8 add-details rounded border-blue-500 border-1 py-2 items-center justify-center flex cursor-pointer"
-          onClick={() => append({ value: "" })}
-        >
-          <span className="p-1 inline-flex items-center justify-center text-white">
-            <AddIcon fontSize="small" className="text-blue-500" />
-          </span>
-          <p className="font-bold text-blue-500">إضافة اهتمام آخر</p>
-        </div>
+
       </form>
     </div>
   );

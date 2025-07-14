@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { FcGoogle } from 'react-icons/fc';
 import { useLazyForgetPasswordQuery } from './api/login';
 import { toast } from 'react-toastify';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
+import { jwtDecode } from 'jwt-decode';
 
 
 const ChangePassword = () => {
@@ -62,7 +64,7 @@ if (validate()) {
     <>
 
 
-
+<GoogleOAuthProvider clientId="176619199544-avcb45kd4c6erkb9ibhoms3eqd6nhg4u.apps.googleusercontent.com">
       <div className='w-full min-h-screen flex justify-center items-center '>
         <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg ">
           <h1 className="text-2xl font-bold mb-6 text-center text-black-600">ادخل الايميل للتحقق </h1>
@@ -90,27 +92,27 @@ if (validate()) {
             </button>
 
             <p className=" mb-6 text-center text-black-500 ">او قم بتسجيل الدخول باستخدام</p>
-            <button
-
-              className="w-full bg-white-800 text-blue-800  rounded-lg border border-blue-900 transition duration-200 flex items-center justify-center gap-3 p-2 "
-            >
-              <a href="https://www.google.com" target="_blank" rel="noopener noreferrer" >
-                <FcGoogle size={20} />
-              </a>
-
-              Google
-            </button>
-            <hr />
-            <p className='text-gray-500 text-center'>ليس لديك حساب ؟
-              <a href='#' > انشاء حساب كمتعلم او متدرب</a>
-            </p>
+              <div className="bg-white rounded-lg border border-blue-900 p-2 hover:bg-blue-800 transition duration-200">
+  <GoogleLogin
+    onSuccess={(credentialResponse) => {
+  if (credentialResponse.credential) {
+    const userInfo = jwtDecode(credentialResponse.credential);
+    console.log("User info:", userInfo);
+    navigate('/landingpage')
+  } else {
+    console.error("No credential returned from Google");
+  }
+}}
+    width="100%"
+  /></div>
+           
           </form>
         </div>
       </div>
 
 
 
-
+</GoogleOAuthProvider>
 
     </>
   );

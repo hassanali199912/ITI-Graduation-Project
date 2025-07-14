@@ -3,6 +3,7 @@ import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
+import ReviewPage from './ReviewPage'; // Import ReviewPage
 import { type FormData } from '../types';
 import StepFive from './StepFive';
 

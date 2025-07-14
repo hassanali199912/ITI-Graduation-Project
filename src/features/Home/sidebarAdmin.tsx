@@ -3,8 +3,11 @@ import React from "react";
 import { FaHome, FaUserGraduate, FaChalkboardTeacher, FaCog, FaSignOutAlt, FaCalendarAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
+import { MdAddBox } from "react-icons/md"; // Material Icons
+
+
 type Props = {
-  setView: (view: 'overview' | 'students' | 'mentors'|'mentorsrequests') => void;
+  setView: (view: 'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill') => void;
 };
 
 const Sidebar: React.FC<Props> = ({ setView }) => {
@@ -37,6 +40,10 @@ const Sidebar: React.FC<Props> = ({ setView }) => {
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('students')}>
           <span>الطلاب</span>
           <FaUserGraduate />
+        </li>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('addskill')}>
+          <span>اضافة مهارة</span>
+          <MdAddBox />
         </li>
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer">
           <span>الإعدادات</span>

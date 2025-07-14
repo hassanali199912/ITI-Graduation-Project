@@ -103,6 +103,7 @@ export default function RegisterMentor() {
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
 
+
       if (isValid && activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
@@ -122,6 +123,7 @@ export default function RegisterMentor() {
       }
     } else {
       console.log("No submit function registered for step:", activeStep);
+      if (activeStep < 5) {
       if (activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
@@ -221,7 +223,7 @@ export default function RegisterMentor() {
       <CustomizedProgressBars activeStep={activeStep} />
       <div className="">
         <div className="flex w-full items-start" dir="rtl">
-          <CircularSteps activeStep={activeStep} />
+          <CircularSteps activeStep={activeStep}  /> {/* Updated to 5 steps */}
           <div className="flex-1 p-4">
             <FormProvider {...formMethods}>
               <MainForm
