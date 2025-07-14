@@ -98,62 +98,6 @@ export default function RegisterMentor() {
 
   const formRefs = useRef<{ [key: number]: () => Promise<boolean> }>({});
 
-  const handleNext = async () => {
-    console.log("Validation failed, staying on step:", formMethods?.formState.defaultValues);
-    if (formRefs.current[activeStep]) {
-      const isValid = await formRefs.current[activeStep]();
-
-
-      if (isValid && activeStep < 5) {
-        setActiveStep((prev) => {
-          const nextStep = prev + 1;
-          console.log("Advancing to step:", nextStep);
-          return nextStep;
-        });
-      } else if (isValid && activeStep === 5) {
-        try {
-          handleSubmit(formMethods.getValues());
-
-        } catch (error) {
-          console.error("Submission error:", error);
-        }
-      } else {
-        console.log("Validation failed, staying on step:", activeStep);
-        console.log("Validation failed, staying on step:", formMethods?.formState);
-      }
-    } else {
-      console.log("No submit function registered for step:", activeStep);
-      if (activeStep < 5) {
-      if (activeStep < 5) {
-        setActiveStep((prev) => {
-          const nextStep = prev + 1;
-          return nextStep;
-        });
-      }
-    }
-  };
-
-  const handleBack = () => {
-    if (activeStep > 1) {
-      setActiveStep((prev) => {
-        const prevStep = prev - 1;
-        return prevStep;
-      });
-    }
-  };
-
-  const updateFormData = (
-    step: keyof FormData,
-    data: Partial<FormData[keyof FormData]>
-  ) => {
-
-    formMethods.setValue(step as any, {
-      ...formMethods.getValues(step as any),
-      ...data,
-    });
-  };
-
-
   const handleSubmit = async (data: FormData) => {
     const finalData = {
       email: data.stepOne.email,
@@ -210,6 +154,60 @@ export default function RegisterMentor() {
   };
 
 
+  const handleNext = async () => {
+    console.log("Validation failed, staying on step:", formMethods?.formState.defaultValues);
+    if (formRefs.current[activeStep]) {
+      const isValid = await formRefs.current[activeStep]();
+
+
+      if (isValid && activeStep < 5) {
+        setActiveStep((prev) => {
+          const nextStep = prev + 1;
+          console.log("Advancing to step:", nextStep);
+          return nextStep;
+        });
+      } else if (isValid && activeStep === 5) {
+        try {
+          handleSubmit(formMethods.getValues());
+
+        } catch (error) {
+          console.error("Submission error:", error);
+        }
+      } else {
+        console.log("Validation failed, staying on step:", activeStep);
+        console.log("Validation failed, staying on step:", formMethods?.formState);
+      }
+    } else {
+      console.log("No submit function registered for step:", activeStep);
+      if (activeStep < 5) {
+        if (activeStep < 5) {
+          setActiveStep((prev) => {
+            const nextStep = prev + 1;
+            return nextStep;
+          });
+        }
+      }
+    };
+  }
+  const handleBack = () => {
+    if (activeStep > 1) {
+      setActiveStep((prev) => {
+        const prevStep = prev - 1;
+        return prevStep;
+      });
+    }
+  };
+
+  const updateFormData = (
+    step: keyof FormData,
+    data: Partial<FormData[keyof FormData]>
+  ) => {
+
+    formMethods.setValue(step as any, {
+      ...formMethods.getValues(step as any),
+      ...data,
+    });
+  };
 
 
 
@@ -217,13 +215,11 @@ export default function RegisterMentor() {
 
   return (
     <>
-
-      {isLoading &&
-        <BlurLoader />}
-      <CustomizedProgressBars activeStep={activeStep} />
-      <div className="">
+      {isLoading && <BlurLoader />}
+      <CustomizedProgressBars activeStep={activeStep} totalSteps={6} />
+      <div>
         <div className="flex w-full items-start" dir="rtl">
-          <CircularSteps activeStep={activeStep}  /> {/* Updated to 5 steps */}
+          <CircularSteps activeStep={activeStep} /> {/* Updated to 5 steps */}
           <div className="flex-1 p-4">
             <FormProvider {...formMethods}>
               <MainForm
@@ -247,5 +243,5 @@ export default function RegisterMentor() {
         </div>
       </div>
     </>
-  );
+  )
 }
