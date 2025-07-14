@@ -44,7 +44,13 @@ export const lookupsApi = api.injectEndpoints({
         method: "GET"
       })
     }),
+    getSkills : builder.query<any,void>({
+      query : () => ({
+        url : '/api/lookup/skilles',
+        method: "GET"
 
+      })
+    })
   }),
 });
 export const {
@@ -64,6 +70,6 @@ export const {
   useGetTeachingAgeAreaQuery,
   // teaching language
   useLazyGetTeachingLangQuery,
-  useGetTeachingLangQuery
-
+  useGetTeachingLangQuery,
+  useLazyGetSkillsQuery
 } = lookupsApi;
