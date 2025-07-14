@@ -31,19 +31,19 @@ function App() {
           <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
           <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
 
-           <Route path="/landingpage" element={<Home></Home>}></Route>
-              <Route path="/dashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
-               <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
-                <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
-<Route path="/mentor/:name" element={<MentorDetails />} />
+          <Route path="/landingpage" element={<Home></Home>}></Route>
+          <Route path="/dashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
+          <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
+          <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
+          <Route path="/mentor/:name" element={<MentorDetails />} />
 
         </Routes>
       </Router>
-      
-      <ToastContainer />
-     
 
-     
+      <ToastContainer />
+
+
+
 
     </>
   );
