@@ -108,20 +108,48 @@ export const stepFourSchema = z.object({
   additionalInterests: z
     .array(
       z.object({
-        value: z.string().min(1, { message: "لا تترك الحقل فارغًا" }),
+        value: z.string(),
       })
     )
     .optional(),
+});
+
+// Step 5 validation schema
+export const stepFiveSchema = z.object({
+  hasExams: z.enum(["yes", "no"], { required_error: "يرجى اختيار هل اجتزت اختبارات" }),
+  exams: z.array(
+    z.object({
+      examName: z.string().min(1, { message: "اسم الامتحان مطلوب" }),
+      rate: z.string().min(1, { message: "التقييم مطلوب" }),
+      givingOrg: z.string().min(1, { message: "الجهة المانحة مطلوبة" }),
+      examCertificates: z.string().optional(),
+      certificateFile: z.any().optional(),
+      examMonth: z.string().min(1, { message: "الشهر مطلوب" }),
+      examYear: z.string().min(1, { message: "السنة مطلوبة" }),
+    })
+  ).optional(),
+}).superRefine((data, ctx) => {
+  if (data.hasExams === 'yes') {
+    if (!data.exams || data.exams.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "يجب إضافة امتحان واحد على الأقل",
+        path: ["exams"],
+      });
+    }
+  }
 });
 
 export type StepOneData = z.infer<typeof stepOneSchema>;
 export type StepTwoData = z.infer<typeof stepTwoSchema>;
 export type StepThreeData = z.infer<typeof stepThreeSchema>;
 export type StepFourData = z.infer<typeof stepFourSchema>;
+export type StepFiveData = z.infer<typeof stepFiveSchema>;
 
 export interface FormData {
   stepOne: StepOneData;
   stepTwo: StepTwoData;
   stepThree: StepThreeData;
   stepFour: StepFourData;
+  stepFive: StepFiveData;
 }

@@ -1,10 +1,11 @@
-import React from 'react';
+
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
 import ReviewPage from './ReviewPage'; // Import ReviewPage
 import { type FormData } from '../types';
+import StepFive from './StepFive';
 
 interface Props {
   activeStep: number;
@@ -14,8 +15,6 @@ interface Props {
 }
 
 export default function MainForm({ activeStep, formData, updateFormData, triggerSubmit }: Props) {
-  console.log('Rendering MainForm with activeStep:', activeStep);
-
   return (
     <>
       {activeStep === 1 && (
@@ -47,9 +46,10 @@ export default function MainForm({ activeStep, formData, updateFormData, trigger
         />
       )}
       {activeStep === 5 && (
-        <ReviewPage
-          formData={formData}
-          onSubmit={() => {}} // Placeholder, submission handled in parent
+        <StepFive
+          data={formData.stepFive}
+          updateData={(data) => updateFormData('stepFive', data)}
+          triggerSubmit={(submitFn) => triggerSubmit(5, submitFn)}
         />
       )}
     </>

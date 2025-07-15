@@ -39,20 +39,19 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
 
   // Handle form submission
   const onSubmit = async (formData: StepOneData) => {
-    console.log('StepOne onSubmit:', JSON.stringify(formData, null, 2));
+
     updateData(formData);
     return true;
   };
 
   // Register validation and submission
   useEffect(() => {
-    console.log('Registering triggerSubmit for StepOne');
     triggerSubmit(async () => {
-      console.log('Validating StepOne...');
       const isValid = await trigger();
-      console.log('StepOne isValid:', isValid);
       if (!isValid) {
-        // console.log('StepOne Validation Errors:', JSON.stringify(errors, null, 2));
+        console.log('StepOne Validation Errors:', JSON.stringify(errors, null, 2));
+        console.log('StepOne Validation Errors:', errors);
+
       }
       if (isValid) {
         const currentData = watch();
@@ -175,7 +174,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
         />
         {errors.gender?.message && <span className="error">{String(errors.gender.message)}</span>}
 
-       
+
         <SelectInput
           id="countryId"
           label="من أي بلد؟"

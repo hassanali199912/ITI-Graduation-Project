@@ -5,15 +5,11 @@ import AddIcon from '@mui/icons-material/Add';
 import { type FormData, type StepTwoData } from '../types';
 
 interface Props {
-  /** بيانات الخطوة يمكن أن تُمرَّر ولكن الكمبوننت لا يعتمد عليها الآن */
   data?: StepTwoData;
-  /** يمرّر دالة التحقق للـ Wizard */
   triggerSubmit: (submitFn: () => Promise<boolean>) => void;
-  /** موجودة احتياطيًّا لو احتجنا تحديث البيانات فى المستقبل */
   updateData?: (data: Partial<StepTwoData>) => void;
 }
 
-/* سجل مبدئى فارغ إن لم يوجد تعليم */
 const emptyEducation: StepTwoData['educations'][number] = {
   institution: '',
   degree: '',
@@ -24,7 +20,6 @@ const emptyEducation: StepTwoData['educations'][number] = {
 };
 
 export default function StepTwo({ triggerSubmit }: Props) {
-  /* 1. الاتصال بـ FormProvider (نفس الفورم العام) */
   const {
     control,
     register,
@@ -32,7 +27,6 @@ export default function StepTwo({ triggerSubmit }: Props) {
     trigger,
   } = useFormContext<FormData>();
 
-  /* 2. FieldArray داخل stepTwo.educations */
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'stepTwo.educations',

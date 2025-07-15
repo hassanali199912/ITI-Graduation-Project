@@ -8,34 +8,40 @@ export const lookupsApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    getGender:builder.query<any,void>({
-      query : () => ({
-        url:'/api/lookup/gender',
+    getGender: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/gender',
         method: "GET",
       })
     }),
-    getSpecialization : builder.query<any,void>({
+    getSpecialization: builder.query<any, void>({
       query: () => ({
-        url : '/api/lookup/specialization',
-        method : "GET",
+        url: '/api/lookup/specialization',
+        method: "GET",
       })
     }),
-    getTeachingAgeArea : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/teachingarea',
-        method : "GET"
+    getAgegroup: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/agegroup',
+        method: "GET",
       })
     }),
-      getTeachingLang : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/teachingLanguage',
-        method : "GET"
+    getTeachingAgeArea: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/teachingarea',
+        method: "GET"
       })
     }),
-    getCommunicationMethod : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/communicationmethod',
-        method : "GET"
+    getTeachingLang: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/teachingLanguage',
+        method: "GET"
+      })
+    }),
+    getCommunicationMethod: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/communicationmethod',
+        method: "GET"
       })
     }),
 
@@ -50,6 +56,9 @@ export const {
   //spec
   useLazyGetSpecializationQuery,
   useGetSpecializationQuery,
+  //getAgegroup
+  useLazyGetAgegroupQuery,
+  useGetAgegroupQuery,
   //teaching area 
   useLazyGetTeachingAgeAreaQuery,
   useGetTeachingAgeAreaQuery,

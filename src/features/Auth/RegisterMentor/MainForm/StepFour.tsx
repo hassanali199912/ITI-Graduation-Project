@@ -5,7 +5,7 @@ import { stepFourSchema, type StepFourData } from "../types";
 import FormInput from "./components/FormInput";
 import SelectInput from "./components/SelectInput";
 import AddIcon from "@mui/icons-material/Add";
-import { useLazyGetCommunicationMethodQuery, useLazyGetSpecializationQuery, useLazyGetTeachingAgeAreaQuery, useLazyGetTeachingLangQuery } from "../../api/lookups";
+import { useLazyGetAgegroupQuery, useLazyGetCommunicationMethodQuery, useLazyGetSpecializationQuery, useLazyGetTeachingAgeAreaQuery, useLazyGetTeachingLangQuery } from "../../api/lookups";
 
 interface Props {
   data: StepFourData;
@@ -19,13 +19,11 @@ interface LookupItem {
 }
 
 export default function StepFour({ data, updateData, triggerSubmit }: Props) {
-  const [teachingAreas, setTeachingAreas] = useState<LookupItem[]>([]);
-  const [ageGroups, setAgeGroups] = useState<LookupItem[]>([]);
-  const [teachingLanguages, setTeachingLanguages] = useState<LookupItem[]>([]);
-    const [triggerSpec , {data : specializations}] = useLazyGetSpecializationQuery();
-  const[triggerTeachingAges , {data : teachingAges}] = useLazyGetTeachingAgeAreaQuery();
-  const [triggerMethods , {data : communicationMethods}] = useLazyGetCommunicationMethodQuery();
-  const[triggerLanguages , {data : teachingLangs}] = useLazyGetTeachingLangQuery();
+  const [triggerSpec, { data: specializations }] = useLazyGetSpecializationQuery();
+  const [triggerAgeArea, { data: ageArea }] = useLazyGetAgegroupQuery();
+  const [triggerTeachingAges, { data: teachingAges }] = useLazyGetTeachingAgeAreaQuery();
+  const [triggerMethods, { data: communicationMethods }] = useLazyGetCommunicationMethodQuery();
+  const [triggerLanguages, { data: teachingLangs }] = useLazyGetTeachingLangQuery();
 
   const {
     register,
@@ -50,36 +48,18 @@ export default function StepFour({ data, updateData, triggerSubmit }: Props) {
   });
 
   useEffect(() => {
-      // console.log(useLazyGetSpecializationQuery)
-
-    // const fetchLookups = async () => {
-    //   try {
-    //     const response = await fetch("/api/lookups");
-    //     const data = await response.json();
-    //     setTeachingAreas(data.teachingAreas || []);
-    //     setAgeGroups(data.ageGroups || []);
-    //     setCommunicationMethods(data.communicationMethods || []);
-    //     setTeachingLanguages(data.teachingLanguages || []);
-    //   } catch (error) {
-    //     console.error("Error fetching lookups:", error);
-    //   }
-    // };
-    // fetchLookups();
-
     triggerSpec();
+    triggerAgeArea();
     triggerMethods();
     triggerTeachingAges();
     triggerLanguages()
-  }, [triggerSpec, triggerMethods , triggerTeachingAges , triggerLanguages]);
+  }, [triggerSpec, triggerMethods, triggerTeachingAges, triggerLanguages]);
 
-  const formData = watch();
-  useEffect(() => {
-    console.log("StepFour Errors:", JSON.stringify(errors, null, 2));
-    console.log("StepFour Form Data:", JSON.stringify(formData, null, 2));
-  }, [errors, formData]);
+
 
   const onSubmit = async (formData: StepFourData) => {
-    console.log("StepFour onSubmit:", JSON.stringify(formData, null, 2));
+    console.log("step intersted ", formData);
+
     updateData(formData);
     return true;
   };
@@ -102,7 +82,7 @@ export default function StepFour({ data, updateData, triggerSubmit }: Props) {
         <SelectInput
           id="teachingAreaIds"
           label="ما هي المجالات التي تفضل الإرشاد فيها؟"
-          options={(specializations?.value ?? []).map((t:LookupItem) => ({ id: t.id, name: t.name }))}
+          options={(teachingAges?.value ?? []).map((t: LookupItem) => ({ id: t.id, name: t.name }))}
           multiple
           register={register}
         />
@@ -114,7 +94,7 @@ export default function StepFour({ data, updateData, triggerSubmit }: Props) {
         <SelectInput
           id="ageGroupIds"
           label="ما الفئة العمرية التي تفضل التعامل معها؟"
-          options={(teachingAges?.value ?? []).map((a:LookupItem) => ({ id: a.id, name: a.name }))}
+          options={(ageArea?.value ?? []).map((a: LookupItem) => ({ id: a.id, name: a.name }))}
           multiple
           register={register}
         />
@@ -124,7 +104,7 @@ export default function StepFour({ data, updateData, triggerSubmit }: Props) {
         <SelectInput
           id="communicationMethodIds"
           label="كيف تفضل التواصل مع المتعلمين؟"
-          options={(communicationMethods?.value ?? []).map((c:LookupItem) => ({
+          options={(communicationMethods?.value ?? []).map((c: LookupItem) => ({
             id: c.id,
             name: c.name,
           }))}
@@ -139,7 +119,7 @@ export default function StepFour({ data, updateData, triggerSubmit }: Props) {
         <SelectInput
           id="teachingLanguageIds"
           label="اختر اللغات التي يمكنك الإرشاد بها"
-          options={(teachingLangs?.value ?? []).map((l:LookupItem) => ({ id: l.id, name: l.name }))}
+          options={(teachingLangs?.value ?? []).map((l: LookupItem) => ({ id: l.id, name: l.name }))}
           multiple
           register={register}
         />
