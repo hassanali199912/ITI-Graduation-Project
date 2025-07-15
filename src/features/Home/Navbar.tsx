@@ -12,7 +12,7 @@ const Navbar = () => {
 
         
         <div className="flex items-center gap-6 text-blue-800 font-semibold text-lg">
-          <Link to="" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">الرئيسية</Link>
+          <Link to="/landingpage" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">الرئيسية</Link>
 
           <Link to="/dashboardMentor" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة المرشد</Link>
           <Link to="/dashboardAdmin" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة الإدارة</Link>

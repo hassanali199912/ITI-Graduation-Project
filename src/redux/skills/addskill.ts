@@ -17,7 +17,7 @@ export const lookupApi = api.injectEndpoints({
       query: (name) => ({
         url: `/api/skills/add`,
         method: 'POST',
-       data: { nameAr: name }
+       data: { nameEn: name }
       }),
       invalidatesTags: [{ type: 'Lookup', id: 'skilles' }],
     }),

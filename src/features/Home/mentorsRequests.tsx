@@ -80,12 +80,12 @@ else if (action === 'رفض') {
   if (error) return <p className="text-center p-8 text-red-500">{error}</p>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" dir='rtl'>
       {mentors.map((mentor, i) => (
         <div key={i} className="bg-white p-5 rounded-lg shadow-sm border hover:shadow-md transition-all duration-300" dir="rtl">
           <img
-            // src={mentor.profilePictureUrl 
-                 src={img1}
+            src={mentor.profilePictureUrl }
+                //  src={img1}
             
             
             

@@ -29,8 +29,8 @@ const MentorsCards = () => {
         >
            
           <img
-            // src={mentor.profilePictureUrl || {img1} }
-            src={img1}
+            src={mentor.profilePictureUrl || {img1} }
+            // src={img1}
             alt="mentor"
             className="w-full h-44 object-cover rounded-md mb-4"
           />
