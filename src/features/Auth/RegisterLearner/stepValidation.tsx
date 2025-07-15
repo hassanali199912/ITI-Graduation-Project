@@ -6,7 +6,7 @@ export const validateStep = (step: number, data: Record<string, any>): string | 
       if (
         !data.firstName || !data.lastName || !data.email ||
         !data.password || !data.confirmPassword ||
-        !data.birthDate || !data.gender || !data.country || !data.nationality
+        !data.gender 
       ) {
         return "يرجى ملء جميع الحقول المطلوبة";
       }
@@ -21,29 +21,30 @@ export const validateStep = (step: number, data: Record<string, any>): string | 
       }
       break;
 
-    case 2:
-      if (!data.educationLevel || !data.specialization) {
+    /*case 2:
+      if (!data.specialistId) {
         return "يرجى تحديد المستوى الدراسي والتخصص";
       }
-      if (!data.relatedToProgramming) {
+      if (!data.connectProgramming) {
         return "يرجى تحديد إذا كان مجالك متعلق بالبرمجة";
       }
-      break;
+      break;*/
 
     case 3:
-      if (!data.level) {
+      if (!data.levelId) {
         return "يرجى تحديد مستواك";
       }
       if (!data.skills || data.skills.length === 0) {
         return "يرجى اختيار مهارة واحدة على الأقل";
       }
-      if (!data.interest || data.interest.length === 0) {
+      if (!data.learningInterests || data.learningInterests.length === 0) {
         return "يرجى اختيار اهتمام واحد على الأقل";
       }
       break;
 
     case 4:
-      // if (!data.about) return "يرجى كتابة نبذة عنك";
+      // النبذة اختيارية، لكن لو عايزاها إجبارية:
+      // if (!data.about) return "يرجى كتابة نبذة عنك.";
       break;
 
     default:

@@ -7,7 +7,8 @@ import RegisterLearner from "./features/Auth/RegisterLearner/RegisterLearner";
 import RegisterMentor from "./features/Auth/RegisterMentor/RegisterMentor";
 import ResetPassword from "./features/Auth/resetPassword"
 import MentorsList from "./features/MentorsPage/components/MentorsList";
-import MentorsPage from './features/MentorsPage/MentorsPage'
+import MentorsPage from './features/MentorsPage/MentorsPage';
+import MentorProfilePage from "./features/ProfileMentorForStudent/MentorProfilePage";
 import Index from "./view/Index"
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -39,6 +40,7 @@ function App() {
           <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
           <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
           <Route path="/mentor/:name" element={<MentorDetails />} />
+          <Route path="/MentorProfilePage" element={<MentorProfilePage></MentorProfilePage>}></Route>
 
         </Routes>
         <Footer></Footer>

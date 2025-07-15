@@ -1,21 +1,36 @@
 import { TextField } from "@mui/material";
+import type RegisterFormData from "../../../domain/types/RegisterFormData";
+import { useRegisterMutation } from "../../../redux/api/authApi";
+
 
 interface Props {
-  data: any;
-  setData: (val: any) => void;
+  data: RegisterFormData;
+  setData: (val: RegisterFormData) => void;
   onBack: () => void;
 }
 
 const Step4Intro = ({ data, setData, onBack }: Props) => {
+  const [register, { isLoading }] = useRegisterMutation();
+
   return (
     <div className="flex flex-col bg-white p-8 w-full max-w-4xl">
       <h2 className="text-2xl font-bold mb-2 text-[#000000] text-right">نبذة تعريفية</h2>
       <p className="text-sm text-[#A3A3A3] mb-8 text-right">هدفها: بناء ملف تعريفي يبان للمدربين.</p>
 
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          alert("تم إنشاء الحساب بنجاح!");
+          console.log("🚀 Final form data to be sent:", data);
+          try {
+            const response = await register(data).unwrap();
+            console.log("✅ Response from API:", response);
+      
+            alert("تم إنشاء الحساب بنجاح!");
+            window.location.href = "/";
+          } catch (error: any) {
+            console.error("❌ Error from API:", error); // ✅ اطبعي الخطأ
+            console.log("❌ Full error object:", JSON.stringify(error, null, 2));
+          }
         }}
         className="grid grid-cols-1 gap-4"
       >
@@ -29,8 +44,8 @@ const Step4Intro = ({ data, setData, onBack }: Props) => {
             multiline
             rows={4}
             placeholder="أخبرنا عنك، أهدافك، وماذا تفعل"
-            value={data.about}
-            onChange={(e) => setData({ ...data, about: e.target.value })}
+            value={data.bio}
+            onChange={(e) => setData({ ...data, bio: e.target.value })}
             InputProps={{
               style: {
                 backgroundColor: "#F4F9FB",
@@ -85,9 +100,10 @@ const Step4Intro = ({ data, setData, onBack }: Props) => {
 
           <button
             type="submit"
-            className="flex items-center gap-2 bg-[#0003C7] text-white px-6 py-2 rounded hover:bg-blue-800"
+            disabled={isLoading}
+            className="flex items-center gap-2 bg-[#0003C7] text-white px-6 py-2 rounded hover:bg-blue-800 disabled:opacity-50"
           >
-            استمرار
+            {isLoading ? "جارٍ الإرسال..." : "استمرار"}
             <img src="/arrow-left.png" alt="" />
           </button>
         </div>
@@ -96,7 +112,7 @@ const Step4Intro = ({ data, setData, onBack }: Props) => {
             لديك حساب؟{" "}
             <span
               className="cursor-pointer text-[#A3A3A3] hover:text-[#0003C7] transition"
-              onClick={() => window.location.href = "/login"} 
+              onClick={() => window.location.href = "/"} 
             >
               سجل دخول
             </span>

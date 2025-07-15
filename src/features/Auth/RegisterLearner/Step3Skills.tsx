@@ -1,17 +1,25 @@
 import { useState } from "react";
 import { TextField, MenuItem, RadioGroup, FormControlLabel, Radio, Chip, Autocomplete, } from "@mui/material";
+import { useGetLookupByTypeQuery } from "../../../redux/api/lookupApi";
+import type { LookupItem } from "../../../domain/types/LookupItem";
+import type RegisterFormData from "../../../domain/types/RegisterFormData";
 
 interface Props {
-  data: any;
-  setData: (val: any) => void;
+  data: RegisterFormData;
+  setData: (val: RegisterFormData) => void;
   onNext: () => void;
   onBack: () => void;
 }
 
 const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
-  const levels = ["مبتدىء", "متوسط", "متقدم"];
-  const skills = ["HTML", "CSS", "JavaScript", "React", "Python"];
-  const interests = ["Python", "UI/UX", "Backend", "Data Science"];
+  const { data: levelsResponse } = useGetLookupByTypeQuery("level");
+  const levels = levelsResponse?.value ?? [];
+
+  const { data: skillsResponse } = useGetLookupByTypeQuery("skilles");
+  const skills = skillsResponse?.value ?? [];
+
+  const { data: interestsResponse } = useGetLookupByTypeQuery("field");
+  const interests = interestsResponse?.value ?? [];
 
   return (
     <div className="flex flex-col bg-white  p-8 w-full max-w-4xl">
@@ -34,15 +42,15 @@ const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
           <TextField
             fullWidth
             select
-            value={data.level || ""}
-            onChange={(e) => setData({ ...data, level: e.target.value })}
+            value={data.levelId || ""}
+            onChange={(e) => setData({ ...data, levelId: e.target.value })}
           >
             <MenuItem value="" disabled>
               اختر من القائمة
             </MenuItem>
-            {levels.map((lvl) => (
-              <MenuItem key={lvl} value={lvl}>
-                {lvl}
+            {levels.map((lvl: LookupItem) => (
+              <MenuItem key={lvl.id} value={lvl.id}>
+                {lvl.name}
               </MenuItem>
             ))}
           </TextField>
@@ -51,35 +59,40 @@ const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
         <div>
           <label className="text-sm font-medium text-gray-800 mb-1 text-right">ما هي مهاراتك الحالية؟</label>
           <div className="border border-gray-300 rounded-md px-3 py-2 min-h-[56px] flex flex-wrap items-center gap-2 bg-white">
-            {data.skills?.map((skill: string, index: number) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
-              >
-                {skill}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setData({
-                      ...data,
-                      skills: data.skills.filter((s: string) => s !== skill),
-                    })
-                  }
-                  className="text-blue-600 hover:text-blue-800 font-bold"
+            {data.skills?.map((skillObj: { skillId: string }, index: number) => {
+              const skillName = skills.find((s: LookupItem) => s.id === skillObj.skillId)?.name ?? "غير معروف";
+              return (
+                <span
+                  key={skillObj.skillId}
+                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
                 >
-                  ×
-                </button>
-              </span>
-            ))}
+                  {skillName}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setData({
+                        ...data,
+                        skills: data.skills.filter((s: { skillId: string }) => s.skillId !== skillObj.skillId),
+
+                      })
+                    }
+                    className="text-blue-600 hover:text-blue-800 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+              );
+            })}
 
             <select
               value=""
               onChange={(e) => {
                 const val = e.target.value;
-                if (val && !data.skills?.includes(val)) {
+                if (val && !data.skills?.some((s: { skillId: string }) => s.skillId === val)
+                ) {
                   setData({
                     ...data,
-                    skills: [...(data.skills || []), val],
+                    skills: [...(data.skills || []), { skillId: val }],
                   });
                 }
               }}
@@ -88,9 +101,9 @@ const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
               <option value="" disabled>
                 اختر من القائمة
               </option>
-              {skills.map((skill) => (
-                <option key={skill} value={skill}>
-                  {skill}
+              {skills.map((skill: LookupItem) => (
+                <option key={skill.id} value={skill.id}>
+                  {skill.name}
                 </option>
               ))}
             </select>
@@ -100,35 +113,43 @@ const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
         <div>
           <label className="text-sm font-medium text-gray-800 mb-1 text-right">المجالات التي تريد تعلمها</label>
           <div className="border border-gray-300 rounded-md px-3 py-2 min-h-[56px] flex flex-wrap items-center gap-2 bg-white">
-            {data.interest?.map((item: string, index: number) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
-              >
-                {item}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setData({
-                      ...data,
-                      interest: data.interest.filter((i: string) => i !== item),
-                    })
-                  }
-                  className="text-blue-600 hover:text-blue-800 font-bold"
+            {data.learningInterests?.map((item: { learningInterestId: string }, index: number) => {
+              const name = interests.find((i: LookupItem) => i.id === item.learningInterestId)?.name ?? "غير معروف";
+              return (
+                <span
+                  key={item.learningInterestId}
+                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
                 >
-                  ×
-                </button>
-              </span>
-            ))}
+                  {name}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setData({
+                        ...data,
+                        learningInterests: data.learningInterests.filter(
+                          (i: { learningInterestId: string }) => i.learningInterestId !== item.learningInterestId
+                        ),
+                      })
+                    }
+                    className="text-blue-600 hover:text-blue-800 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+              );
+            })}
 
             <select
               value=""
               onChange={(e) => {
                 const val = e.target.value;
-                if (val && !data.interest?.includes(val)) {
+                if (
+                  val &&
+                  !data.learningInterests?.some((i: { learningInterestId: string }) => i.learningInterestId === val)
+                ) {
                   setData({
                     ...data,
-                    interest: [...(data.interest || []), val],
+                    learningInterests: [...(data.learningInterests || []), { learningInterestId: val }],
                   });
                 }
               }}
@@ -137,14 +158,16 @@ const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
               <option value="" disabled>
                 اختر من القائمة
               </option>
-              {interests.map((item) => (
-                <option key={item} value={item}>
-                  {item}
+              {interests.map((item: LookupItem) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
                 </option>
               ))}
             </select>
           </div>
         </div>
+
+
 
         <div className="col-span-2 flex justify-between mt-4">
           <button
@@ -169,7 +192,7 @@ const Step3Skills = ({ data, setData, onNext, onBack }: Props) => {
             لديك حساب؟{" "}
             <span
               className="cursor-pointer text-[#A3A3A3] hover:text-[#0003C7] transition"
-              onClick={() => window.location.href = "/login"}
+              onClick={() => window.location.href = "/"}
             >
               سجل دخول
             </span>

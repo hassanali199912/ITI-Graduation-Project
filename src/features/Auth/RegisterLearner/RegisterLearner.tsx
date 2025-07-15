@@ -9,30 +9,56 @@ import ProgressBar from "../ProgressBar";
 import StepSidebar from "./StepSidebar";
 import CircularSteps from '../CircularSteps';
 import { validateStep } from "./stepValidation";
+import type RegisterFormData  from "../../../domain/types/RegisterFormData";
+import { useGetLookupByTypeQuery } from "../../../redux/api/lookupApi";
 
 const MySwal = withReactContent(Swal);
 
 const RegisterLearner = () => {
   const [step, setStep] = useState(1);
 
-  const [formData, setFormData] = useState({
+  const { data: countriesResponse } = useGetLookupByTypeQuery("country");
+  const countries = countriesResponse?.value ?? [];
+
+  const { data: graduationStatusesResponse } = useGetLookupByTypeQuery("graduationStatus");
+  const graduationStatuses = graduationStatusesResponse?.value ?? [];
+
+  const { data: specialistsResponse } = useGetLookupByTypeQuery("specialization");
+  const specialists = specialistsResponse?.value ?? [];
+
+  const { data: skillsResponse } = useGetLookupByTypeQuery("skilles");
+  const skills = skillsResponse?.value ?? [];
+
+  const { data: genderData } = useGetLookupByTypeQuery("gender");
+  const genders = genderData?.value ?? [];
+
+
+  const [formData, setFormData] = useState<RegisterFormData>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    birthDate: "",
-    gender: "",
-    country: "",
-    nationality: "",
-    specialization: "",
-    educationLevel: "",
-    about: "",
+    gender: 0,
+    residenceCountryId: "",
+    profilePictureUrl: "",
+    bio: "",
     github: "",
+    connectProgramming: false,
+    levelId: "",
+    graduationStatusId: "",
+    specialistId: "",
+    experiences: [],
+    skills: [],
+    learningInterests: [],
   });
+
+  
+  
 
   const nextStep = () => {
     const error = validateStep(step, formData);
+    console.log("validation error:", error);
     if (error) {
       MySwal.fire({
         title: 'تنبيه',
@@ -51,7 +77,7 @@ const RegisterLearner = () => {
   return (
     <div className=" min-h-screen" dir='rtl'>
       
-      <ProgressBar activeStep={step} />
+      <ProgressBar activeStep={step} totalSteps={4} />
       
       
       <div className=" mx-auto flex bg-white overflow-hidden ">
@@ -62,6 +88,7 @@ const RegisterLearner = () => {
               data={formData}
               setData={setFormData}
               onNext={nextStep}
+              genders={genders}
             />
           )}
           {step === 2 && (
@@ -88,7 +115,12 @@ const RegisterLearner = () => {
             />
           )}
         </div>
-        <StepSidebar data={formData} />
+        <StepSidebar data={formData} 
+           countries={countries} 
+           specialists={specialists}
+           graduationStatuses={graduationStatuses} 
+           skills={skills}
+           genders={genders}/>
       </div>
     </div>
   );
