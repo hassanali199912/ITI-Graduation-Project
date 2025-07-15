@@ -2,15 +2,12 @@ import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import logger from "./logger";
 import { createApi, type BaseQueryFn } from "@reduxjs/toolkit/query/react"
 
-
-
 const axiosInterseptor = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     headers: {
         "Content-Type": "Application/json"
     }
 });
-
 
 axiosInterseptor.interceptors.request.use((config) => {
 
@@ -109,11 +106,4 @@ export const api = createApi({
     tagTypes: ['Lookup'],
     endpoints: () => ({})
 })
-
-
-
-
-
-
-
 export default axiosInterseptor

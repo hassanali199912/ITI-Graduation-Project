@@ -13,8 +13,8 @@ useEffect(() => {
       console.log("API response:", data);
       if (Array.isArray(data)) {
         setStudents(data);
-      } else if (Array.isArray(data.data)) {
-        setStudents(data.data);
+      } else if (Array.isArray(data.data.students)) {
+        setStudents(data.data.students);
       } else {
         throw new Error("البيانات غير متوقعة");
       }

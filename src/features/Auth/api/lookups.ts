@@ -50,6 +50,12 @@ export const lookupsApi = api.injectEndpoints({
         method: "GET",
       }),
     }),
+    getSkills: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/skilles', // تأكدي من spelling هنا هل هي skilles ولا skills؟
+        method: "GET"
+      })
+    })
   }),
 });
 export const {
