@@ -11,6 +11,7 @@ import {
 } from "../../api/lookups";
 import Tags from "../../../../shared/components/form/Tags";
 import { useUploadFileMutation } from "../../api/regester";
+import { uploadFileDirect } from "../../../../config/apis";
 
 type Props = {
   data: StepOneData;
@@ -74,21 +75,20 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
   //   trigger("profilePictureUrl");
   // };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
-
-  // 1) عرّض الصورة محليًا
-  setValue("profilePictureUrl", file, { shouldValidate: true });
-
-  try {
-    const res = await uploadFile(file).unwrap();
-    let url = res.data.fileUrl
-    // 2) بعد الرفع، خزّن الـ URL بدل الـ File
-    setValue("profilePictureUrl", url, { shouldValidate: true });
-  } catch (err) {
-    console.error("Upload error", err);
-  }
-};
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // 1) عرّض الصورة محليًا
+    setValue("profilePictureUrl", file, { shouldValidate: true });
+    try {
+      const response = await uploadFileDirect(file);
+      let url = response?.data?.fileUrl || ""
+      console.log("jhhkhkkhkhk", response?.data?.data?.fileUrl);
+      // 2) بعد الرفع، خزّن الـ URL بدل الـ File
+      setValue("profilePictureUrl", url, { shouldValidate: true });
+    } catch (err) {
+      console.error("Upload error", err);
+    }
+  };
 
   const skills = watch("skills");
   const avatarFile = watch("profilePictureUrl");
@@ -182,20 +182,20 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
           control={control}
           render={({ field }) => (
             <>
-            <label className="block text-right mb-2 font-bold">السعر</label>
-            <input
-              {...field}
-              type="text"
-              placeholder="ادخل السعر"
-              className="bg-blue-50 p-2 w-full rounded mt-4 mb-8"
-              onChange={(e) =>
-                field.onChange(
-                  e.target.value.trim() === ""
-                    ? undefined
-                    : Number(e.target.value)
-                )
-              }
-            />
+              <label className="block text-right mb-2 font-bold">السعر</label>
+              <input
+                {...field}
+                type="text"
+                placeholder="ادخل السعر"
+                className="bg-blue-50 p-2 w-full rounded mt-4 mb-8"
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value.trim() === ""
+                      ? undefined
+                      : Number(e.target.value)
+                  )
+                }
+              />
             </>
           )}
         />
