@@ -10,7 +10,7 @@ const MentorsRequests = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  fetch("http://academix1.runasp.net/api/GetTeachers?status=2")
+  fetch("http://academix1.runasp.net/api/GetTeachers?status=2&pageNumber=1&pageSize=10")
     .then((res) => res.json())
     .then((data) => {
     
@@ -19,8 +19,8 @@ const refused = JSON.parse(localStorage.getItem("refusedMentors") || "[]");
       let mentorsList = [];
       if (Array.isArray(data)) {
         mentorsList = data;
-      } else if (Array.isArray(data.data)) {
-        mentorsList = data.data;
+      } else if (Array.isArray(data.data.teachers)) {
+        mentorsList = data.data.teachers;
       }
 
       

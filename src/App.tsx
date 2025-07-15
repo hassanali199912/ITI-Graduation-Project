@@ -25,7 +25,7 @@ function App() {
         <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<Login></Login>} />
-          <Route path="/changepassword" element={<ChangePassword />} />
+          <Route path="/changepassword" element={<ChangePassword></ChangePassword>} />
           <Route path="/sendotp" element={<OtpPage></OtpPage>} />
           <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
 
