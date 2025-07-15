@@ -8,18 +8,19 @@ export const authApi = api.injectEndpoints({
         data: data,
       }),
     }),
-    uploadFile: builder.mutation<{ url: string }, File>({
-      query: (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
+uploadFile: builder.mutation<{ data: { fileUrl: string }}, File>({
+  query: (file) => {
+    const form = new FormData();
+    form.append("file", file);          
 
-        return {
-          url: "/api/files/upload",
-          method: "POST",
-          body: formData,
-        };
-      },
-    }),
+    return {
+      url: "/api/files/upload",                
+      method: "POST",
+      body: form,
+    };
+  },
+}),
+
   }),
 });
 

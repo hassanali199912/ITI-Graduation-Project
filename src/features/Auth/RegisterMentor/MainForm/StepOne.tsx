@@ -74,17 +74,22 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
   //   trigger("profilePictureUrl");
   // };
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    try {
-      const { url } = await uploadFile(file).unwrap();
-      console.log("File URL:", url);
-      // setValue("profilePictureUrl", url); لو بتستخدم RHF
-    } catch (err) {
-      console.error("Upload error", err);
-    }
-  };
+  // 1) عرّض الصورة محليًا
+  setValue("profilePictureUrl", file, { shouldValidate: true });
+
+  try {
+    const res = await uploadFile(file).unwrap();
+    let url = res.data.fileUrl
+    // 2) بعد الرفع، خزّن الـ URL بدل الـ File
+    setValue("profilePictureUrl", url, { shouldValidate: true });
+  } catch (err) {
+    console.error("Upload error", err);
+  }
+};
+
   const skills = watch("skills");
   const avatarFile = watch("profilePictureUrl");
   const [triggerSkills, { data: skillsRes }] = useLazyGetSkillsQuery();

@@ -49,8 +49,7 @@ export const lookupsApi = api.injectEndpoints({
         url: "/api/lookup/skilles",
         method: "GET",
       }),
-    }),
-  }),
+  }),})
 });
 export const {
   useLazyGetCountriesQuery,
@@ -70,6 +69,6 @@ export const {
   // teaching language
   useLazyGetTeachingLangQuery,
   useGetTeachingLangQuery,
-  // skills
-  useLazyGetSkillsQuery,
+  // skills 
+  useLazyGetSkillsQuery
 } = lookupsApi;

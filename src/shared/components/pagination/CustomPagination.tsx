@@ -1,7 +1,4 @@
 import React from "react";
-import LArrow from "@/assets/l_arrow.svg";
-import RArrow from "@/assets/r_arrow.svg";
-import { useTranslation } from "react-i18next";
 
 interface IPaginationProps {
   page: number;
@@ -14,76 +11,52 @@ export const CustomPagination: React.FC<IPaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const { i18n } = useTranslation();
-  const isRTL = i18n.dir() === "rtl";
-
-  const getPagesArray = (): (number | string)[] => {
-    if (totalPages <= 5) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
-    return [1, 2, 3, "...", totalPages];
-  };
-
-  const pages = getPagesArray();
+  // مصفوفة الصفحات (١‑٥ أو ١ ٢ ٣ ... آخر)
+  const pages: (number | string)[] =
+    totalPages <= 5
+      ? Array.from({ length: totalPages }, (_, i) => i + 1)
+      : [1, 2, 3, "…", totalPages];
 
   return (
-    <div
-      className={`flex items-center space-x-4 px-4 mt-4 mb-4 ${
-        isRTL ? "justify-start" : "justify-end"
-      }`}
-    >
+    <nav className="flex justify-center items-center gap-2 py-4" aria-label="pagination">
+      {/* السابق */}
       <button
-        className={`text-[#161616] disabled:opacity-50`}
-        onClick={() => onPageChange(Math.max(page - 1, 1))}
         disabled={page === 1}
+        onClick={() => onPageChange(page - 1)}
+        className="px-2 disabled:opacity-40"
+        aria-label="السابق"
       >
-        <img
-        className={`${isRTL ? "!ml-6":""}`}
-          src={isRTL ? RArrow : LArrow} 
-          alt="Previous"
-        />
+        ‹
       </button>
 
-      {pages.map((item, index) => {
-        if (item === "...") {
-          return (
-            <span
-              key={index}
-              className="text-[#161616] border rounded-sm border-[#1f1f1f] px-2 py-1 text-sm medium"
-            >
-              ...
-            </span>
-          );
-        }
-
-        const pageNum = item as number;
-        const isActive = pageNum === page;
-
-        return (
+      {/* الأرقام */}
+      {pages.map((item, i) =>
+        item === "…" ? (
+          <span key={i} className="px-2 select-none">
+            …
+          </span>
+        ) : (
           <button
-            key={index}
-            className={`text-[#161616] text-md  normal !px-3 relative ${
-              isActive
-                ? "bold after:content-[''] after:absolute after:bottom-[-3px] after:left-0 after:w-full after:h-[3px] after:bg-[#1B8354]"
-                : "hover:text-primary-600"
+            key={i}
+            onClick={() => onPageChange(item as number)}
+            className={`px-3 ${
+              page === item ? "font-bold underline" : "hover:underline"
             }`}
-            onClick={() => onPageChange(pageNum)}
           >
-            {pageNum}
+            {item}
           </button>
-        );
-      })}
+        )
+      )}
 
+      {/* التالى */}
       <button
-        className="text-[#161616] disabled:opacity-50"
-        onClick={() => onPageChange(Math.min(page + 1, totalPages))}
         disabled={page === totalPages}
+        onClick={() => onPageChange(page + 1)}
+        className="px-2 disabled:opacity-40"
+        aria-label="التالى"
       >
-        <img
-          src={isRTL ? LArrow : RArrow}
-          alt="Next"
-        />
+        ›
       </button>
-    </div>
+    </nav>
   );
 };
