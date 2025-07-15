@@ -143,7 +143,7 @@ export default function RegisterMentor() {
     try {
       const res = await regesterMentor(finalData);
       console.log("API response:", res);
-      if (res && res?.data && res?.data?.statusCode === 201) {
+      if (res && res?.data && res?.data?.statusCode === 200) {
         toast.success("تم انشاء المستخدم بنجاح");
       } else {
         toast.error(res?.error?.data || "حدث خطا , برجاء المحاولة لاحقا");

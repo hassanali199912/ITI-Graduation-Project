@@ -67,7 +67,7 @@ export default function Mentor(props: MentorCardProps) {
       <p className="text-xs leading-5 mb-3">{bioShown}</p>
 
       <div className="flex flex-wrap gap-2 mb-4 justify-end">
-        {skills?.slice(0, 3).map((skill:Skill) => (
+        {skills?.map((skill:Skill) => (
           <span
             key={skill.skillId}
             className="bg-blue-100 text-gray-800 text-[10px] font-medium px-2 py-0.5 rounded-full"
