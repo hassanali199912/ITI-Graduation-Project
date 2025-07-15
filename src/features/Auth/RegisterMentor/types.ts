@@ -45,28 +45,28 @@ export const stepTwoSchema = z.object({
     })
   ),
 });
-
+const fileSchema = z
+  .instanceof(File)
+  .refine(
+    (f) =>
+      f.size <= 5 * 1024 * 1024 &&
+      ["image/jpeg", "image/png", "application/pdf"].includes(f.type),
+    {
+      message:
+        "يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 10 ميجابايت",
+    }
+  );
 export const stepThreeSchema = z.object({
   certificates: z
     .array(
       z.object({
         name: z.string().min(1, { message: "اسم الشهادة مطلوب" }),
         certificateUrl: z
-          .any()
-          .optional()
-          .refine(
-            (file) =>
-              !file ||
-              (file instanceof File &&
-                file.size <= 5 * 1024 * 1024 &&
-                ["image/jpeg", "image/png", "application/pdf"].includes(
-                  file.type
-                )),
-            {
-              message:
-                "يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 5 ميجابايت",
-            }
-          ),
+          .object({
+            file: fileSchema,
+            url: z.string().url(),
+          })
+          .optional(),
         issuedBy: z.string().min(1, { message: "الجهة المانحة مطلوبة" }),
         issuedDate: z
           .string()
@@ -151,8 +151,8 @@ export interface GetTeachersResponse {
     totalPages: number;
     PageSize: number;
     pageNumber: number;
-    hasPreviousPage:Boolean;
-    hasNextPage:Boolean
+    hasPreviousPage: Boolean;
+    hasNextPage: Boolean;
   };
 }
 

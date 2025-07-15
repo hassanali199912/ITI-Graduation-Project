@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { stepThreeSchema, type StepThreeData } from '../types';
 import FormInput from './components/FormInput';
 import AddIcon from '@mui/icons-material/Add';
+import { uploadFileDirect } from '../../../../config/apis';
 
 interface Props {
   data: StepThreeData;
@@ -32,8 +33,6 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
     name: 'certificates',
   });
 
-
-
   // Handle form submission
   const onSubmit = async (formData: StepThreeData) => {
     updateData(formData);
@@ -42,11 +41,8 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
 
   // Register validation and submission
   React.useEffect(() => {
-
     triggerSubmit(async () => {
-
       const isValid = await trigger();
-
       if (!isValid) {
         console.log('StepThree Validation Errors:', JSON.stringify(errors, null, 2));
       }
@@ -58,9 +54,19 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
   }, [triggerSubmit, trigger, handleSubmit, watch, errors]);
 
   // Handle file upload
-  const handleFileChange = (index: number, file: File | undefined) => {
-    setValue(`certificates.${index}.certificateUrl`, file, { shouldValidate: true });
-    trigger(`certificates.${index}.certificateUrl`);
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    console.log(file, 'file');
+    if (!file) return;
+    try {
+      const response = await uploadFileDirect(file);
+      const url = response?.data?.data?.fileUrl || "";
+      console.log("Uploaded URL", url);
+      // Set only the URL as certificateUrl expects a string or File
+      setValue(`certificates.${index}.certificateUrl`, url, { shouldValidate: true });
+    } catch (err) {
+      console.error("Upload error", err);
+    }
   };
 
   return (
@@ -86,8 +92,12 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
               <input
                 type="file"
                 accept="image/jpeg,image/png,application/pdf"
-                onChange={(e) => handleFileChange(index, e.target.files?.[0])}
+                onChange={(e) => handleFileChange(e, index)}
                 className="border rounded px-4 py-2"
+              />
+              <input
+                type="hidden"
+                {...register(`certificates.${index}.certificateUrl` as const)}
               />
               {errors.certificates?.[index]?.certificateUrl?.message && (
                 <span className="error">{String(errors.certificates[index].certificateUrl.message)}</span>

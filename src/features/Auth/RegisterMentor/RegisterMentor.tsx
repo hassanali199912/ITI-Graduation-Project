@@ -65,7 +65,7 @@ export default function RegisterMentor() {
         certificates: [
           {
             name: "",
-            certificateUrl: "",
+            certificateUrl:{},
             issuedBy: "",
             issuedDate: "", // e.g. "2025-07-01"
             examResult: "",
