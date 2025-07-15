@@ -4,76 +4,52 @@ export const lookupsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getCountries: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/country',
-        method: 'GET',
+        url: "/api/lookup/country",
+        method: "GET",
       }),
     }),
     getGender: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/gender',
+        url: "/api/lookup/gender",
         method: "GET",
-      })
+      }),
     }),
     getSpecialization: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/specialization',
+        url: "/api/lookup/specialization",
         method: "GET",
-      })
+      }),
     }),
     getAgegroup: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/agegroup',
+        url: "/api/lookup/agegroup",
         method: "GET",
-      })
+      }),
     }),
     getTeachingAgeArea: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/teachingarea',
-        method: "GET"
-      })
+        url: "/api/lookup/teachingarea",
+        method: "GET",
+      }),
     }),
     getTeachingLang: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/teachingLanguage',
-        method: "GET"
-      })
+        url: "/api/lookup/teachingLanguage",
+        method: "GET",
+      }),
     }),
     getCommunicationMethod: builder.query<any, void>({
       query: () => ({
-        url: '/api/lookup/communicationmethod',
-        method: "GET"
-      })
+        url: "/api/lookup/communicationmethod",
+        method: "GET",
+      }),
     }),
-    getSkills : builder.query<any,void>({
-      query : () => ({
-<<<<<<< Updated upstream
-        url : '/api/lookup/skilles',
-        method: "GET"
-
-=======
-        url : '/api/lookup/teachingarea',
-        method : "GET"
-      })
+    getSkills: builder.query<any, void>({
+      query: () => ({
+        url: "/api/lookup/skilles",
+        method: "GET",
+      }),
     }),
-      getTeachingLang : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/teachingLanguage',
-        method : "GET"
-      })
-    }),
-    getCommunicationMethod : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/communicationmethod',
-        method : "GET"
-      })
-    }),
-    getSkills : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/skilles',
-        method : "GET"
->>>>>>> Stashed changes
-      })
-    })
   }),
 });
 export const {
@@ -88,15 +64,12 @@ export const {
   //getAgegroup
   useLazyGetAgegroupQuery,
   useGetAgegroupQuery,
-  //teaching area 
+  //teaching area
   useLazyGetTeachingAgeAreaQuery,
   useGetTeachingAgeAreaQuery,
   // teaching language
   useLazyGetTeachingLangQuery,
   useGetTeachingLangQuery,
-<<<<<<< Updated upstream
-=======
-  // skills 
->>>>>>> Stashed changes
-  useLazyGetSkillsQuery
+  // skills
+  useLazyGetSkillsQuery,
 } = lookupsApi;
