@@ -96,11 +96,8 @@ const availableSkills: string[] = useMemo(() => {
           <main className="flex-1">
   <div className="rounded-xl p-6 h-full overflow-y-auto space-y-6">
 
-    {isFetching ? (
-      <p className="text-center py-10">جارى التحميل…</p>
-    ) : (
-      <MentorsList mentors={mentors} />
-    )}
+    
+<MentorsList mentors={mentors} loading={isFetching} />
 
     {/* Pagination */}
     {totalPages > 1 && (

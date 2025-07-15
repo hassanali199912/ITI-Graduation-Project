@@ -125,16 +125,18 @@ import type { Teacher } from "../../Auth/RegisterMentor/types";
 
 interface MentorsListProps {
   mentors: Teacher[] | undefined;
+  loading?: boolean;          
+
 }
 
-export default function MentorsList({ mentors }: MentorsListProps) {
+export default function MentorsList({ mentors = [], loading  }: MentorsListProps) {
+  const skeletons = Array.from({ length: 6 });
+
   return (
-    <>
-       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"> 
-     {mentors?.map((t) => (
-        <Mentor key={t.id} {...t} compact /> 
-      ))}
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {loading
+        ? skeletons.map((_, i) => <Mentor key={`s-${i}`} loading compact />)
+        : mentors.map((t) => <Mentor key={t.id} {...t} compact />)}
     </div>
-    </>
   );
 }
