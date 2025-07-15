@@ -2,12 +2,11 @@ import { z } from "zod";
 
 export const stepOneSchema = z
   .object({
-    firstName: z
-      .string()
-      .min(1, { message: "الإسم الأول مطلوب" }),
-    lastName: z
-      .string()
-      .min(1, { message: "الإسم الثانى مطلوب" }),
+    firstName: z.string().min(1, { message: "الإسم الأول مطلوب" }),
+    lastName: z.string().min(1, { message: "الإسم الثانى مطلوب" }),
+    skills: z
+      .array(z.string().uuid())
+      .min(1, { message: "يجب اختيار مهارة" }),
     email: z
       .string()
       .min(1, { message: "البريد الإلكتروني مطلوب" })
@@ -21,12 +20,11 @@ export const stepOneSchema = z
       .min(1, { message: "رقم الهاتف مطلوب" })
       .regex(/^\+?\d{7,15}$/, { message: "رقم الهاتف غير صحيح" }),
     gender: z.number().int().min(0).max(1, { message: "النوع مطلوب" }),
+    salary:z.number().int({message:'السعر مطلوب'}),
     bio: z.string().min(1, { message: "السيرة الذاتية مطلوبة" }),
-    lang: z
-      .string()
-      .refine((val) => ["Arabic", "English"].includes(val), {
-        message: "يرجى اختيار اللغة",
-      }),
+    lang: z.string().refine((val) => ["Arabic", "English"].includes(val), {
+      message: "يرجى اختيار اللغة",
+    }),
     profilePictureUrl: z
       .any()
       .optional()
@@ -52,7 +50,7 @@ export const stepTwoSchema = z.object({
       degree: z.string().min(1, "الدرجة العلمية مطلوبة"),
       field: z.string().min(1, "التخصص مطلوب"),
       startDate: z.string(), // أو z.date().transform(String)
-      endDate: z.string(),   // أو z.date().transform(String)
+      endDate: z.string(), // أو z.date().transform(String)
       description: z.string(),
     })
   ),
@@ -115,30 +113,36 @@ export const stepFourSchema = z.object({
 });
 
 // Step 5 validation schema
-export const stepFiveSchema = z.object({
-  hasExams: z.enum(["yes", "no"], { required_error: "يرجى اختيار هل اجتزت اختبارات" }),
-  exams: z.array(
-    z.object({
-      examName: z.string().min(1, { message: "اسم الامتحان مطلوب" }),
-      rate: z.string().min(1, { message: "التقييم مطلوب" }),
-      givingOrg: z.string().min(1, { message: "الجهة المانحة مطلوبة" }),
-      examCertificates: z.string().optional(),
-      certificateFile: z.any().optional(),
-      examMonth: z.string().min(1, { message: "الشهر مطلوب" }),
-      examYear: z.string().min(1, { message: "السنة مطلوبة" }),
-    })
-  ).optional(),
-}).superRefine((data, ctx) => {
-  if (data.hasExams === 'yes') {
-    if (!data.exams || data.exams.length === 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "يجب إضافة امتحان واحد على الأقل",
-        path: ["exams"],
-      });
+export const stepFiveSchema = z
+  .object({
+    hasExams: z.enum(["yes", "no"], {
+      required_error: "يرجى اختيار هل اجتزت اختبارات",
+    }),
+    exams: z
+      .array(
+        z.object({
+          examName: z.string().min(1, { message: "اسم الامتحان مطلوب" }),
+          rate: z.string().min(1, { message: "التقييم مطلوب" }),
+          givingOrg: z.string().min(1, { message: "الجهة المانحة مطلوبة" }),
+          examCertificates: z.string().optional(),
+          certificateFile: z.any().optional(),
+          examMonth: z.string().min(1, { message: "الشهر مطلوب" }),
+          examYear: z.string().min(1, { message: "السنة مطلوبة" }),
+        })
+      )
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.hasExams === "yes") {
+      if (!data.exams || data.exams.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "يجب إضافة امتحان واحد على الأقل",
+          path: ["exams"],
+        });
+      }
     }
-  }
-});
+  });
 
 export type StepOneData = z.infer<typeof stepOneSchema>;
 export type StepTwoData = z.infer<typeof stepTwoSchema>;

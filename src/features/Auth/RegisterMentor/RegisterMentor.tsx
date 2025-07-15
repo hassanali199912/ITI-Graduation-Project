@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm, FormProvider, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,6 +18,7 @@ import { z } from "zod";
 import { useRegesterMentorMutation } from "../api/regester";
 import BlurLoader from "../../../shared/components/loaders/Blurloader";
 import { toast } from "react-toastify";
+import { useLazyGetSkillsQuery } from "../api/lookups";
 
 export default function RegisterMentor() {
   const [activeStep, setActiveStep] = useState(1);
@@ -37,10 +38,12 @@ export default function RegisterMentor() {
         firstName: "",
         lastName: "",
         email: "",
+        skills:[],
         password1: "",
         password2: "",
         phoneNumber: "",
         gender: 0,
+        salary:0,
         bio: "",
         lang: "", // ID of teaching language
         profilePictureUrl: "",
@@ -100,8 +103,10 @@ export default function RegisterMentor() {
       password: data.stepOne.password1,
       firstName: data.stepOne.firstName,
       lastName: data.stepOne.lastName,
+      skills: data.stepOne.skills.map((id) => ({ skillId: id })), 
       phoneNumber: data.stepOne.phoneNumber,
       gender: data.stepOne.gender,
+      salary: data.stepOne.salary,
       bio: data.stepOne.bio,
       profilePictureUrl:
         typeof data.stepOne.profilePictureUrl === "string"
@@ -123,14 +128,14 @@ export default function RegisterMentor() {
       //   ...exam,
       //   certificateFile: typeof exam.certificateFile === "string" ? exam.certificateFile : ""
       // })),
-      skills: [
-        { skillId: "3a58e810-53bd-4fe6-9bf7-08ddc25fa0b3" }, // HTML
-        { skillId: "dc469252-469c-4d08-9bf8-08ddc25fa0b3" }, // CSS
-        { skillId: "06aba2a1-bfea-432f-9bf9-08ddc25fa0b3" }, // JavaScript
-        { skillId: "4eba2156-8f55-4bc2-9bfb-08ddc25fa0b3" }, // React
-        { skillId: "b80b2614-55cb-4f8b-9bfe-08ddc25fa0b3" }, // Node.js
-        { skillId: "497a8831-93ac-463f-9c03-08ddc25fa0b3" }, // MongoDB
-      ],
+      // skills: [
+      //   { skillId: "3a58e810-53bd-4fe6-9bf7-08ddc25fa0b3" }, // HTML
+      //   { skillId: "dc469252-469c-4d08-9bf8-08ddc25fa0b3" }, // CSS
+      //   { skillId: "06aba2a1-bfea-432f-9bf9-08ddc25fa0b3" }, // JavaScript
+      //   { skillId: "4eba2156-8f55-4bc2-9bfb-08ddc25fa0b3" }, // React
+      //   { skillId: "b80b2614-55cb-4f8b-9bfe-08ddc25fa0b3" }, // Node.js
+      //   { skillId: "497a8831-93ac-463f-9c03-08ddc25fa0b3" }, // MongoDB
+      // ],
     };
 
     console.log("Submitting to API:", JSON.stringify(finalData, null, 2));
@@ -200,6 +205,7 @@ export default function RegisterMentor() {
       ...data,
     });
   };
+
 
   return (
     <>
