@@ -100,6 +100,7 @@ const axiosBaseQuery =
 
 export const api = createApi({
     baseQuery: axiosBaseQuery(),
+    tagTypes: ['Lookup'],
     endpoints: () => ({})
 })
 

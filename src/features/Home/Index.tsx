@@ -22,7 +22,7 @@ const Home: React.FC = () => {
   const navigate=useNavigate();
   return (
     <>
-    <Navbar></Navbar>
+    
     <div className="bg-blue-50">
 <div className="relative w-fit mt-30 ml-30 ">
  
@@ -206,7 +206,7 @@ const Home: React.FC = () => {
     </button>
   </div>
 </div>
-<Footer></Footer>
+
     </>
   );
 };

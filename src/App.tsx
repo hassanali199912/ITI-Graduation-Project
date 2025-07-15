@@ -15,11 +15,14 @@ import Home from "./features/Home/Index";
 import DashboardAdmin from "./features/Home/dashboardAdmin";
 import DashboardMentor from "./features/Home/dashboardMentor";
 import MentorDetails from "./features/Home/dataofmentor";
+import Navbar from "./features/Home/Navbar";
+import Footer from "./features/Home/footer";
 function App() {
   return (
     <>
 
       <Router>
+        <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<Login></Login>} />
           <Route path="/changepassword" element={<ChangePassword />} />
@@ -38,6 +41,7 @@ function App() {
 <Route path="/mentor/:name" element={<MentorDetails />} />
 
         </Routes>
+        <Footer></Footer>
       </Router>
       
       <ToastContainer />
