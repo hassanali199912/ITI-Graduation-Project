@@ -44,34 +44,10 @@ export const lookupsApi = api.injectEndpoints({
         method: "GET"
       })
     }),
-    getSkills : builder.query<any,void>({
-      query : () => ({
-<<<<<<< Updated upstream
-        url : '/api/lookup/skilles',
+    getSkills: builder.query<any, void>({
+      query: () => ({
+        url: '/api/lookup/skilles', // تأكدي من spelling هنا هل هي skilles ولا skills؟
         method: "GET"
-
-=======
-        url : '/api/lookup/teachingarea',
-        method : "GET"
-      })
-    }),
-      getTeachingLang : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/teachingLanguage',
-        method : "GET"
-      })
-    }),
-    getCommunicationMethod : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/communicationmethod',
-        method : "GET"
-      })
-    }),
-    getSkills : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/skilles',
-        method : "GET"
->>>>>>> Stashed changes
       })
     })
   }),
@@ -94,9 +70,6 @@ export const {
   // teaching language
   useLazyGetTeachingLangQuery,
   useGetTeachingLangQuery,
-<<<<<<< Updated upstream
-=======
   // skills 
->>>>>>> Stashed changes
   useLazyGetSkillsQuery
 } = lookupsApi;
