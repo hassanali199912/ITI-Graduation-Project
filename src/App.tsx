@@ -14,6 +14,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./features/Home/Index";
 import DashboardAdmin from "./features/Home/dashboardAdmin";
 import DashboardMentor from "./features/Home/dashboardMentor";
+import MentorDetails from "./features/Home/dataofmentor";
 function App() {
   return (
     <>
@@ -33,7 +34,8 @@ function App() {
            <Route path="/landingpage" element={<Home></Home>}></Route>
               <Route path="/dashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
                <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
-
+                <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
+<Route path="/mentor/:name" element={<MentorDetails />} />
 
         </Routes>
       </Router>

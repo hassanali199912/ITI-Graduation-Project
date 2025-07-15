@@ -4,7 +4,7 @@ import { FaHome, FaUserGraduate, FaChalkboardTeacher, FaCog, FaSignOutAlt, FaCal
 import { useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 type Props = {
-  setView: (view: 'overview' | 'students' | 'mentors') => void;
+  setView: (view: 'overview' | 'students' | 'mentors'|'mentorsrequests') => void;
 };
 
 const Sidebar: React.FC<Props> = ({ setView }) => {
@@ -19,21 +19,24 @@ const Sidebar: React.FC<Props> = ({ setView }) => {
           <span>الصفحة الرئيسية</span>
           <FaHome />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('students')}>
-          <span>الطلاب</span>
-          <FaUserGraduate />
-        </li>
+        
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('mentors')}>
-          <span>المرشدين</span>
+          <span>المرشدين الفعالة</span>
           <FaChalkboardTeacher />
         </li>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('mentorsrequests')}>
+          <span>الطلبات</span>
+          <FaChalkboardTeacher />
+        </li>
+
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('overview')}>
                   <span>لوحة التحكم</span>
         <MdDashboard></MdDashboard>
                 </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer">
-          <span>الجلسات</span>
-          <FaCalendarAlt />
+        
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('students')}>
+          <span>الطلاب</span>
+          <FaUserGraduate />
         </li>
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer">
           <span>الإعدادات</span>

@@ -16,7 +16,7 @@ const Navbar = () => {
 
           <Link to="/dashboardMentor" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة المرشد</Link>
           <Link to="/dashboardAdmin" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة الإدارة</Link>
-          <Link to="" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">المرشدين  </Link>
+          <Link to="/mentors" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">المرشدين  </Link>
         </div>
         <div className="flex gap-4">
           <button

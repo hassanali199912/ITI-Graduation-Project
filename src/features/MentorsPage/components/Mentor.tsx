@@ -52,7 +52,7 @@ export default function Mentor({firstName,lastName,bio,position,skills,salary,im
           {skills.map((skill) => (
             <span
               key={skill}
-              className="bg-gray-200 text-gray-800 text-xs font-medium px-3 py-1 rounded-full"
+              className="bg-blue-100 text-gray-800 text-xs font-medium px-3 py-1 rounded-full"
             >
               {skill}
             </span>
@@ -74,7 +74,7 @@ export default function Mentor({firstName,lastName,bio,position,skills,salary,im
           <div className="col-span-3">
             <a
               href="#"
-              className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg transition-colors duration-150"
+              className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors duration-150"
             >
               عرض الملف
             </a>

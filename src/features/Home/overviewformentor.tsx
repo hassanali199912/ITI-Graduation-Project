@@ -103,15 +103,7 @@ const Overviewmentor = () => {
       </div>
 
      
-      <div className="bg-white p-4 rounded shadow">
-        <h2 className="text-lg font-bold text-blue-800 mb-4">آراء الطلاب</h2>
-        {reviews.map((rev, i) => (
-          <div key={i} className="border-b border-gray-200 pb-2 mb-2">
-            <p className="font-bold">{rev.student}</p>
-            <p>{rev.text}</p>
-          </div>
-        ))}
-      </div>
+      
     </div>
   );
 };

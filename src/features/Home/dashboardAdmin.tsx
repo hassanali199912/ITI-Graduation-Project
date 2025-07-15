@@ -3,11 +3,12 @@ import Sidebar from "./sidebarAdmin";
 import Overview from "./overview";
 
 import MentorsCards from "./mentorsforAdmin";
-import Students from "./studentsforMentors";
+
 import StudentsTable from "./studentsforAdmin";
+import MentorsRequests from "./mentorsRequests";
 
 const DashboardAdmin = () => {
-  const [view, setView] = useState<'overview' | 'students' | 'mentors'>('overview');
+  const [view, setView] = useState<'overview' | 'students' | 'mentors'|'mentorsrequests'>('overview');
 
   return (
     <div className="flex">
@@ -17,6 +18,8 @@ const DashboardAdmin = () => {
         {view === 'overview' && <Overview/> }
         {view === 'students' && <StudentsTable/> }
         {view === 'mentors' && <MentorsCards />}
+        {view === 'mentorsrequests' &&<MentorsRequests/>}
+       
       </div>
     </div>
   );
