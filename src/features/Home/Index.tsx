@@ -16,7 +16,10 @@ import img14 from"../../assets/images/Group 9.png"
 import img15 from"../../assets/images/Group 10.png"
 import Footer from "./footer";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+
 const Home: React.FC = () => {
+  const navigate=useNavigate();
   return (
     <>
     <Navbar></Navbar>
@@ -197,6 +200,7 @@ const Home: React.FC = () => {
     <button
       type="submit"
       className="bg-blue-800 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
+      onClick={()=>{navigate('/createAccount')}}
     >
       انشئ حسابك مجانا
     </button>
