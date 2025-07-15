@@ -1,10 +1,11 @@
-import React from 'react';
+
 import StepOne from './StepOne';
 import StepTwo from './StepTwo';
 import StepThree from './StepThree';
 import StepFour from './StepFour';
-import StepFive from './StepFive';
+import ReviewPage from './ReviewPage'; // Import ReviewPage
 import { type FormData } from '../types';
+import StepFive from './StepFive';
 
 interface Props {
   activeStep: number;
@@ -14,7 +15,6 @@ interface Props {
 }
 
 export default function MainForm({ activeStep, formData, updateFormData, triggerSubmit }: Props) {
-  console.log('Rendering MainForm with activeStep:', activeStep);
   return (
     <>
       {activeStep === 1 && (

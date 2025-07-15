@@ -30,18 +30,22 @@ axiosInterseptor.interceptors.response.use((response) => response,
         const lang: string = localStorage.getItem("lang") || "en";
 
         let errorMassage: string = "Unknown Error";
-
         if (error.response?.data) {
             const data = error.response.data;
+            console.log("asdadd", data);
 
             if (typeof data === 'string') {
                 errorMassage = data;
-            } else if (data.message) {
-                errorMassage = data.message;
+            } else if (typeof data === 'object') {
+                console.log("dsdhjfhjdhfjsdhooo", data);
+                errorMassage = data.massage;
             } else {
                 errorMassage = data.error;
             }
         }
+
+        console.log(errorMassage);
+
 
 
         logger.error(`[Request Error] Level 1 Config `, error);
@@ -54,6 +58,9 @@ const trnaslateError = (msg: string, lang: string): string => {
     switch (msg) {
         case "Unauthorized":
             return lang === "en" ? 'Unauthorized access' : 'غير مصرح لك بالدخول';
+
+        case "UserAlreadyExists":
+            return lang === "en" ? 'User Already Exists' : 'خطاء في اسم المستخدم ';
 
         default:
             return lang === "en" ? 'Something went wrong' : 'حدث خطأ ما';
@@ -87,8 +94,7 @@ const axiosBaseQuery =
 
                 return {
                     error: {
-                        status: err.response?.status,
-                        data: err.response?.data || err.message,
+                        data: err,
                     },
                 };
             }
@@ -97,6 +103,7 @@ const axiosBaseQuery =
 
 export const api = createApi({
     baseQuery: axiosBaseQuery(),
+    tagTypes: ['Lookup'],
     endpoints: () => ({})
 })
 export default axiosInterseptor

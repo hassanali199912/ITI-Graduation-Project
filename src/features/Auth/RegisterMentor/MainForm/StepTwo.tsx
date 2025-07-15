@@ -1,261 +1,164 @@
-import React from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { stepTwoSchema, type StepTwoData } from '../types';
+import React, { useEffect } from 'react';
+import { useFieldArray, useFormContext } from 'react-hook-form';
+import FormInput from './components/FormInput';
 import AddIcon from '@mui/icons-material/Add';
+import { type FormData, type StepTwoData } from '../types';
 
-type Props = {
-  data: StepTwoData;
-  updateData: (data: Partial<StepTwoData>) => void;
+interface Props {
+  data?: StepTwoData;
   triggerSubmit: (submitFn: () => Promise<boolean>) => void;
+  updateData?: (data: Partial<StepTwoData>) => void;
+}
+
+const emptyEducation: StepTwoData['educations'][number] = {
+  institution: '',
+  degree: '',
+  field: '',
+  startDate: '',
+  endDate: '',
+  description: '',
 };
 
-export default function StepTwo({ data, updateData, triggerSubmit }: Props) {
-  const months = [
-    'يناير',
-    'فبراير',
-    'مارس',
-    'أبريل',
-    'مايو',
-    'يونيو',
-    'يوليو',
-    'أغسطس',
-    'سبتمبر',
-    'أكتوبر',
-    'نوفمبر',
-    'ديسمبر',
-  ];
-  const years = Array.from({ length: 2025 - 1998 + 1 }, (_, i) => 1998 + i);
-
+export default function StepTwo({ triggerSubmit }: Props) {
   const {
-    register,
     control,
-    handleSubmit,
+    register,
     formState: { errors },
     trigger,
-    watch,
-  } = useForm<StepTwoData>({
-    resolver: zodResolver(stepTwoSchema),
-    defaultValues: data,
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-  });
+  } = useFormContext<FormData>();
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'education',
+    name: 'stepTwo.educations',
   });
 
-  // Log errors and form data for debugging
-  const formData = watch();
-  React.useEffect(() => {
-    console.log('StepTwo Errors:', errors);
-    console.log('StepTwo Form Data:', formData);
-  }, [errors, formData]);
+  /* 3. إضافة صف فارغ مرة واحدة فقط بعد mount */
+  useEffect(() => {
+    if (fields.length === 0) append({ ...emptyEducation });
+    // intentionally empty dependency array to run once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Handle form submission
-  const onSubmit = async (formData: StepTwoData) => {
-    console.log('StepTwo onSubmit:', formData);
-    updateData(formData);
-    return true;
-  };
+  /* 4. تسجيل دالة التحقق؛ لا نعتمد على updateData لتفادى إعادة الإنشاء */
+  useEffect(() => {
+    triggerSubmit(async () => await trigger('stepTwo'));
+  }, [triggerSubmit, trigger]);
 
-  // Register validation and submission function
-  React.useEffect(() => {
-    console.log('Registering triggerSubmit for StepTwo');
-    triggerSubmit(async () => {
-      console.log('Validating StepTwo...');
-      const isValid = await trigger();
-      console.log('StepTwo isValid:', isValid);
-      if (isValid) {
-        const currentData = watch();
-        await handleSubmit(onSubmit)({ target: { elements: [] } } as any);
-      }
-      return isValid;
-    });
-  }, [triggerSubmit, trigger, handleSubmit, watch]);
-
+  /* ———————————————————————— UI ———————————————————————— */
   return (
     <div className="step-two mx-4">
-      <div className="mt-8">
-        <p className="text-3xl font-bold">بيانات التعليم</p>
+      <div className="my-8">
+        <p className="text-3xl font-bold">التعليم</p>
       </div>
-      <form className="my-16">
-        {fields.map((field, index) => (
-          <div key={field.id} className="mb-8 border-b pb-4">
-            <div className="form-control mb-8">
-              <label
-                htmlFor={`education[${index}].qualification`}
-                className="block text-right mb-2 font-bold"
-              >
-                المؤهل الدراسي
-              </label>
-              <input
-                type="text"
-                id={`education[${index}].qualification`}
-                className="bg-blue-50 p-2 w-full rounded"
-                placeholder="ما هو آخر مؤهل حصلت عليه؟"
-                {...register(`education.${index}.qualification` as const)}
+
+      <div className="my-16">
+        <div className="education-fields">
+          {fields.map((field, index) => (
+            <div key={field.id} className="mb-8 border-b pb-4">
+              {/* المؤسسة التعليمية */}
+              <FormInput
+                id={`stepTwo.educations.${index}.institution`}
+                label="المؤسسة التعليمية"
+                placeholder="أدخل اسم المؤسسة"
+                register={register}
+                onChange={() => trigger(`stepTwo.educations.${index}.institution`)}
               />
-              {errors.education?.[index]?.qualification?.message && (
-                <span className="error">
-                  {String(errors.education[index].qualification.message)}
+              {errors.stepTwo?.educations?.[index]?.institution?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].institution?.message)}
                 </span>
               )}
-            </div>
-            <div className="form-control mb-8">
-              <label
-                htmlFor={`education[${index}].org`}
-                className="block text-right mb-2 font-bold"
-              >
-                المؤسسة التعليمية
-              </label>
-              <input
-                type="text"
-                id={`education[${index}].org`}
-                className="bg-blue-50 p-2 w-full rounded"
-                placeholder="من أين حصلت على هذا المؤهل؟"
-                {...register(`education.${index}.org` as const)}
+
+              {/* الدرجة العلمية */}
+              <FormInput
+                id={`stepTwo.educations.${index}.degree`}
+                label="الدرجة العلمية"
+                placeholder="أدخل الدرجة العلمية"
+                register={register}
+                onChange={() => trigger(`stepTwo.educations.${index}.degree`)}
               />
-              {errors.education?.[index]?.org?.message && (
-                <span className="error">{String(errors.education[index].org.message)}</span>
+              {errors.stepTwo?.educations?.[index]?.degree?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].degree?.message)}
+                </span>
+              )}
+
+              {/* التخصص */}
+              <FormInput
+                id={`stepTwo.educations.${index}.field`}
+                label="التخصص"
+                placeholder="أدخل التخصص"
+                register={register}
+                onChange={() => trigger(`stepTwo.educations.${index}.field`)}
+              />
+              {errors.stepTwo?.educations?.[index]?.field?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].field?.message)}
+                </span>
+              )}
+
+              {/* تاريخ البداية */}
+              <FormInput
+                id={`stepTwo.educations.${index}.startDate`}
+                label="تاريخ البداية"
+                type="date"
+                register={register}
+                onChange={() => trigger(`stepTwo.educations.${index}.startDate`)}
+              />
+              {errors.stepTwo?.educations?.[index]?.startDate?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].startDate?.message)}
+                </span>
+              )}
+
+              {/* تاريخ النهاية */}
+              <FormInput
+                id={`stepTwo.educations.${index}.endDate`}
+                label="تاريخ النهاية"
+                type="date"
+                register={register}
+                onChange={() => trigger(`stepTwo.educations.${index}.endDate`)}
+              />
+              {errors.stepTwo?.educations?.[index]?.endDate?.message && (
+                <span className="error text-red-500 text-sm">
+                  {String(errors.stepTwo.educations[index].endDate?.message)}
+                </span>
+              )}
+
+              {/* الوصف */}
+              <FormInput
+                id={`stepTwo.educations.${index}.description`}
+                label="الوصف"
+                placeholder="أدخل وصفًا (اختياري)"
+                register={register}
+                onChange={() => trigger(`stepTwo.educations.${index}.description`)}
+              />
+
+              {/* زر الحذف */}
+              {fields.length > 1 && (
+                <button
+                  type="button"
+                  className="text-red-500 mt-2"
+                  onClick={() => remove(index)}
+                >
+                  إزالة
+                </button>
               )}
             </div>
-            <div className="form-control mb-8">
-              <label
-                htmlFor={`education[${index}].spec`}
-                className="block text-right mb-2 font-bold"
-              >
-                التخصص الدراسي
-              </label>
-              <input
-                type="text"
-                id={`education[${index}].spec`}
-                className="bg-blue-50 p-2 w-full rounded"
-                placeholder="ما هو تخصصك الأكاديمي؟"
-                {...register(`education.${index}.spec` as const)}
-              />
-              {errors.education?.[index]?.spec?.message && (
-                <span className="error">{String(errors.education[index].spec.message)}</span>
-              )}
-            </div>
-            <div className="flex gap-4">
-              <div className="form-control mb-8 w-1/2">
-                <label
-                  htmlFor={`education[${index}].startMonth`}
-                  className="block text-right mb-2 font-bold"
-                >
-                  تاريخ البداية
-                </label>
-                <div className="flex gap-2">
-                  <select
-                    className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-                    {...register(`education.${index}.startMonth` as const)}
-                  >
-                    <option value="" disabled>
-                      الشهر
-                    </option>
-                    {months.map((month, i) => (
-                      <option key={i} value={month}>
-                        {month}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-                    {...register(`education.${index}.startYear` as const)}
-                  >
-                    <option value="" disabled>
-                      السنة
-                    </option>
-                    {years.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {errors.education?.[index]?.startMonth?.message && (
-                  <span className="error">{String(errors.education[index].startMonth.message)}</span>
-                )}
-                {errors.education?.[index]?.startYear?.message && (
-                  <span className="error">{String(errors.education[index].startYear.message)}</span>
-                )}
-              </div>
-              <div className="form-control mb-8 w-1/2">
-                <label
-                  htmlFor={`education[${index}].endMonth`}
-                  className="block text-right mb-2 font-bold"
-                >
-                  تاريخ النهاية
-                </label>
-                <div className="flex gap-2">
-                  <select
-                    className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-                    {...register(`education.${index}.endMonth` as const)}
-                  >
-                    <option value="" disabled>
-                      الشهر
-                    </option>
-                    {months.map((month, i) => (
-                      <option key={i} value={month}>
-                        {month}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    className="appearance-none border w-full mt-2 border-gray-300 rounded px-4 py-2 text-sm text-gray-600 bg-white custom-select"
-                    {...register(`education.${index}.endYear` as const)}
-                  >
-                    <option value="" disabled>
-                      السنة
-                    </option>
-                    {years.map((year) => (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {errors.education?.[index]?.endMonth?.message && (
-                  <span className="error">{String(errors.education[index].endMonth.message)}</span>
-                )}
-                {errors.education?.[index]?.endYear?.message && (
-                  <span className="error">{String(errors.education[index].endYear.message)}</span>
-                )}
-              </div>
-            </div>
-            {fields.length > 1 && (
-              <button
-                type="button"
-                className="text-red-500 mt-2"
-                onClick={() => remove(index)}
-              >
-                إزالة
-              </button>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* زر إضافة صف جديد */}
         <div
-          className="add-details rounded border-blue-500 border-1 py-2 items-center justify-center flex cursor-pointer"
-          onClick={() =>
-            append({
-              qualification: '',
-              org: '',
-              spec: '',
-              startMonth: '',
-              startYear: '',
-              endMonth: '',
-              endYear: '',
-            })
-          }
+          className="mb-8 add-details rounded border-blue-500 border-1 py-2 items-center justify-center flex cursor-pointer"
+          onClick={() => append({ ...emptyEducation })}
         >
           <span className="p-1 inline-flex items-center justify-center text-white">
             <AddIcon fontSize="small" className="text-blue-500" />
           </span>
-          <p className="font-bold text-blue-500">اضف بيانات تعليم</p>
+          <p className="font-bold text-blue-500">إضافة تعليم آخر</p>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

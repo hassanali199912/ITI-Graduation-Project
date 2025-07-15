@@ -1,0 +1,30 @@
+import  { useState } from "react";
+import Sidebar from "./sidebarAdmin";
+import Overview from "./overview";
+
+import MentorsCards from "./mentorsforAdmin";
+
+import StudentsTable from "./studentsforAdmin";
+import MentorsRequests from "./mentorsRequests";
+import AddSkillForm from "./addskill";
+
+const DashboardAdmin = () => {
+  const [view, setView] = useState<'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill'>('overview');
+
+  return (
+    <div className="flex">
+      <Sidebar setView={setView} />
+      <div className="flex-1 p-10">
+      
+        {view === 'overview' && <Overview/> }
+        {view === 'students' && <StudentsTable/> }
+        {view === 'mentors' && <MentorsCards />}
+        {view === 'mentorsrequests' &&<MentorsRequests/>}
+         {view === 'addskill' &&<AddSkillForm></AddSkillForm>}
+       
+      </div>
+    </div>
+  );
+};
+
+export default DashboardAdmin;

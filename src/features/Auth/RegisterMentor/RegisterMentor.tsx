@@ -1,56 +1,186 @@
-import React, { useState, useRef } from 'react';
-import CustomizedProgressBars from '../ProgressBar';
-import CircularSteps from '../CircularSteps';
-import MainForm from './MainForm/MainForm';
-import SimpleSlider from './SliderImages';
-import FormsHandle from './FormsHandle';
-import type{ FormData, StepOneData, StepTwoData, StepThreeData, StepFourData, StepFiveData } from './types';
+import { useState, useRef, useEffect } from "react";
+import { useForm, FormProvider, type UseFormReturn } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  type FormData,
+  stepOneSchema,
+  stepTwoSchema,
+  stepThreeSchema,
+  stepFourSchema,
+  stepFiveSchema,
+} from "./types";
+import CustomizedProgressBars from "../ProgressBar";
+import CircularSteps from "../CircularSteps";
+import MainForm from "./MainForm/MainForm";
+import SimpleSlider from "./SliderImages";
+import FormsHandle from "./FormsHandle";
+import { z } from "zod";
+import { useRegesterMentorMutation } from "../api/regester";
+import BlurLoader from "../../../shared/components/loaders/Blurloader";
+import { toast } from "react-toastify";
+import { useLazyGetSkillsQuery } from "../api/lookups";
 
 export default function RegisterMentor() {
   const [activeStep, setActiveStep] = useState(1);
-  const [formData, setFormData] = useState<FormData>({
-    stepOne: {
-      avatar: undefined,
-      name: '',
-      email: '',
-      password1: '',
-      password2: '',
-      type: '' as any,
-      country: '',
-      lang: '',
+  const [regesterMentor, { isLoading }] = useRegesterMentorMutation();
+  const formMethods: UseFormReturn<FormData> = useForm<FormData>({
+    resolver: zodResolver(
+      z.object({
+        stepOne: stepOneSchema,
+        stepTwo: stepTwoSchema,
+        stepThree: stepThreeSchema,
+        stepFour: stepFourSchema,
+        stepFive: stepFiveSchema,
+      })
+    ),
+    defaultValues: {
+      stepOne: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        skills:[],
+        password1: "",
+        password2: "",
+        phoneNumber: "",
+        gender: 0,
+        salary:0,
+        bio: "",
+        lang: "", // ID of teaching language
+        profilePictureUrl: "",
+        countryId: "", // ID of country
+      },
+      stepTwo: {
+        educations: [
+          {
+            institution: "",
+            degree: "",
+            field: "",
+            startDate: "", // or new Date().toISOString().split("T")[0] if needed
+            endDate: "",
+            description: "",
+          },
+        ],
+      },
+      stepThree: {
+        certificates: [
+          {
+            name: "",
+            certificateUrl: "",
+            issuedBy: "",
+            issuedDate: "", // e.g. "2025-07-01"
+            examResult: "",
+          },
+        ],
+      },
+      stepFour: {
+        teachingAreaIds: [],
+        ageGroupIds: [],
+        communicationMethodIds: [],
+        teachingLanguageIds: [],
+        additionalInterests: [{ value: "jdkhdfshksdf " }],
+      },
+      stepFive: {
+        exams: [
+          {
+            examName: "",
+            rate: "",
+            givingOrg: "",
+            examCertificates: "",
+            certificateFile: "",
+            examMonth: "",
+            examYear: "",
+          },
+        ],
+      },
     },
-    stepTwo: { education: [{ qualification: '', org: '', spec: '', startMonth: '', startYear: '', endMonth: '', endYear: '' }] },
-    stepThree: { certificates: [{ skill: '', certificate: '', file: undefined, organisation: '', certificateDate: '' }] },
-    stepFour: { interests: [{ field: '', yearCategory: '', connect: '', timeNum: '', lang: '' }] },
-    stepFive: { hasExams: '' as any, exams: [{ examName: '', rate: '', givingOrg: '', examCertificates: '', certificateFile: undefined, examMonth: '', examYear: '' }] },
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
+
+  const handleSubmit = async (data: FormData) => {
+    const finalData = {
+      email: data.stepOne.email,
+      password: data.stepOne.password1,
+      firstName: data.stepOne.firstName,
+      lastName: data.stepOne.lastName,
+      skills: data.stepOne.skills.map((id) => ({ skillId: id })), 
+      phoneNumber: data.stepOne.phoneNumber,
+      gender: data.stepOne.gender,
+      salary: data.stepOne.salary,
+      bio: data.stepOne.bio,
+      profilePictureUrl:
+        typeof data.stepOne.profilePictureUrl === "string"
+          ? data.stepOne.profilePictureUrl
+          : "",
+      countryId: data.stepOne.countryId,
+      educations: data.stepTwo.educations,
+      certificates: data.stepThree.certificates.map((cert) => ({
+        ...cert,
+        certificateUrl:
+          typeof cert.certificateUrl === "string" ? cert.certificateUrl : "",
+      })),
+      teachingAreaIds: data.stepFour.teachingAreaIds,
+      ageGroupIds: data.stepFour.ageGroupIds,
+      communicationMethodIds: data.stepFour.communicationMethodIds,
+      teachingLanguageIds: data.stepFour.teachingLanguageIds,
+      additionalInterests: data?.stepFour?.additionalInterests?.map((item) => item.value),
+      // exams: data?.stepFive?.exams?.map(exam => ({
+      //   ...exam,
+      //   certificateFile: typeof exam.certificateFile === "string" ? exam.certificateFile : ""
+      // })),
+      // skills: [
+      //   { skillId: "3a58e810-53bd-4fe6-9bf7-08ddc25fa0b3" }, // HTML
+      //   { skillId: "dc469252-469c-4d08-9bf8-08ddc25fa0b3" }, // CSS
+      //   { skillId: "06aba2a1-bfea-432f-9bf9-08ddc25fa0b3" }, // JavaScript
+      //   { skillId: "4eba2156-8f55-4bc2-9bfb-08ddc25fa0b3" }, // React
+      //   { skillId: "b80b2614-55cb-4f8b-9bfe-08ddc25fa0b3" }, // Node.js
+      //   { skillId: "497a8831-93ac-463f-9c03-08ddc25fa0b3" }, // MongoDB
+      // ],
+    };
+
+    console.log("Submitting to API:", JSON.stringify(finalData, null, 2));
+
+    try {
+      const res = await regesterMentor(finalData);
+      console.log("API response:", res);
+      if (res && res?.data && res?.data?.statusCode === 201) {
+        toast.success("تم انشاء المستخدم بنجاح");
+      } else {
+        toast.error(res?.error?.data || "حدث خطا , برجاء المحاولة لاحقا");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
 
   const formRefs = useRef<{ [key: number]: () => Promise<boolean> }>({});
 
   const handleNext = async () => {
-    console.log('handleNext called for step:', activeStep);
+    console.log("Validation failed, staying on step:", formMethods?.formState.defaultValues);
     if (formRefs.current[activeStep]) {
       const isValid = await formRefs.current[activeStep]();
-      console.log('Step valid:', isValid, 'Current formData:', JSON.stringify(formData, null, 2));
+
       if (isValid && activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
-          console.log('Advancing to step:', nextStep);
+          console.log("Advancing to step:", nextStep);
           return nextStep;
         });
       } else if (isValid && activeStep === 5) {
-        console.log('Final Form Data:', JSON.stringify(formData, null, 2));
-        // Submit to API
-        // await fetch('/api/submit', { method: 'POST', body: JSON.stringify(formData) });
+        try {
+          handleSubmit(formMethods.getValues());
+        } catch (error) {
+          console.error("Submission error:", error);
+        }
       } else {
-        console.log('Validation failed, staying on step:', activeStep);
+        console.log("Validation failed, staying on step:", activeStep);
+        console.log("Validation failed, staying on step:", formMethods?.formState);
       }
     } else {
-      console.log('No submit function registered for step:', activeStep);
+      console.log("No submit function registered for step:", activeStep);
       if (activeStep < 5) {
         setActiveStep((prev) => {
           const nextStep = prev + 1;
-          console.log('Advancing to step:', nextStep);
           return nextStep;
         });
       }
@@ -61,36 +191,40 @@ export default function RegisterMentor() {
     if (activeStep > 1) {
       setActiveStep((prev) => {
         const prevStep = prev - 1;
-        console.log('Going back to step:', prevStep);
         return prevStep;
       });
     }
   };
 
-  const updateFormData = (step: keyof FormData, data: Partial<FormData[keyof FormData]>) => {
-    console.log('Updating formData for step:', step, 'with data:', JSON.stringify(data, null, 2));
-    setFormData((prev) => ({
-      ...prev,
-      [step]: { ...prev[step], ...data },
-    }));
+  const updateFormData = (
+    step: keyof FormData,
+    data: Partial<FormData[keyof FormData]>
+  ) => {
+    formMethods.setValue(step as any, {
+      ...formMethods.getValues(step as any),
+      ...data,
+    });
   };
+
 
   return (
     <>
-      <CustomizedProgressBars activeStep={activeStep} />
+      {isLoading && <BlurLoader />}
+      <CustomizedProgressBars activeStep={activeStep} totalSteps={5} />
       <div className="">
         <div className="flex w-full items-start" dir="rtl">
           <CircularSteps activeStep={activeStep} />
           <div className="flex-1 p-4">
-            <MainForm
-              activeStep={activeStep}
-              formData={formData}
-              updateFormData={updateFormData}
-              triggerSubmit={(step, submitFn) => {
-                console.log('Registering submit function for step:', step);
-                formRefs.current[step] = submitFn;
-              }}
-            />
+            <FormProvider {...formMethods}>
+              <MainForm
+                activeStep={activeStep}
+                formData={formMethods.getValues()}
+                updateFormData={updateFormData}
+                triggerSubmit={(step, submitFn) => {
+                  formRefs.current[step] = submitFn;
+                }}
+              />
+            </FormProvider>
             <FormsHandle
               backFun={handleBack}
               nextFun={handleNext}
@@ -104,4 +238,4 @@ export default function RegisterMentor() {
       </div>
     </>
   );
-}
+} 
