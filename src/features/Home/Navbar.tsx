@@ -1,8 +1,11 @@
 
+
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+ 
     const navigate=useNavigate();
+     const role = localStorage.getItem("role");
     return (
         <div>
             <div dir="rtl">
@@ -13,10 +16,24 @@ const Navbar = () => {
         
         <div className="flex items-center gap-6 text-blue-800 font-semibold text-lg">
           <Link to="/landingpage" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">الرئيسية</Link>
+{role === "teacher" && (
+  <>
 
           <Link to="/dashboardMentor" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة المرشد</Link>
+           <Link to="" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">الصفحة الشخصية </Link>
+           </>
+)}
+{role === "admin" && (
+  <>
           <Link to="/dashboardAdmin" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة الإدارة</Link>
+           <Link to="/dashboardMentor" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة المرشد</Link>
+           
+           </>
+          )}
+{role === "student" && (
+          
           <Link to="/mentors" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">المرشدين  </Link>
+)}
         </div>
         <div className="flex gap-4">
           <button

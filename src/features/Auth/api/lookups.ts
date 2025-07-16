@@ -46,34 +46,15 @@ export const lookupsApi = api.injectEndpoints({
     }),
     getSkills : builder.query<any,void>({
       query : () => ({
-<<<<<<< Updated upstream
+
         url : '/api/lookup/skilles',
         method: "GET"
 
-=======
-        url : '/api/lookup/teachingarea',
-        method : "GET"
+
+       
       })
     }),
-      getTeachingLang : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/teachingLanguage',
-        method : "GET"
-      })
-    }),
-    getCommunicationMethod : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/communicationmethod',
-        method : "GET"
-      })
-    }),
-    getSkills : builder.query<any,void>({
-      query : () => ({
-        url : '/api/lookup/skilles',
-        method : "GET"
->>>>>>> Stashed changes
-      })
-    })
+     
   }),
 });
 export const {
@@ -94,9 +75,6 @@ export const {
   // teaching language
   useLazyGetTeachingLangQuery,
   useGetTeachingLangQuery,
-<<<<<<< Updated upstream
-=======
-  // skills 
->>>>>>> Stashed changes
+
   useLazyGetSkillsQuery
 } = lookupsApi;

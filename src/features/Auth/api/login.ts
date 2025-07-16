@@ -63,5 +63,7 @@ export const {
     useForgetPasswordQuery, 
     useLazyForgetPasswordQuery,
     useVerifyEmialQuery,
-    useLazyVerifyEmialQuery
+    useLazyVerifyEmialQuery,
+  
 } = authApi;
+
