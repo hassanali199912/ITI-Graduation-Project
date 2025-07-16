@@ -5,8 +5,11 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SupportIcon from '@mui/icons-material/Support';
+interface PlansCardProps {
+  price: number;  
+}
 
-const PlansCard = () => {
+const PlansCard = ({price}:PlansCardProps) => {
   return (
     <Card dir="rtl" className="shadow-lg rounded-xl overflow-hidden">
       <CardContent className="space-y-4">
@@ -17,7 +20,7 @@ const PlansCard = () => {
         </div>
 
         <h2 className="text-3xl font-bold text-right text-gray-900 px-2">
-          240$ <span className="text-base font-normal">/ شهرياً</span>
+          {price}$ <span className="text-base font-normal">/ شهرياً</span>
         </h2>
 
         <p className="text-right text-sm text-gray-600 px-2">

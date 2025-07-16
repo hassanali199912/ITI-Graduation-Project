@@ -12,12 +12,14 @@
 
 import { Box, Skeleton } from "@mui/material";
 import type { Skill, Teacher } from "../../Auth/RegisterMentor/types";
+import { Link, useParams } from "react-router-dom";
 interface MentorCardProps extends Partial<Teacher> {
   loading?: boolean;
   compact?: boolean;
 }
 export default function Mentor(props: MentorCardProps) {
    const {
+    id,
     firstName,
     lastName,
     bio,
@@ -82,12 +84,12 @@ export default function Mentor(props: MentorCardProps) {
           ${salary}
           <span className="text-[10px] text-gray-500"> / شهر</span>
         </span>
-        <a
-          href="#"
+        <Link
+          to={`/mentors/${id}`}
           className="text-[10px] bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
         >
           عرض الملف
-        </a>
+        </Link>
       </div>
     </div>
   );

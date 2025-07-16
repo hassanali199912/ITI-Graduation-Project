@@ -1,26 +1,30 @@
 import React from 'react';
 import { Chip } from '@mui/material';
+import type { Skill } from '../Auth/RegisterMentor/types';
 
-const skills = [
-    'C#', '.NET', 'SQL', 'AWS', 'Typescript', 'JavaScript', 'Angular', 'Coding',
-    'Agile', 'Career Growth', 'Career Coaching', 'Career', 'Interview', 'Java Script',
-    'Coaching', 'Product Strategy', 'Technical Leadership', 'Design Leadership',
-    'Agile Development', 'Clean Code', 'Clean Architecture', 'Technical Design',
-    'Technical Interviews', 'Cloud', 'Software Architecture', 'Software Engineering',
-    'Cloud Computing', 'Blazor', 'HTML', 'Git', 'Backend', 'Full Stack', 'ASP.NET Core',
-    'DotNet Core', 'Design System'
-];
-
-const SkillsSection = () => {
+// const skills = [
+//     'C#', '.NET', 'SQL', 'AWS', 'Typescript', 'JavaScript', 'Angular', 'Coding',
+//     'Agile', 'Career Growth', 'Career Coaching', 'Career', 'Interview', 'Java Script',
+//     'Coaching', 'Product Strategy', 'Technical Leadership', 'Design Leadership',
+//     'Agile Development', 'Clean Code', 'Clean Architecture', 'Technical Design',
+//     'Technical Interviews', 'Cloud', 'Software Architecture', 'Software Engineering',
+//     'Cloud Computing', 'Blazor', 'HTML', 'Git', 'Backend', 'Full Stack', 'ASP.NET Core',
+//     'DotNet Core', 'Design System'
+// ];
+interface SkillsSectionProps {
+  skills: Skill[];
+}
+const SkillsSection = ({skills}:SkillsSectionProps) => {
+    
     return (
         <div dir="rtl" className="max-w-5xl mx-auto px-4 mt-16">
             <h2 className="text-xl font-bold text-gray-900 mb-4">المهارات</h2>
 
             <div className="flex flex-wrap gap-2">
-                {skills.map((skill, index) => (
+                {skills?.map((skill, index) => (
                     <Chip
                         key={index}
-                        label={skill}
+                        label={skill.skillName}
                         size="small"
                         sx={{
                             backgroundColor: '#F4F9FB',

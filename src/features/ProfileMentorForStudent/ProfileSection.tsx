@@ -5,8 +5,9 @@ import { Avatar, Chip } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import type { Teacher } from '../Auth/RegisterMentor/types';
 
-const ProfileSection = () => {
+const ProfileSection = ({firstName,lastName,bio,specialists,skills,salary,profilePictureUrl}:Teacher) => {
   return (
     <>
       <div dir="rtl" className="relative bg-white">
@@ -18,7 +19,7 @@ const ProfileSection = () => {
           <div className="flex flex-col items-start w-full lg:w-2/3">
             <div className="flex items-center gap-4">
               <Avatar
-                src="/🤖 AI Generated Avatars_ Rohan Sharma.png"
+                src={profilePictureUrl}
                 alt="صورة البروفايل"
                 sx={{ width: 150, height: 150, border: '3px solid white' }}
               />
@@ -26,15 +27,15 @@ const ProfileSection = () => {
 
             <div className="mt-4 space-y-1 text-sm text-gray-700">
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">كاتالين روسو</h1>
+                <h1 className="text-xl font-semibold text-gray-900">{firstName+" "+lastName} </h1>
                 <p className="text-sm text-gray-600">قائد تقني / مدير تطوير</p>
                 <p className="text-sm text-[#0003C7] mt-1">
-                  خبرة أكثر من 20 سنة في تطوير البرمجيات
+                  {bio}
                 </p>
               </div>
               <div className="flex items-center gap-2 mt-5">
                 <LocationOnIcon fontSize="small" sx={{ color: '#0003C7' }} />
-                <span>المملكة المتحدة</span>
+                {/* <span>المملكة المتحدة</span> */}
               </div>
               <div className="flex items-center gap-2">
                 <StarIcon fontSize="small" sx={{ color: '#0003C7' }} />
@@ -47,15 +48,19 @@ const ProfileSection = () => {
             </div>
 
             <div className="flex gap-2 mt-4">
-              <Chip label="C#" />
-              <Chip label=".NET" />
-              <Chip label="Typescript" />
+              {skills?.map((skill)=>{
+                return(
+                  <Chip label={skill.skillName} />
+                )
+              })}
+              {/* <Chip label=".NET" />
+              <Chip label="Typescript" /> */}
             </div>
           </div>
 
           {/* Left: الكارد */}
           <div className="w-full lg:w-1/3">
-            <PlansCard />
+            <PlansCard price={salary}/>
           </div>
         </div>
       </div>

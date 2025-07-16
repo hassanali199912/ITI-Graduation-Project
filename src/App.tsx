@@ -40,7 +40,7 @@ function App() {
           <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
           <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
           <Route path="/mentor/:name" element={<MentorDetails />} />
-          <Route path="/MentorProfilePage" element={<MentorProfilePage></MentorProfilePage>}></Route>
+          <Route path="/mentors/:id" element={<MentorProfilePage></MentorProfilePage>}></Route>
 
         </Routes>
         <Footer></Footer>

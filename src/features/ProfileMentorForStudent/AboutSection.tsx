@@ -2,8 +2,11 @@
 import React from 'react';
 import { Button, Card, CardContent } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
+interface AboutProps  {
+    bio : string,
 
-const AboutSection = () => {
+}
+const AboutSection = ({bio}:AboutProps) => {
     return (
         <div dir="rtl" className="max-w-5xl mx-auto px-4 mt-16">
             {/* العنوان */}
@@ -11,9 +14,7 @@ const AboutSection = () => {
 
             {/* الفقرة التعريفية */}
             <p className="text-gray-700 leading-relaxed mb-4">
-                قائد تقني / مهندس برمجيات بخبرة تزيد عن 20 سنة في دورة التطوير الكاملة، مكرس لدعم نمو الآخرين من خلال الإرشاد.
-                <br />
-                خلال مسيرتي، طورت مهاراتي في تصميم البرمجيات، التطوير، وإدارة الفرق، أثناء العمل على مشاريع متنوعة من الشركات الناشئة وحتى المؤسسات الكبرى.
+                {bio}
             </p>
 
             {/* قراءة المزيد */}
