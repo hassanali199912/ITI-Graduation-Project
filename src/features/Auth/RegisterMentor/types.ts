@@ -4,9 +4,7 @@ export const stepOneSchema = z
   .object({
     firstName: z.string().min(1, { message: "الإسم الأول مطلوب" }),
     lastName: z.string().min(1, { message: "الإسم الثانى مطلوب" }),
-    skills: z
-      .array(z.string().uuid())
-      .min(1, { message: "يجب اختيار مهارة" }),
+    skills: z.array(z.string().uuid()).min(1, { message: "يجب اختيار مهارة" }),
     email: z
       .string()
       .min(1, { message: "البريد الإلكتروني مطلوب" })
@@ -20,22 +18,14 @@ export const stepOneSchema = z
       .min(1, { message: "رقم الهاتف مطلوب" })
       .regex(/^\+?\d{7,15}$/, { message: "رقم الهاتف غير صحيح" }),
     gender: z.number().int().min(0).max(1, { message: "النوع مطلوب" }),
-    salary:z.number().int({message:'السعر مطلوب'}),
+    salary: z.number().int({ message: "السعر مطلوب" }),
     bio: z.string().min(1, { message: "السيرة الذاتية مطلوبة" }),
     lang: z.string().refine((val) => ["Arabic", "English"].includes(val), {
       message: "يرجى اختيار اللغة",
     }),
     profilePictureUrl: z
-      .any()
-      .optional()
-      .refine(
-        (file) =>
-          !file ||
-          (file instanceof File &&
-            file.size <= 2 * 1024 * 1024 &&
-            ["image/jpeg", "image/png"].includes(file.type)),
-        { message: "يجب أن تكون الصورة JPEG أو PNG بحجم أقل من 2 ميجابايت" }
-      ),
+      .union([z.string().url(), z.instanceof(File)])
+      .optional(),
     countryId: z.string().uuid({ message: "البلد مطلوب" }),
   })
   .refine((data) => data.password1 === data.password2, {
@@ -55,28 +45,28 @@ export const stepTwoSchema = z.object({
     })
   ),
 });
-
+const fileSchema = z
+  .instanceof(File)
+  .refine(
+    (f) =>
+      f.size <= 5 * 1024 * 1024 &&
+      ["image/jpeg", "image/png", "application/pdf"].includes(f.type),
+    {
+      message:
+        "يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 10 ميجابايت",
+    }
+  );
 export const stepThreeSchema = z.object({
   certificates: z
     .array(
       z.object({
         name: z.string().min(1, { message: "اسم الشهادة مطلوب" }),
         certificateUrl: z
-          .any()
-          .optional()
-          .refine(
-            (file) =>
-              !file ||
-              (file instanceof File &&
-                file.size <= 5 * 1024 * 1024 &&
-                ["image/jpeg", "image/png", "application/pdf"].includes(
-                  file.type
-                )),
-            {
-              message:
-                "يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 5 ميجابايت",
-            }
-          ),
+          .object({
+            file: fileSchema,
+            url: z.string().url(),
+          })
+          .optional(),
         issuedBy: z.string().min(1, { message: "الجهة المانحة مطلوبة" }),
         issuedDate: z
           .string()
@@ -111,6 +101,69 @@ export const stepFourSchema = z.object({
     )
     .optional(),
 });
+// types.ts
+// ----------
+
+// مهارة واحدة
+export interface Skill {
+  skillId: string;
+  skillName: string;
+}
+
+// التخصص (Teaching Area)
+export interface Specialist {
+  teachingAreaId: string;
+  nameAr: string;
+  nameEn: string;
+}
+
+// بيانات التقييم
+export interface RatingSummary {
+  averageRating: number;
+  totalComments: number;
+}
+
+// الكيان الأساسي: Teacher / Mentor
+export interface Teacher {
+  id: string;
+  firstName: string;
+  lastName: string;
+  bio: string;
+  profilePictureUrl?: string; // اختياري
+  salary: number;
+  skills: Skill[];
+  specialists: Specialist[];
+  rating: RatingSummary;
+  stutas: number;
+  comments: [];
+  // لو الـ backend هيصلحها لـ status غيّر الاسم هنا
+}
+
+// شكل الـ Response الكامل للـ API
+export interface GetTeachersResponse {
+  status: boolean;
+  massage: string; // برضه دي typo من API، خليها كما هي أو اعمل alias
+  statusCode: number;
+
+  data: {
+    teachers: Teacher[];
+    totalCount: number;
+    totalPages: number;
+    PageSize: number;
+    pageNumber: number;
+    hasPreviousPage: Boolean;
+    hasNextPage: Boolean;
+  };
+}
+
+// ========== أمثلة تانية لو محتاجها ==========
+// لو عندك Page Filters
+export interface GetTeachersArgs {
+  pageNumber?: number;
+  pageSize?: number;
+  orderByRating?: boolean;
+  search?: string;
+}
 
 // Step 5 validation schema
 export const stepFiveSchema = z

@@ -1,117 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import FiltersInputs from "./components/FiltersInputs";
-import MentorsList from "./components/MentorsList";
-import { useLazyGetSkillsQuery } from "../Auth/api/lookups";
-
-interface MentorProps {
-  firstName: string;
-  lastName: string;
-  bio: string;
-  position: string;
-  skills: string[];
-  salary: number;
-  imgUrl?: string; // علامة ? معناها إنه اختياري
-}
+import MentorsList   from "./components/MentorsList";
+import { useLazyGetSkillsQuery }   from "../Auth/api/lookups";
+import { useLazyGetMentorsQuery }  from "../Auth/api/mentorsApi";
+import type { Teacher } from "../Auth/RegisterMentor/types";
+import { CustomPagination } from "../../shared/components/pagination/CustomPagination";
 
 export default function MentorsPage() {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery]       = useState("");
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [triggerSkills, { data: skillsData, isLoading, isError }] = useLazyGetSkillsQuery();
-  console.log(skillsData, "skills");
+  const [page, setPage]= useState(1);   
+  const [pageSize]= useState(10);  
 
-  const [allMentors, setAllMentors] = useState<MentorProps[]>([
-    {
-      firstName: "أحمد",
-      lastName: "خالد",
-      bio: "مهندس برمجيات بخبرة أكثر من ٨ سنوات في تطوير الأنظمة باستخدام .NET.",
-      position: "مهندس برمجيات أول",
-      skills: ["C#", ".NET", "SQL", "Azure", "TypeScript", "JavaScript"],
-      salary: 120,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "سارة",
-      lastName: "محمد",
-      bio: "متخصصة في تطوير واجهات المستخدم باستخدام React وتهتم بتحسين تجربة المستخدم.",
-      position: "مطورة واجهات أمامية",
-      skills: ["React", "Next.js", "TypeScript", "HTML", "CSS", "Jest"],
-      salary: 110,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "يوسف",
-      lastName: "الزين",
-      bio: "مطور متكامل يستخدم Vue وNuxt ويعمل مع الشركات الناشئة في الشرق الأوسط.",
-      position: "مطور Full Stack",
-      skills: ["Vue", "Nuxt", "Pinia", "Tailwind CSS", "Node.js", "MongoDB"],
-      salary: 95,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "ليلى",
-      lastName: "عبدالله",
-      bio: "مهندسة DevOps تساعد الفرق على أتمتة عمليات النشر والتكامل المستمر.",
-      position: "مهندسة DevOps",
-      skills: ["Docker", "Kubernetes", "CI/CD", "GitHub Actions", "Go", "Terraform"],
-      salary: 130,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "كريم",
-      lastName: "سامي",
-      bio: "عالم بيانات يركز على معالجة اللغة الطبيعية والتعلم الآلي.",
-      position: "مهندس تعلم آلي",
-      skills: ["Python", "TensorFlow", "PyTorch", "FastAPI", "GCP", "SQL"],
-      salary: 140,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "ندى",
-      lastName: "خليل",
-      bio: "تهتم بتصميم الواجهات وبناء تجارب مستخدم مميزة باستخدام أدوات حديثة.",
-      position: "مطورة واجهات أمامية",
-      skills: ["Svelte", "React", "Framer Motion", "Figma", "SCSS", "UX/UI"],
-      salary: 105,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "محمود",
-      lastName: "شريف",
-      bio: "خبير في الحوسبة السحابية ويعمل على نقل الأنظمة القديمة إلى Azure.",
-      position: "مهندس حلول Azure",
-      skills: ["Azure", ".NET Core", "Bicep", "SQL Server", "Terraform", "C#"],
-      salary: 135,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "جميلة",
-      lastName: "صالح",
-      bio: "تحب الأنظمة عالية الأداء وتستخدم لغة Rust لتطوير خدمات قوية.",
-      position: "مهندسة نظم",
-      skills: ["Rust", "PostgreSQL", "gRPC", "Redis", "Kafka", "Docker"],
-      salary: 125,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "علي",
-      lastName: "محمoud",
-      bio: "مدرب ومطور Full Stack باستخدام تقنيات MERN ويهتم باختبار الكود.",
-      position: "مطور MERN متكامل",
-      skills: ["MongoDB", "Express", "React", "Node.js", "Jest", "Cypress"],
-      salary: 100,
-      imgUrl: "/person.jpg",
-    },
-    {
-      firstName: "ريم",
-      lastName: "أمين",
-      bio: "متخصصة في أمان التطبيقات وتساعد المطورين على كتابة كود آمن.",
-      position: "خبيرة أمن تطبيقات",
-      skills: ["OWASP", "نمذجة التهديدات", "Java", "Spring", "Burp Suite", "Linux"],
-      salary: 115,
-      imgUrl: "/person.jpg",
-    },
-  ]);
 
+  /* ـــــــــــــ API calls ـــــــــــــ */
+  const [triggerSkills,  { data: skillsData }]       = useLazyGetSkillsQuery();
+  const [triggerMentors, { data: mentorsRes, isFetching }] = useLazyGetMentorsQuery();
+
+  /* ـــــــــــــ load once ـــــــــــــ */
+  useEffect(() => {
+    triggerSkills();
+    triggerMentors({ pageNumber: page, pageSize: 6, orderByRating: true });
+  }, [triggerSkills, triggerMentors ,page, pageSize]);
+
+  /* ـــــــــــــ raw data ـــــــــــــ */
+  const mentors: Teacher[] = mentorsRes?.data.teachers ?? [];
+  const totalCount  = mentorsRes?.data.totalCount  ?? 0;
+const totalPages  = mentorsRes?.data.totalPages  // يرجع 2 من الـ backend
+                  ?? Math.max(1, Math.ceil(totalCount / pageSize));
+  console.log(totalCount , totalPages)
+  const handleSearch = (val: string) => {
+    setPage(1);
+    setSearchQuery(val);
+  };
+
+  /* ـــــــــــــ unique skills list (strings) ـــــــــــــ */
+const availableSkills: string[] = useMemo(() => {
+  if (skillsData?.value) {
+    return skillsData.value
+      .map((s: { name: string }) => s.name?.trim())
+      .filter((n : string): n is string => !!n && n !== "")
+      .map((n: string) => n.toLowerCase())       
+      .sort();
+  }
+
+  // fallback
+  return Array.from(
+    new Set(
+      mentors.flatMap((m) =>
+        m.skills.map((sk) => sk.skillName.toLowerCase())
+      )
+    )
+  ).sort();
+}, [skillsData, mentors]);
+
+  /* ـــــــــــــ toggle skill ـــــــــــــ */
   const toggleSkill = (skill: string) =>
     setSelectedSkills((prev) =>
       prev.includes(skill)
@@ -119,46 +62,56 @@ export default function MentorsPage() {
         : [...prev, skill]
     );
 
-  useEffect(() => {
-    triggerSkills();
-  }, [triggerSkills]);
+  /* ـــــــــــــ apply filters ـــــــــــــ */
+  const filteredMentors = useMemo(() => {
+    return mentors.filter((m) => {
+      const fullName = `${m.firstName} ${m.lastName}`.toLowerCase();
+      const skillNames = m.skills.map((sk) => sk.skillName.toLowerCase());
+      const matchesSearch =
+        !searchQuery ||
+        fullName.includes(searchQuery.toLowerCase()) ||
+        skillNames.some((n) => n.includes(searchQuery.toLowerCase()));
 
-  const filteredMentors = allMentors.filter((m) => {
-    const matchesSearch =
-      !searchQuery ||
-      `${m.firstName} ${m.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.skills.some((s) => s.toLowerCase().includes(searchQuery.toLowerCase()));
+      const matchesSkills =
+        selectedSkills.length === 0 ||
+        selectedSkills.every((s) => skillNames.includes(s.toLowerCase()));
 
-    const matchesSkills =
-      selectedSkills.length === 0 ||
-      selectedSkills.every((s) =>
-        m.skills.map((sk) => sk.toLowerCase()).includes(s.toLowerCase())
-      );
+      return matchesSearch && matchesSkills;
+    });
+  }, [mentors, searchQuery, selectedSkills]);
 
-    return matchesSearch && matchesSkills;
-  });
-
-  // Safely handle skillsData
-  const uniqueSkills: string[] = skillsData
-    ? skillsData.map((skill:{ id: string; name: string }) => skill.name) // Remove type cast if possible, rely on RTK Query types
-    : [...new Set(allMentors.flatMap((m) => m.skills))].sort();
-
+  /* ـــــــــــــ UI ـــــــــــــ */
   return (
     <div dir="rtl" className="bg-gray-50 min-h-screen py-6">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-6">
           <FiltersInputs
-            skills={uniqueSkills}
+            skills={availableSkills}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
             selectedSkills={selectedSkills}
             onToggleSkill={toggleSkill}
           />
+
           <main className="flex-1">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm h-full overflow-y-auto">
-              <MentorsList mentors={filteredMentors} />
-            </div>
-          </main>
+  <div className="rounded-xl p-6 h-full overflow-y-auto space-y-6">
+
+    
+<MentorsList mentors={filteredMentors} loading={isFetching} />
+
+    {/* Pagination */}
+    {totalPages > 1 && (
+      <CustomPagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={(newPage) => {
+          window.scrollTo({ top: 0, behavior: "smooth" }); // اختيارى
+          setPage(newPage);
+        }}
+      />
+    )}
+  </div>
+</main>
         </div>
       </div>
     </div>

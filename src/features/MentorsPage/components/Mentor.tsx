@@ -1,88 +1,96 @@
-import React from 'react'
-interface MentorProps {
-  firstName: string;
-  lastName: string;
-  bio: string;
-  position: string;
-  skills: string[];
-  salary: number;
-  imgUrl?: string; // علامة ? معناها إنه اختياري
+// ------------- Mentor.tsx -------------
+// interface MentorProps {
+//   firstName: string;
+//   lastName: string;
+//   bio: string;
+//   position: string;
+//   skills: string[];
+//   salary: number;
+//   imgUrl?: string;
+//   compact?: boolean;              // ← جديد
+// }
+
+import { Box, Skeleton } from "@mui/material";
+import type { Skill, Teacher } from "../../Auth/RegisterMentor/types";
+import { Link, useParams } from "react-router-dom";
+interface MentorCardProps extends Partial<Teacher> {
+  loading?: boolean;
+  compact?: boolean;
 }
-export default function Mentor({firstName,lastName,bio,position,skills,salary,imgUrl} : MentorProps) {
+export default function Mentor(props: MentorCardProps) {
+   const {
+    id,
+    firstName,
+    lastName,
+    bio,
+    stutas,
+    skills,   
+    salary,
+    profilePictureUrl,
+    compact = false,
+    loading = false,
+  } = props;
+  
+  /* حجم العناصر يتغيّر لو compact */
+  const imgH = compact ? "h-32" : "h-60";
+  const nameSize = compact ? "text-lg" : "text-2xl";
+  const bioShown = compact ? bio?.slice(0, 60) + "..." : bio; // اختصار
+  if (loading) {
+    /* Skeleton كارت */
+    return (
+      <Box sx={{ width: compact ? 220 : 300, p: 2 }}>
+        <Skeleton variant="rectangular" width="100%" height={compact ? 100 : 160} />
+        <Skeleton sx={{ mt: 1 }} />
+        <Skeleton width="60%" />
+      </Box>
+    );
+  }
+ 
+
   return (
     <div
-  dir="rtl"
-  className="my-4 relative box px-7 py-8 transition-all duration-150 mb-6 max-w-4xl mx-auto border border-gray-300 rounded-lg shadow-sm"
->
-  <div className="sm:grid grid-cols-24 sm:space-x-10">
-    {/* صورة الـ Mentor */}
-    <div className="col-span-7 md:col-span-5 relative">
-      <a
-        href="#"
-        className="relative w-full h-60 bg-center bg-cover inline-block rounded-lg overflow-hidden md:mb-20"
-      >
-        <img
-          src={imgUrl}
-          alt="Mentor"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </a>
-    </div>
+      dir="rtl"
+      className={`relative box p-4 transition-all duration-150 border border-gray-300 rounded-lg shadow-sm ${
+        compact ? "max-w-xs" : "max-w-4xl"
+      } mx-auto`}
+    >
+      <img
+        src={profilePictureUrl || "/avatar.png"}
+        alt="Mentor"
+        className={`w-full ${imgH} object-cover rounded-md mb-3`}
+      />
 
-    {/* المحتوى */}
-    <div className="main-content-col col-span-full col-start-8 md:col-start-6 border-0 pr-10 text-right">
-      <div className="relative h-full">
-        {/* الاسم */}
-        <h3 className="text-2xl text-gray-900 font-bold mb-2">
-          {firstName}  {lastName}
-        </h3>
+      <h3 className={`${nameSize} font-bold text-gray-900 mb-1`}>
+        {firstName} {lastName}
+      </h3>
 
-        {/* الوظيفة */}
-        <p className="text-sm text-gray-900 mb-4">
-          {position}
-        </p>
+      <p className="text-xs text-gray-600 mb-2">{bio}</p>
 
-        {/* نبذة */}
-        <p className="text-sm leading-6 mb-6 max-w-screen-md">
-         {bio}
-        </p>
+      <p className="text-xs leading-5 mb-3">{bioShown}</p>
 
-        {/* المهارات / البادچز */}
-        <div className="flex flex-wrap gap-3 mb-6 justify-end">
-          {skills.map((skill) => (
-            <span
-              key={skill}
-              className="bg-blue-100 text-gray-800 text-xs font-medium px-3 py-1 rounded-full"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
+      <div className="flex flex-wrap gap-2 mb-4 justify-end">
+        {skills?.map((skill:Skill) => (
+          <span
+            key={skill.skillId}
+            className="bg-blue-100 text-gray-800 text-[10px] font-medium px-2 py-0.5 rounded-full"
+          >
+            {skill.skillName}
+          </span>
+        ))}
+      </div>
 
-        {/* السعر و الزر */}
-        <div className="md:grid grid-cols-5 items-center gap-4">
-          <div className="col-span-2 mb-4 sm:mb-0">
-            <div className="text-black text-2xl lg:text-3xl font-bold leading-none">
-              <span className="block text-gray-500 text-sm font-medium">
-                يبدأ من
-              </span>
-              ${salary}
-              <span className="font-semibold text-lg"> / شهر</span>
-            </div>
-          </div>
-
-          <div className="col-span-3">
-            <a
-              href="#"
-              className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition-colors duration-150"
-            >
-              عرض الملف
-            </a>
-          </div>
-        </div>
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-bold">
+          ${salary}
+          <span className="text-[10px] text-gray-500"> / شهر</span>
+        </span>
+        <Link
+          to={`/mentors/${id}`}
+          className="text-[10px] bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
+        >
+          عرض الملف
+        </Link>
       </div>
     </div>
-  </div>
-    </div>
-  )
+  );
 }

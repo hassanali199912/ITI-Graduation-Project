@@ -1,11 +1,17 @@
 import { useState } from "react";
 //import image1 from "../assets/images/Avatar1.png"
+import type RegisterFormData from "../../../domain/types/RegisterFormData";
 
 interface Props {
-  data: any;
+  data: RegisterFormData;
+  countries: { id: string; name: string }[];
+  specialists: { id: string; name: string }[];
+  graduationStatuses: { id: string; name: string }[];
+  skills: { id: string; name: string }[];
+  genders: { id: number; name: string }[];
 }
 
-const StepSidebar = ({ data }: Props) => {
+const StepSidebar = ({ data, countries, specialists, graduationStatuses, skills, genders }: Props) => {
   const [activeTab, setActiveTab] = useState("overview");
   const countryCodeMap: { [key: string]: string } = {
     "مصر": "EG",
@@ -14,7 +20,16 @@ const StepSidebar = ({ data }: Props) => {
     "الأردن": "JO",
   };
 
-  const countryCode = data.country ? countryCodeMap[data.country] || "" : "";
+  const getNameById = (
+    list: { id: string | number; name: string }[],
+    id: string | number
+  ) => {
+    return list.find(item => String(item.id) === String(id))?.name || "غير محددة";
+  };
+  
+  
+
+  const countryCode = data.residenceCountryId ? countryCodeMap[data.residenceCountryId] || "" : "";
 
   return (
     <div className="w-[500px] bg-white border-l border-gray-200 shadow-md hidden md:block">
@@ -22,7 +37,7 @@ const StepSidebar = ({ data }: Props) => {
       <div className="p-6">
         <div className="flex gap-4 mt-[-60px]">
           <img
-            src={data.avatar || " /🤖 AI Generated Avatars_ Rohan Sharma.png"}
+            src={data.profilePictureUrl || " /🤖 AI Generated Avatars_ Rohan Sharma.png"}
             alt="avatar"
             className="w-40 h-40 rounded-full border-4 border-white object-cover shadow-md"
           />
@@ -38,8 +53,8 @@ const StepSidebar = ({ data }: Props) => {
               )}
             </div>
 
-            {data.specialization ? (
-              <p className="text-lg text-gray-500 mt-2">{data.specialization}</p>
+            {data.specialistId ? (
+              <p className="text-lg text-gray-500 mt-2">{getNameById(specialists, data.specialistId)}</p>
             ) : (
               <img
                 src="/Rectangle 40.png"
@@ -74,10 +89,10 @@ const StepSidebar = ({ data }: Props) => {
 
           {activeTab === "overview" && (
             <div className="mt-6">
-              {data.about ? (
+              {data.bio ? (
                 <div className="bg-[#F4F9FB] rounded-lg p-4 mt-4">
                   <p className="text-base text-[#4B5563] leading-relaxed text-right">
-                    {data.about}
+                    {data.bio}
                   </p>
                 </div>
               ) : (
@@ -105,7 +120,7 @@ const StepSidebar = ({ data }: Props) => {
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium text-[#A3A3A3]">النوع:</span> {data.gender ? (
-                  <p className="text-lg text-gray-500 ">{data.gender}</p>
+                  <p className="text-lg text-gray-500 ">{getNameById(genders, data.gender)}</p>
                 ) : (
                   <img
                     src="/Rectangle 40.png"
@@ -115,8 +130,8 @@ const StepSidebar = ({ data }: Props) => {
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-[#A3A3A3]">الدولة:</span> {data.country ? (
-                  <p className="text-lg text-gray-500 ">{data.country}</p>
+                <span className="font-medium text-[#A3A3A3]">الدولة:</span> {data.residenceCountryId ? (
+                  <p className="text-lg text-gray-500 ">{getNameById(countries, data.residenceCountryId)}</p>
                 ) : (
                   <img
                     src="/Rectangle 40.png"
@@ -126,8 +141,8 @@ const StepSidebar = ({ data }: Props) => {
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-[#A3A3A3]">التخصص:</span> {data.specialization ? (
-                  <p className="text-lg text-gray-500 ">{data.specialization}</p>
+                <span className="font-medium text-[#A3A3A3]">التخصص:</span> {data.specialistId ? (
+                  <p className="text-lg text-gray-500 ">{getNameById(specialists, data.specialistId)}</p>
                 ) : (
                   <img
                     src="/Rectangle 40.png"
@@ -137,8 +152,8 @@ const StepSidebar = ({ data }: Props) => {
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-[#A3A3A3]">المستوى الدراسي:</span> {data.educationLevel ? (
-                  <p className="text-lg text-gray-500 ">{data.educationLevel}</p>
+                <span className="font-medium text-[#A3A3A3]">المستوى الدراسي:</span> {data.graduationStatusId ? (
+                  <p className="text-lg text-gray-500 ">{getNameById(graduationStatuses, data.graduationStatusId)}</p>
                 ) : (
                   <img
                     src="/Rectangle 40.png"
@@ -151,14 +166,17 @@ const StepSidebar = ({ data }: Props) => {
                 <span className="font-medium text-[#A3A3A3]">المهارات:</span>
                 {Array.isArray(data.skills) && data.skills.length > 0 ? (
                   <div className="flex flex-wrap gap-2 mt-1">
-                    {data.skills.map((skill: string, index: number) => (
-                      <span
-                        key={index}
-                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
-                      >
-                        {skill}
-                      </span>
-                    ))}
+                    {data.skills.map((skillObj: { skillId: string }, index: number) => {
+                      const skillName = getNameById(skills, skillObj.skillId);
+                      return (
+                        <span
+                          key={skillObj.skillId}
+                          className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs"
+                        >
+                          {skillName}
+                        </span>
+                      );
+                    })}
                   </div>
                 ) : (
                   <img

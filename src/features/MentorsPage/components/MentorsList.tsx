@@ -112,28 +112,31 @@
 // }
 import React from "react";
 import Mentor from "./Mentor";
-interface MentorType {
-  firstName: string;
-  lastName: string;
-  bio: string;
-  position: string;
-  skills: string[];
-  salary: number;
-  imgUrl?: string; // علامة ? معناها إنه اختياري
-}
+import type { Teacher } from "../../Auth/RegisterMentor/types";
+// interface MentorType {
+//   firstName: string;
+//   lastName: string;
+//   bio: string;
+//   position: string;
+//   skills: string[];
+//   salary: number;
+//   imgUrl?: string; // علامة ? معناها إنه اختياري
+// }
 
 interface MentorsListProps {
-  mentors: MentorType[];
+  mentors: Teacher[] | undefined;
+  loading?: boolean;          
+
 }
 
-export default function MentorsList({ mentors }: MentorsListProps) {
+export default function MentorsList({ mentors = [], loading  }: MentorsListProps) {
+  const skeletons = Array.from({ length: 6 });
+
   return (
-    <>
-      {mentors.length ? (
-        mentors.map((m, idx) => <Mentor key={idx} {...m} />)
-      ) : (
-        <p className="text-center text-gray-600 mt-10">لا توجد نتائج مطابقة.</p>
-      )}
-    </>
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {loading
+        ? skeletons.map((_, i) => <Mentor key={`s-${i}`} loading compact />)
+        : mentors.map((t) => <Mentor key={t.id} {...t} compact />)}
+    </div>
   );
 }

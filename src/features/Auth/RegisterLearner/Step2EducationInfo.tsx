@@ -1,17 +1,25 @@
 import { useState } from "react";
 import { TextField, MenuItem, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { useGetLookupByTypeQuery } from "../../../redux/api/lookupApi";
+import type RegisterFormData from "../../../domain/types/RegisterFormData";
+import type { LookupItem } from "../../../domain/types/LookupItem";
 
 interface Props {
-  data: any;
-  setData: (val: any) => void;
+  data: RegisterFormData;
+  setData: (val: RegisterFormData) => void;
   onNext: () => void;
   onBack: () => void;
 }
 
 const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
-  const levels = ["طالب", "خريج"];
-  const fields = ["Frontend", "Backend", "UI/UX", "Data Science"];
-  const experiences = ["تعدد المهام", "العمل الجماعي", "القيادة", "حل المشكلات"];
+  const { data: levelsResponse } = useGetLookupByTypeQuery("graduationStatus");
+  const { data: fieldsResponse } = useGetLookupByTypeQuery("specialization");
+  const { data: experiencesResponse } = useGetLookupByTypeQuery("experiences");
+
+  const levels = levelsResponse?.value ?? [];
+  const fields = fieldsResponse?.value ?? [];
+  const experiences = experiencesResponse?.value ?? [];
+  
 
   return (
     <div className="flex flex-col bg-white p-8 w-full max-w-4xl">
@@ -34,14 +42,14 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
           <TextField
             fullWidth
             select
-            value={data.educationLevel}
+            value={data.graduationStatusId}
             onChange={(e) =>
-              setData({ ...data, educationLevel: e.target.value })
+              setData({ ...data, graduationStatusId: e.target.value })
             }
           >
-            {levels.map((level) => (
-              <MenuItem key={level} value={level}>
-                {level}
+            {levels.map((level: { id: string; name: string }) => (
+              <MenuItem key={level.id} value={level.id}>
+                {level.name}
               </MenuItem>
             ))}
           </TextField>
@@ -52,14 +60,14 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
           <TextField
             fullWidth
             select
-            value={data.specialization}
+            value={data.specialistId}
             onChange={(e) =>
-              setData({ ...data, specialization: e.target.value })
+              setData({ ...data, specialistId: e.target.value })
             }
           >
-            {fields.map((field) => (
-              <MenuItem key={field} value={field}>
-                {field}
+            {fields.map((field: LookupItem) => (
+              <MenuItem key={field.id} value={field.id}>
+                {field.name}
               </MenuItem>
             ))}
           </TextField>
@@ -68,35 +76,38 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
         <div>
           <label className="text-sm font-medium text-gray-800 mb-1 text-right">ما هي خبراتك؟</label>
           <div className="border border-gray-300 rounded-md px-3 py-2 min-h-[56px] flex flex-wrap items-center gap-2 bg-white">
-            {data.experience?.map((exp: string, index: number) => (
-              <span
-                key={index}
-                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
-              >
-                {exp}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setData({
-                      ...data,
-                      experience: data.experience.filter((e: string) => e !== exp),
-                    })
-                  }
-                  className="text-blue-600 hover:text-blue-800 font-bold"
+            {data.experiences?.map((exp: { id: string }) => {
+              const expName = experiences.find((e: LookupItem) => e.id === exp.id)?.name ?? "غير معروف";
+              return (
+                <span
+                  key={exp.id}
+                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1"
                 >
-                  ×
-                </button>
-              </span>
-            ))}
+                  {expName}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setData({
+                        ...data,
+                        experiences: data.experiences.filter((e) => e.id !== exp.id),
+                      })
+                    }
+                    className="text-blue-600 hover:text-blue-800 font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
+              );
+            })}
 
             <select
               value=""
               onChange={(e) => {
                 const val = e.target.value;
-                if (val && !data.experience?.includes(val)) {
+                if (val && !data.experiences.some((exp) => exp.id === val)) {
                   setData({
                     ...data,
-                    experience: [...(data.experience || []), val],
+                    experiences: [...(data.experiences || []), { id: val }],
                   });
                 }
               }}
@@ -105,9 +116,9 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
               <option value="" disabled>
                 اختر من القائمة
               </option>
-              {experiences.map((exp) => (
-                <option key={exp} value={exp}>
-                  {exp}
+              {experiences.map((exp: LookupItem) => (
+                <option key={exp.id} value={exp.id}>
+                  {exp.name}
                 </option>
               ))}
             </select>
@@ -120,9 +131,9 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
           </label>
           <RadioGroup
             row
-            value={data.relatedToProgramming || ""}
+            value={data.connectProgramming ? "نعم" : "لا"}
             onChange={(e) =>
-              setData({ ...data, relatedToProgramming: e.target.value })
+              setData({ ...data, connectProgramming: e.target.value === "نعم" })
             }
           >
             <FormControlLabel value="نعم" control={<Radio />} label="نعم" />
@@ -153,7 +164,7 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
             لديك حساب؟{" "}
             <span
               className="cursor-pointer text-[#A3A3A3] hover:text-[#0003C7] transition"
-              onClick={() => window.location.href = "/login"} // عدلي الرابط حسب مسار صفحة تسجيل الدخول
+              onClick={() => window.location.href = "/"} // عدلي الرابط حسب مسار صفحة تسجيل الدخول
             >
               سجل دخول
             </span>

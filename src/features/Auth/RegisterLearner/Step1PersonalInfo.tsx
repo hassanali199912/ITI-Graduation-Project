@@ -1,18 +1,29 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TextField, MenuItem } from "@mui/material";
-// import { useLazyGetLookupDataQuery } from "../../Auth/api/lookups";
+import type  RegisterFormData  from "../../../domain/types/RegisterFormData"; 
+import type { LookupItem } from "../../../domain/types/LookupItem";
+import { useGetLookupByTypeQuery } from "../../../redux/api/lookupApi";
 
 interface Props {
-  data: any;
-  setData: (val: any) => void;
+  data: RegisterFormData; 
+  setData: (val: RegisterFormData) => void; 
   onNext: () => void;
+  genders: { id: number; name: string }[];
+  
 }
 
 const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
-  const genders = ["ذكر", "أنثى"];
-  // const countries = ["مصر", "السعودية", "الإمارات", "الأردن"];
-  const nationalities = ["مصري", "سعودي", "إماراتي", "أردني"];
-  const [preview, setPreview] = useState<string>(data.avatar || "");
+  const { data: gendersResponse } = useGetLookupByTypeQuery("gender");
+  const genders = gendersResponse?.value ?? [];
+
+  const { data: countriesResponse } = useGetLookupByTypeQuery("country");
+  const countries = countriesResponse?.value ?? [];
+  
+  
+  const { data: nationalitiesResponse } = useGetLookupByTypeQuery("nationality");
+  const nationalities = nationalitiesResponse?.value ?? [];
+
+  const [preview, setPreview] = useState<string>(data.profilePictureUrl || "");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -27,7 +38,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
     reader.onloadend = () => {
       const base64 = reader.result as string;
       setPreview(base64);
-      setData({ ...data, avatar: base64 });
+      setData({ ...data, profilePictureUrl: base64 });
     };
     reader.readAsDataURL(file);
   };
@@ -192,7 +203,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
           />
         </div>
 
-        <div className="col-span-2 flex flex-col">
+        {/*<div className="col-span-2 flex flex-col">
           <label className="text-sm font-medium text-gray-800 mb-1 text-right">
             العمر <span className="text-red-500">*</span>
           </label>
@@ -217,33 +228,44 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               },
             }}
           />
-        </div>
+        </div>*/}
 
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-gray-800 mb-1 text-right">
-            النوع <span className="text-red-500">*</span>
-          </label>
-          <TextField
-            select 
+  <label className="text-sm font-medium text-gray-800 mb-1 text-right">
+    النوع <span className="text-red-500">*</span>
+  </label>
 
-            variant="outlined"
-            fullWidth
-            value={data.gender}
-            onChange={(e) => setData({ ...data, gender: e.target.value })}
-            InputProps={{
-              style: {
+  {genders.length > 0 ? (
+    <TextField
+      select
+      variant="outlined"
+      fullWidth
+      value={data.gender}
+      onChange={(e) => setData({ ...data, gender: Number(e.target.value) })}
+      InputProps={{
+        style: {
+          backgroundColor: "#F4F9FB",
+          borderRadius: 8,
+        },
+        notched: false,
+      }}
+      sx={{
+        "& .MuiOutlinedInput-notchedOutline": {
+          border: "none",
+        },
+      }}
+    >
+      {genders.map((g: LookupItem) => (
+        <MenuItem key={g.id} value={g.id}>
+          {g.name}
+        </MenuItem>
+      ))}
+    </TextField>
+  ) : (
+    <p className="text-gray-400 text-sm">جاري تحميل النوع...</p>
+  )}
+</div>
 
-                borderRadius: 8,
-              },
-            }}
-          >
-            {genders.map((gender) => (
-              <MenuItem key={gender} value={gender}>
-                {gender}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
 
         <div className="flex flex-col">
           <label className="text-sm font-medium text-gray-800 mb-1 text-right">
@@ -253,24 +275,23 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
             select
             variant="outlined"
             fullWidth
-            value={data.country}
-            onChange={(e) => setData({ ...data, country: e.target.value })}
+            value={data.residenceCountryId}
+            onChange={(e) => setData({ ...data, residenceCountryId: e.target.value })}
             InputProps={{
               style: {
                 borderRadius: 8,
               },
             }}
           >
-            {/* {countries.values.map((country) => (
-              <MenuItem key={country} value={country}>
-                {country}
-              </MenuItem>
-            ))} */}
-            {/* {countries.value} */}
+            {countries.map((country: LookupItem) => (
+              <MenuItem key={country.id} value={country.id}>
+              {country.name}
+            </MenuItem>
+            ))}
           </TextField>
         </div>
 
-        <div className="col-span-2 flex flex-col">
+        {/*<div className="col-span-2 flex flex-col">
           <label className="text-sm font-medium text-gray-800 mb-1 text-right">
             ما هي جنسيتك؟ <span className="text-red-500">*</span>
           </label>
@@ -278,21 +299,21 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
             select
             variant="outlined"
             fullWidth
-            value={data.nationality}
-            onChange={(e) => setData({ ...data, nationality: e.target.value })}
+            value={data.nationalityId}
+            onChange={(e) => setData({ ...data, nationalityId: e.target.value })}
             InputProps={{
               style: {
                 borderRadius: 8,
               },
             }}
           >
-            {nationalities.map((nat) => (
-              <MenuItem key={nat} value={nat}>
-                {nat}
+            {nationalities.map((n: LookupItem) => (
+              <MenuItem key={n.id} value={n.id}>
+                {n.name}
               </MenuItem>
             ))}
           </TextField>
-        </div>
+        </div>*/}
 
         <div className="col-span-2 flex justify-between mt-6 items-center">
           <button
@@ -316,7 +337,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
             لديك حساب؟{" "}
             <span
               className="cursor-pointer text-[#A3A3A3] hover:text-[#0003C7] transition"
-              onClick={() => window.location.href = "/login"} 
+              onClick={() => window.location.href = "/"} 
             >
               سجل دخول
             </span>

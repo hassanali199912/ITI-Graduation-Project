@@ -11,6 +11,7 @@ import {
 } from "../../api/lookups";
 import Tags from "../../../../shared/components/form/Tags";
 import { useUploadFileMutation } from "../../api/regester";
+import { uploadFileDirect } from "../../../../config/apis";
 
 type Props = {
   data: StepOneData;
@@ -76,15 +77,19 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
+    // 1) عرّض الصورة محليًا
+    setValue("profilePictureUrl", file, { shouldValidate: true });
     try {
-      const { url } = await uploadFile(file).unwrap();
-      console.log("File URL:", url);
-      // setValue("profilePictureUrl", url); لو بتستخدم RHF
+      const response = await uploadFileDirect(file);
+      let url = response?.data?.fileUrl || ""
+      console.log("jhhkhkkhkhk", response?.data?.data?.fileUrl);
+      // 2) بعد الرفع، خزّن الـ URL بدل الـ File
+      setValue("profilePictureUrl", response?.data?.data?.fileUrl, { shouldValidate: true });
     } catch (err) {
       console.error("Upload error", err);
     }
   };
+
   const skills = watch("skills");
   const avatarFile = watch("profilePictureUrl");
   const [triggerSkills, { data: skillsRes }] = useLazyGetSkillsQuery();
@@ -100,7 +105,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
       id: s.id,
       name: s.name,
     }));
-  console.log(skillsOptions);
+  // console.log(skillsOptions);
   return (
     <div className="step-one mx-4">
       <div className="mt-8">
@@ -177,20 +182,20 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
           control={control}
           render={({ field }) => (
             <>
-            <label className="block text-right mb-2 font-bold">السعر</label>
-            <input
-              {...field}
-              type="text"
-              placeholder="ادخل السعر"
-              className="bg-blue-50 p-2 w-full rounded mt-4 mb-8"
-              onChange={(e) =>
-                field.onChange(
-                  e.target.value.trim() === ""
-                    ? undefined
-                    : Number(e.target.value)
-                )
-              }
-            />
+              <label className="block text-right mb-2 font-bold">السعر</label>
+              <input
+                {...field}
+                type="text"
+                placeholder="ادخل السعر"
+                className="bg-blue-50 p-2 w-full rounded mt-4 mb-8"
+                onChange={(e) =>
+                  field.onChange(
+                    e.target.value.trim() === ""
+                      ? undefined
+                      : Number(e.target.value)
+                  )
+                }
+              />
             </>
           )}
         />
@@ -213,7 +218,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
                 options={skillsOptions}
                 value={selectedObjs}
                 onChange={(newObjs) => {
-                  const ids = newObjs.map((s) => s.id); // رجّع IDs لـ RHF
+                  const ids = newObjs.map((s) => s.skillId); // رجّع IDs لـ RHF
                   field.onChange(ids);
                 }}
               />

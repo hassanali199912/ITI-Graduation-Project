@@ -2,15 +2,12 @@ import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import logger from "./logger";
 import { createApi, type BaseQueryFn } from "@reduxjs/toolkit/query/react"
 
-
-
 const axiosInterseptor = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
-    headers: {
-        "Content-Type": "Application/json"
-    }
+    // headers: {
+    //     "Content-Type": "Application/json"
+    // }
 });
-
 
 axiosInterseptor.interceptors.request.use((config) => {
 
@@ -109,11 +106,26 @@ export const api = createApi({
     tagTypes: ['Lookup'],
     endpoints: () => ({})
 })
-
-
-
-
-
-
-
 export default axiosInterseptor
+
+/**
+ * Uploads a file to the uploader API without using interceptors or RTK Query.
+ * @param file The file to upload
+ * @returns The Axios response
+ */
+export async function uploadFileDirect(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    // Use a plain axios instance to avoid interceptors
+    const response = await axios.post(
+        'http://academix1.runasp.net/api/files/upload',
+        formData,
+        {
+            headers: {
+                // Let the browser set the correct Content-Type with boundary
+                // Do not set Content-Type manually
+            },
+        }
+    );
+    return response;
+}

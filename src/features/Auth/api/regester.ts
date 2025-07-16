@@ -8,19 +8,22 @@ export const authApi = api.injectEndpoints({
         data: data,
       }),
     }),
-    uploadFile: builder.mutation<{ url: string }, File>({
+    uploadFile: builder.mutation({
       query: (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
+        const form = new FormData();
+        form.append("file", file);
+        console.log("this is file ", file);
+        console.log("this is file ", form.get("file"));
 
         return {
-          url: "/api/files/upload",
+          url: "/api/Files/upload",
           method: "POST",
-          body: formData,
+          body: form,
         };
       },
     }),
+
   }),
 });
 
-export const { useRegesterMentorMutation , useUploadFileMutation} = authApi;
+export const { useRegesterMentorMutation, useUploadFileMutation } = authApi;
