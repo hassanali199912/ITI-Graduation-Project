@@ -55,24 +55,43 @@ const validate = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    console.log('Login Data:', formData);
-    triger({
-      email: formData.email,
-      password: formData.password,
-    }).then((res) => {
-      console.log("this is res ", res);
-    })
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+  e.preventDefault();
+  console.log("Login Data:", formData);
 
-if (validate()) {
-      console.log('Form is valid ', formData);
-      
-    } else {
-      console.log('Form has errors ', errors);
+  triger({
+    email: formData.email,
+    password: formData.password,
+  }).then((res) => {
+    console.log("this is res ", res);
+
+    const role = res?.data?.data?.roles?.[0]; // مثلاً: "Teacher" أو "Student"
+    const personId = res?.data?.data?.personId;
+    const token = res?.data?.data?.accessToken;
+
+    if (role === "Student") {
+      localStorage.setItem("studentId", personId);
+    } else if (role === "Teacher") {
+      localStorage.setItem("teacherId", personId);
     }
-    navigate('/landingpage')
-  };
+
+    localStorage.setItem("token", token);
+
+    console.log("Saved ID:", personId);
+    console.log("Token:", token);
+
+    if (validate()) {
+      console.log("Form is valid ", formData);
+    } else {
+      console.log("Form has errors ", errors);
+    }
+
+    navigate("/landingpage");
+  }).catch((err) => {
+    console.error("Login failed:", err);
+  });
+};
+
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };

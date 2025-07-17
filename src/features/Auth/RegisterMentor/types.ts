@@ -4,7 +4,7 @@ export const stepOneSchema = z
   .object({
     firstName: z.string().min(1, { message: "الإسم الأول مطلوب" }),
     lastName: z.string().min(1, { message: "الإسم الثانى مطلوب" }),
-    skills: z.array(z.string().uuid()).min(1, { message: "يجب اختيار مهارة" }),
+    skills: z.array(z.string().uuid()).optional(),
     email: z
       .string()
       .min(1, { message: "البريد الإلكتروني مطلوب" })
@@ -122,7 +122,20 @@ export interface RatingSummary {
   averageRating: number;
   totalComments: number;
 }
-
+export type Session = {
+  studentId: string;
+  studentName: string;
+  teacherId: string;
+  pointsAmount: number;
+  subject: string;
+  description: string;
+  estimatedDurationMinutes: number;
+  requestedDateTime: string;
+  status: number;
+  acceptedAt: string | null;
+  rejectedAt: string | null;
+  rejectionReason: string | null;
+};
 // الكيان الأساسي: Teacher / Mentor
 export interface Teacher {
   id: string;
