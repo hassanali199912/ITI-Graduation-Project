@@ -55,56 +55,6 @@ const validate = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-<<<<<<< HEAD
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-
-  if (!validate()) {
-    console.log('Form has errors ', errors);
-    return;
-  }
-
-  try {
-    const res = await triger({
-      email: formData.email,
-      password: formData.password,
-    }).unwrap();
-
-    console.log("this is res", res);
-
-   const token = res?.data?.accessToken;
-const role = Array.isArray(res?.data?.roles) ? res.data.roles[0] : null;
-const email = res?.data?.email;
-const password = formData.password; 
-
-if (token && email) {
-  localStorage.setItem("token", token);
-
-
-  if (
-    email.toLowerCase() === "demo@gmail.com" &&
-    password === "Admin@123"
-  ) {
-    localStorage.setItem("role", "admin");
-  } else if (role) {
-    localStorage.setItem("role", role.toLowerCase());
-    window.dispatchEvent(new Event("roleUpdated")); 
-  } 
-
-  navigate("/landingpage");
-} else {
-  console.error("Missing token or email in response:", res);
-}
-
-
-  } catch (err) {
-    console.error("Login error:", err);
-  }
-};
-
-
-
-=======
   const handleSubmit = (e: { preventDefault: () => void }) => {
   e.preventDefault();
   console.log("Login Data:", formData);
@@ -142,7 +92,6 @@ if (token && email) {
   });
 };
 
->>>>>>> 12674091b0454d47eb085e3f52a0376a6595308d
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
