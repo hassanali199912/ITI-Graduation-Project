@@ -3,14 +3,14 @@ import { useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
 import type { Session } from "../Auth/RegisterMentor/types";
 
 
-const students = [
- { name: "أحمد", email: "ahmed@gmail.com", major: "الذكاء الاصطناعي",hour:'12:00pm',salary:'100$' },
-  { name: "سارة", email: "sara@yahoo.com", major: "تطوير الويب",hour:'3:00pm',salary:'200$' },
-  { name: "محمد", email: "mohamed@yahoo.com", major: "UI/UX" ,hour:'6:00pm',salary:'300$' },
-  { name: "مصطفى", email: "mostafa@yahoo.com", major: "أنظمة المعلومات",hour:'1:00pm',salary:'400$' },
-   { name: "كريم", email: "karim@yahoo.com", major: "تطوير الويب",hour:'8:00pm',salary:'300$' },
-    { name: "معز", email: "moaz@yahoo.com", major: "علوم البيانات " ,hour:'12:00pm',salary:'350$'},
-];
+// const students = [
+//  { name: "أحمد", email: "ahmed@gmail.com", major: "الذكاء الاصطناعي",hour:'12:00pm',salary:'100$' },
+//   { name: "سارة", email: "sara@yahoo.com", major: "تطوير الويب",hour:'3:00pm',salary:'200$' },
+//   { name: "محمد", email: "mohamed@yahoo.com", major: "UI/UX" ,hour:'6:00pm',salary:'300$' },
+//   { name: "مصطفى", email: "mostafa@yahoo.com", major: "أنظمة المعلومات",hour:'1:00pm',salary:'400$' },
+//    { name: "كريم", email: "karim@yahoo.com", major: "تطوير الويب",hour:'8:00pm',salary:'300$' },
+//     { name: "معز", email: "moaz@yahoo.com", major: "علوم البيانات " ,hour:'12:00pm',salary:'350$'},
+// ];
 
 const Overviewmentor = () => {
   const [trigger, result] = useLazyGetSessionRequestsByTeacherIdQuery();
