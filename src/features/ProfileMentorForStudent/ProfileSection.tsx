@@ -1,13 +1,20 @@
 // components/ProfileSection.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PlansCard from './PlansCard';
 import { Avatar, Chip } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import type { Teacher } from '../Auth/RegisterMentor/types';
-
+import { FaEdit } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 const ProfileSection = ({id,firstName,lastName,bio,specialists,skills,salary,profilePictureUrl}:Teacher) => {
+  const [role, setRole] = useState<string | null>(null);
+  const navigate=useNavigate();
+  useEffect(() => {
+      const storedRole = localStorage.getItem("role");
+      setRole(storedRole);
+    }, []);
   return (
     <>
       <div dir="rtl" className="relative bg-white">
@@ -57,11 +64,26 @@ const ProfileSection = ({id,firstName,lastName,bio,specialists,skills,salary,pro
               <Chip label="Typescript" /> */}
             </div>
           </div>
-
+  {role === "Student" && (
+            <>
           {/* Left: الكارد */}
           <div className="w-full lg:w-1/3">
             <PlansCard price={salary} mentorId={id}/>
           </div>
+          </>
+          )}
+          {role === "teacher" && (
+            <>
+      <button
+  className="flex items-center justify-between gap-2 bg-blue-700 hover:bg-blue-800 text-white font-medium px-4 py-2 rounded-lg transition duration-500 ms-auto mt-24"
+onClick={()=>{navigate("/editprofile")}}
+>
+  تعديل  
+  <FaEdit className="text-white ml-2" />
+</button>
+
+          </>
+          )}
         </div>
       </div>
 

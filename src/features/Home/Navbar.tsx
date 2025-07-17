@@ -5,7 +5,7 @@ const Navbar = () => {
   const [role, setRole] = useState<string | null>(null);
   const navigate = useNavigate();
 
- 
+ const id=localStorage.getItem("teacherId");
   useEffect(() => {
     const storedRole = localStorage.getItem("role");
     setRole(storedRole);
@@ -48,7 +48,7 @@ const Navbar = () => {
           {role === "teacher" && (
             <>
               <Link to="/dashboardMentor" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">لوحة المرشد</Link>
-              <Link to="/mentor" className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">الصفحة الشخصية </Link>
+              <Link to={`/mentors/${id}`} className="hover:text-blue-500 transition border border-blue-300 rounded-5 p-2">الصفحة الشخصية </Link>
             </>
           )}
 
