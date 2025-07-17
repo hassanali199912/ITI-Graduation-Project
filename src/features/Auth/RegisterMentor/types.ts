@@ -112,6 +112,7 @@ export interface Skill {
 
 // التخصص (Teaching Area)
 export interface Specialist {
+  name: ReactI18NextChildren | Iterable<ReactI18NextChildren>;
   teachingAreaId: string;
   nameAr: string;
   nameEn: string;

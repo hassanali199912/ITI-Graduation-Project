@@ -8,13 +8,25 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import type { Teacher } from '../Auth/RegisterMentor/types';
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
-const ProfileSection = ({id,firstName,lastName,bio,specialists,skills,salary,profilePictureUrl}:Teacher) => {
+
+const ProfileSection = ({
+  id,
+  firstName,
+  lastName,
+  bio,
+  specialists = [],
+  skills = [],
+  salary,
+  profilePictureUrl,
+}: Teacher) => {
   const [role, setRole] = useState<string | null>(null);
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+
   useEffect(() => {
-      const storedRole = localStorage.getItem("role");
-      setRole(storedRole);
-    }, []);
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole);
+  }, []);
+
   return (
     <>
       <div dir="rtl" className="relative bg-white">
@@ -34,60 +46,61 @@ const ProfileSection = ({id,firstName,lastName,bio,specialists,skills,salary,pro
 
             <div className="mt-4 space-y-1 text-sm text-gray-700">
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">{firstName+" "+lastName} </h1>
-<div className="flex flex-wrap gap-2">
-  {specialists.map((specialist, index) => (
-    <p key={index} className="text-sm text-gray-600">
-      {specialist}
-    </p>
-  ))}
-</div>                <p className="text-sm text-[#0003C7] mt-1">
+                <h1 className="text-xl font-semibold text-gray-900">{firstName + " " + lastName}</h1>
+
+                {/* ✅ specialists (تخصصات) */}
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {specialists.map((specialist: any, index) => (
+                    <p key={specialist.id || index} className="text-sm text-gray-600">
+                      {specialist.name}
+                    </p>
+                  ))}
+                </div>
+
+                <p className="text-sm text-[#0003C7] mt-2">
                   {bio}
                 </p>
               </div>
+
               <div className="flex items-center gap-2 mt-5">
                 <LocationOnIcon fontSize="small" sx={{ color: '#0003C7' }} />
-                {/* <span>المملكة المتحدة</span> */}
+                {/* <span>الموقع الجغرافي</span> */}
               </div>
+
               <div className="flex items-center gap-2">
                 <StarIcon fontSize="small" sx={{ color: '#0003C7' }} />
                 <span>5.0 (22 مراجعة)</span>
               </div>
+
               <div className="flex items-center gap-2">
                 <AccessTimeIcon fontSize="small" sx={{ color: '#0003C7' }} />
                 <span>نشط اليوم - يرد عادة خلال ساعات</span>
               </div>
             </div>
 
-            <div className="flex gap-2 mt-4">
-              {skills?.map((skill)=>{
-                return(
-                  <Chip label={skill.skillName} />
-                )
-              })}
-              {/* <Chip label=".NET" />
-              <Chip label="Typescript" /> */}
+            <div className="flex gap-2 mt-4 flex-wrap">
+              {skills?.map((skill: any) => (
+                <Chip key={skill.skillId} label={skill.skillName} />
+              ))}
             </div>
           </div>
-  {role === "Student" && (
-            <>
-          {/* Left: الكارد */}
-          <div className="w-full lg:w-1/3">
-            <PlansCard price={salary} mentorId={id}/>
-          </div>
-          </>
-          )}
-          {role === "teacher" && (
-            <>
-      <button
-  className="flex items-center justify-between gap-2 bg-blue-700 hover:bg-blue-800 text-white font-medium px-4 py-2 rounded-lg transition duration-500 ms-auto mt-24"
-onClick={()=>{navigate("/editprofile")}}
->
-  تعديل  
-  <FaEdit className="text-white ml-2" />
-</button>
 
-          </>
+          {/* ✅ الطالب يشوف الكارد */}
+          {role === "Student" && (
+            <div className="w-full lg:w-1/3">
+              <PlansCard price={salary} mentorId={id} />
+            </div>
+          )}
+
+          {/* ✅ المرشد يقدر يعدل */}
+          {role === "teacher" && (
+            <button
+              className="flex items-center justify-between gap-2 bg-blue-700 hover:bg-blue-800 text-white font-medium px-4 py-2 rounded-lg transition duration-500 ms-auto mt-24"
+              onClick={() => navigate("/editprofile")}
+            >
+              تعديل  
+              <FaEdit className="text-white ml-2" />
+            </button>
           )}
         </div>
       </div>
@@ -98,6 +111,4 @@ onClick={()=>{navigate("/editprofile")}}
   );
 };
 
-
 export default ProfileSection;
-
