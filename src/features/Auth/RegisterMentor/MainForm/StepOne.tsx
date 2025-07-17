@@ -212,13 +212,13 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
             );
 
             return (
-              <Tags
+               <Tags
                 label="المهارات"
                 placeholder="اختر مهارة"
                 options={skillsOptions}
                 value={selectedObjs}
                 onChange={(newObjs) => {
-                  const ids = newObjs.map((s) => s.skillId); // رجّع IDs لـ RHF
+                  const ids = newObjs.map((s) => s.id); // رجّع IDs لـ RHF
                   field.onChange(ids);
                 }}
               />

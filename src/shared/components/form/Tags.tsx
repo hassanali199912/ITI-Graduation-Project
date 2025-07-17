@@ -1,10 +1,9 @@
 import { Autocomplete, Chip, TextField } from "@mui/material";
-import type { Skill } from "../../../features/Auth/RegisterMentor/types";
 
-// type Skill = {
-//   id: string;
-//   name: string;
-// };
+type Skill = {
+  id: string;
+  name: string;
+};
 
 interface TagsProps {
   options: Skill[];
@@ -22,20 +21,20 @@ export default function Tags({
   placeholder,
 }: TagsProps) {
   const selected = options.filter((o) =>
-    value.some((v) => v.skillId === o.skillId)
+    value.some((v) => v.id === o.id)
   );
 
   return (
     <Autocomplete
       multiple
       options={options}
-      getOptionLabel={(o) => o.skillName}
-      isOptionEqualToValue={(a, b) => a.skillId === b.skillId}
+      getOptionLabel={(o) => o.name}
+      isOptionEqualToValue={(a, b) => a.id === b.id}
       value={selected}
       onChange={(_, newVal) => onChange(newVal)}
       renderTags={(tagValue, getTagProps) =>
         tagValue.map((option, idx) => (
-        <Chip label={option.skillName} {...getTagProps({ index: idx })} />
+        <Chip label={option.name} {...getTagProps({ index: idx })} />
         ))
       }
       renderInput={(params) => (

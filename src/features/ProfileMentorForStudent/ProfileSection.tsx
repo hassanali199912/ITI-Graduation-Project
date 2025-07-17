@@ -35,8 +35,13 @@ const ProfileSection = ({id,firstName,lastName,bio,specialists,skills,salary,pro
             <div className="mt-4 space-y-1 text-sm text-gray-700">
               <div>
                 <h1 className="text-xl font-semibold text-gray-900">{firstName+" "+lastName} </h1>
-                <p className="text-sm text-gray-600">قائد تقني / مدير تطوير</p>
-                <p className="text-sm text-[#0003C7] mt-1">
+<div className="flex flex-wrap gap-2">
+  {specialists.map((specialist, index) => (
+    <p key={index} className="text-sm text-gray-600">
+      {specialist}
+    </p>
+  ))}
+</div>                <p className="text-sm text-[#0003C7] mt-1">
                   {bio}
                 </p>
               </div>
