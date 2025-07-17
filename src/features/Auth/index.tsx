@@ -55,6 +55,7 @@ const validate = () => {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+<<<<<<< HEAD
   const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
@@ -103,6 +104,45 @@ if (token && email) {
 
 
 
+=======
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+  e.preventDefault();
+  console.log("Login Data:", formData);
+
+  triger({
+    email: formData.email,
+    password: formData.password,
+  }).then((res) => {
+    console.log("this is res ", res);
+
+    const role = res?.data?.data?.roles?.[0]; // مثلاً: "Teacher" أو "Student"
+    const personId = res?.data?.data?.personId;
+    const token = res?.data?.data?.accessToken;
+
+    if (role === "Student") {
+      localStorage.setItem("studentId", personId);
+    } else if (role === "Teacher") {
+      localStorage.setItem("teacherId", personId);
+    }
+
+    localStorage.setItem("token", token);
+
+    console.log("Saved ID:", personId);
+    console.log("Token:", token);
+
+    if (validate()) {
+      console.log("Form is valid ", formData);
+    } else {
+      console.log("Form has errors ", errors);
+    }
+
+    navigate("/landingpage");
+  }).catch((err) => {
+    console.error("Login failed:", err);
+  });
+};
+
+>>>>>>> 12674091b0454d47eb085e3f52a0376a6595308d
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };

@@ -7,7 +7,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import type { Teacher } from '../Auth/RegisterMentor/types';
 
-const ProfileSection = ({firstName,lastName,bio,specialists,skills,salary,profilePictureUrl}:Teacher) => {
+const ProfileSection = ({id,firstName,lastName,bio,specialists,skills,salary,profilePictureUrl}:Teacher) => {
   return (
     <>
       <div dir="rtl" className="relative bg-white">
@@ -60,7 +60,7 @@ const ProfileSection = ({firstName,lastName,bio,specialists,skills,salary,profil
 
           {/* Left: الكارد */}
           <div className="w-full lg:w-1/3">
-            <PlansCard price={salary}/>
+            <PlansCard price={salary} mentorId={id}/>
           </div>
         </div>
       </div>

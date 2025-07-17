@@ -31,7 +31,7 @@ const MentorProfilePage = () => {
     <div className="bg-white">
       <ProfileSection {...mentor} />
       <AboutSection bio={mentor.bio} />
-      <SkillsSection skills={mentor.skills} />
+      <SkillsSection skills={mentor.skills}/>
       <MenteesReviews  />
     </div>
   );

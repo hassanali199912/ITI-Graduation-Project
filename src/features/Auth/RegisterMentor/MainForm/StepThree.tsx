@@ -63,7 +63,7 @@ export default function StepThree({ data, updateData, triggerSubmit }: Props) {
       const url = response?.data?.data?.fileUrl || "";
       console.log("Uploaded URL", url);
       // Set only the URL as certificateUrl expects a string or File
-      setValue(`certificates.${index}.certificateUrl`, url, { shouldValidate: true });
+      setValue(`certificates.${index}.certificateUrl`, {file, url}, { shouldValidate: true });
     } catch (err) {
       console.error("Upload error", err);
     }
