@@ -18,6 +18,7 @@ import DashboardMentor from "./features/Home/dashboardMentor";
 import MentorDetails from "./features/Home/dataofmentor";
 import Navbar from "./features/Home/Navbar";
 import Footer from "./features/Home/footer";
+import Mentor from "./features/MentorsPage/components/Mentor";
 function App() {
   return (
     <>
@@ -41,6 +42,7 @@ function App() {
           <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
           <Route path="/mentor/:name" element={<MentorDetails />} />
           <Route path="/mentors/:id" element={<MentorProfilePage></MentorProfilePage>}></Route>
+        
 
         </Routes>
         <Footer></Footer>

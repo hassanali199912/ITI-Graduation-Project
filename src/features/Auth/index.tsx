@@ -87,6 +87,7 @@ if (token && email) {
     localStorage.setItem("role", "admin");
   } else if (role) {
     localStorage.setItem("role", role.toLowerCase());
+    window.dispatchEvent(new Event("roleUpdated")); 
   } 
 
   navigate("/landingpage");
