@@ -111,7 +111,7 @@ const Navbar = () => {
               variant="contained"
               color="error"
               endIcon={<ExitToAppIcon />}
-              className="!rounded-lg !font-bold"
+              className="!rounded-lg !font-bold gap-3"
             >
               تسجيل الخروج
             </Button>
@@ -122,7 +122,7 @@ const Navbar = () => {
                 color="primary"
                 onClick={() => navigate('/home')}
                 startIcon={<LoginIcon />}
-                className="!rounded-lg !font-semibold"
+                className="!rounded-lg !font-semibold  gap-3"
               >
                 سجل الدخول
               </Button>
@@ -131,7 +131,7 @@ const Navbar = () => {
                 color="primary"
                 onClick={() => navigate('/createAccount')}
                 startIcon={<PersonAddIcon />}
-                className="!rounded-lg !font-semibold"
+                className="!rounded-lg !font-semibold  gap-3"
               >
                 انشاء حساب
               </Button>

@@ -73,7 +73,7 @@ const MenteesReviews = () => {
 
       {/* زر عرض المزيد */}
       <div className="text-center mt-10">
-        <button className="text-sm text-blue-700 underline hover:text-blue-900">
+        <button className="text-sm text-blue-700 underline hover:text-blue-900 mb-4">
           عرض المزيد من المراجعات
         </button>
       </div>
