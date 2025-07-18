@@ -7,9 +7,11 @@ import MentorsCards from "./mentorsforAdmin";
 import StudentsTable from "./studentsforAdmin";
 import MentorsRequests from "./mentorsRequests";
 import AddSkillForm from "./addskill";
+import AcceptedMentors from "./AcceptedMentors";
+import RejectedMentors from "./RejectedMentors";
 
 const DashboardAdmin = () => {
-  const [view, setView] = useState<'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill'>('overview');
+  const [view, setView] = useState<'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill'|'AcceptedMentors'|'RejectedMentors'>('overview');
 
   return (
     <div className="flex">
@@ -20,8 +22,9 @@ const DashboardAdmin = () => {
         {view === 'students' && <StudentsTable/> }
         {view === 'mentors' && <MentorsCards />}
         {view === 'mentorsrequests' &&<MentorsRequests/>}
-         {view === 'addskill' &&<AddSkillForm></AddSkillForm>}
-       
+        {view === 'addskill' &&<AddSkillForm></AddSkillForm>}
+        {view === 'AcceptedMentors' &&<AcceptedMentors></AcceptedMentors>}
+        {view === 'RejectedMentors' &&<RejectedMentors></RejectedMentors>}
       </div>
     </div>
   );

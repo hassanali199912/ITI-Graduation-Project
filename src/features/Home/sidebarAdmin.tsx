@@ -7,7 +7,7 @@ import { MdAddBox } from "react-icons/md"; // Material Icons
 
 
 type Props = {
-  setView: (view: 'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill') => void;
+  setView: (view: 'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill'|'AcceptedMentors'|'RejectedMentors') => void;
 };
 
 const Sidebar: React.FC<Props> = ({ setView }) => {
@@ -22,16 +22,18 @@ const Sidebar: React.FC<Props> = ({ setView }) => {
           <span>الصفحة الرئيسية</span>
           <FaHome />
         </li>
-        
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('mentors')}>
-          <span>المرشدين الفعالة</span>
-          <FaChalkboardTeacher />
-        </li>
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('mentorsrequests')}>
           <span>الطلبات</span>
           <FaChalkboardTeacher />
         </li>
-
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('AcceptedMentors')}>
+          <span> الطلبات المقبوله</span>
+          <FaChalkboardTeacher />
+        </li>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('RejectedMentors')}>
+          <span> الطلبات المرفوضه</span>
+          <FaChalkboardTeacher />
+        </li>
         <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('overview')}>
                   <span>لوحة التحكم</span>
         <MdDashboard></MdDashboard>
@@ -45,10 +47,7 @@ const Sidebar: React.FC<Props> = ({ setView }) => {
           <span>اضافة مهارة</span>
           <MdAddBox />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer">
-          <span>الإعدادات</span>
-          <FaCog />
-        </li>
+        
         <li className="flex items-center justify-end gap-3 hover:text-red-400 cursor-pointer mt-auto">
           <span>تسجيل الخروج</span>
           <FaSignOutAlt />

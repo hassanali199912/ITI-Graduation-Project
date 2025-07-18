@@ -11,7 +11,6 @@ const MentorProfilePage = () => {
       <ProfileSection />
       <AboutSection />
       <SkillsSection />
-      
       <MenteesReviews />
     </div>
   );
