@@ -23,14 +23,17 @@ export const sessionsApi = api.injectEndpoints({
       }),
     }),
      acceptSessionRequest: builder.mutation<any, { sessionRequestId: string; teacherId: string; scheduledStartTime: string }>({
-      query: (data) => ({
-        url: "/api/sessions/accept",
-        method: "POST",
-        body: data,
-      }),
-    }),
+  query: ({ sessionRequestId, teacherId, scheduledStartTime }) => ({
+    url: "/api/sessions/accept",
+    method: "POST",
+    body: {
+      sessionRequestId,
+      teacherId,
+      scheduledStartTime,
+    },
+  }),
+}),
   }),
 });
 
-export const { useAcceptSessionRequestMutation , useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;
 export const { useAcceptSessionRequestMutation , useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;

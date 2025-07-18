@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAcceptSessionRequestMutation, useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
-import { useAcceptSessionRequestMutation, useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
 import type { Session } from "../Auth/RegisterMentor/types";
 import { toast } from "react-toastify";
 
@@ -36,10 +35,9 @@ const Overviewmentor = () => {
   const acceptSession = async (sessionRequestId: string) => {
     const teacherId = localStorage.getItem("teacherId") ?? "";
     setIsAccepting(true);
-
     try {
-      const res = await fetch("/api/sessions/accept", {
-        method: "POST",
+      const res = await fetch("http://academix1.runasp.net/api/sessions/accept", {
+        method: "POST",       
         headers: {
           "Content-Type": "application/json",
         },
@@ -70,7 +68,7 @@ const Overviewmentor = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
       {sessionData?.map((session: Session) => (
         <div
-          key={session.id}
+          key={session.sessionId}
           className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 p-6 flex flex-col justify-between text-right dir-rtl font-['Noto_Sans_Arabic'] max-w-sm"
         >
           <div className="mb-6">
@@ -123,9 +121,9 @@ const Overviewmentor = () => {
                 : "غير معروفة"}
             </span>
 
-            <div className="flex justify-end gap-4">
+            {!(session.status === 1) && <div className="flex justify-end gap-4">
               <button
-                onClick={() => acceptSession(session.id)}
+                onClick={() => acceptSession(session.sessionId)}
                 disabled={isAccepting}
                 className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50"
               >
@@ -137,7 +135,7 @@ const Overviewmentor = () => {
               >
                 رفض
               </button>
-            </div>
+            </div>}
           </div>
         </div>
       ))}
