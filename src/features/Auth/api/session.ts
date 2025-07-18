@@ -33,3 +33,4 @@ export const sessionsApi = api.injectEndpoints({
 });
 
 export const { useAcceptSessionRequestMutation , useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;
+export const { useAcceptSessionRequestMutation , useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;

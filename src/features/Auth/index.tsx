@@ -8,18 +8,12 @@ import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
-  const [trigger, { data }] = useLazyLoginQuery();
+  const [trigger] = useLazyLoginQuery();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-
-  useEffect(() => {
-    if (data) {
-      console.log("Login data from useLazyLoginQuery: ", data);
-    }
-  }, [data]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,13 +44,10 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validate()) {
-      console.log('Form has errors ', errors);
-      return;
-    }
+    if (!validate()) return;
 
     try {
       const res = await trigger({
@@ -94,8 +85,23 @@ const Login = () => {
         console.error("Missing token or role in response.");
       }
     } catch (err) {
-      console.error("Login error:", err);
-      alert("البريد الإلكتروني أو كلمة المرور غير صحيحة. الرجاء المحاولة مرة أخرى.");
+      console.error("Login failed:", err);
+    }
+  };
+
+  const handleGoogleLogin = (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      const userInfo: any = jwtDecode(credentialResponse.credential);
+      console.log("Google User Info:", userInfo);
+
+      // مثال على تخزين بيانات Google Login
+      localStorage.setItem("token", credentialResponse.credential);
+      localStorage.setItem("email", userInfo.email || "");
+      localStorage.setItem("name", userInfo.name || "");
+
+      navigate("/landingpage");
+    } else {
+      console.error("No credential returned from Google");
     }
   };
 
@@ -105,28 +111,23 @@ const Login = () => {
 
   return (
     <GoogleOAuthProvider clientId="176619199544-avcb45kd4c6erkb9ibhoms3eqd6nhg4u.apps.googleusercontent.com">
-      <div className="flex flex-col lg:flex-row items-center justify-between min-h-screen bg-white border border-gray-200 shadow-md w-full max-w-screen-xl mx-auto">
-        
-        {/* الصورة والجانب الأيسر */}
-        <div
-          className="bg-blue-50 w-full lg:w-[30%] min-h-[300px] lg:min-h-screen border border-gray-300 shadow-lg flex flex-col items-center justify-center px-4"
+      <div className="flex items-center justify-between min-h-screen bg-white gap-30 border border-gray-200 shadow-md w-full">
+        <div className="bg-blue-50 w-[30%] min-h-screen border border-gray-300 shadow-lg flex flex-col items-center justify-center"
           style={{
-            borderTopRightRadius: "3rem",
-            borderBottomRightRadius: "3rem"
-          }}
-        >
-          <img src={img1} className="w-60 h-60 object-contain mb-6" alt="Login visual" />
-          <h3 className="text-lg lg:text-xl font-bold text-black-600 text-center leading-relaxed">
-            من البداية وحتى الاحتراف، لست وحدك…<br />
-            تعلم، اسأل، وتطوّر مع<br />
-            الدعم الذي تحتاجه، في الوقت الذي تحتاجه
+            borderTopRightRadius: "7rem",
+            borderBottomRightRadius: "7rem"
+          }}>
+          <img src={img1} className="items-center justify-center w-70 h-70" alt="Login visual" />
+          <h3 className="text-xl font-bold mb-6 text-black-600 text-center">
+            من البداية وحتى الاحتراف، لست وحدك…
+            <br /> تعلم، اسأل، وتطوّر مع
+            <br /> الدعم الذي تحتاجه، في الوقت الذي تحتاجه
           </h3>
         </div>
 
-        {/* الفورم */}
-        <div className="w-full lg:w-[70%] min-h-screen flex justify-center items-center px-4">
-          <div className="bg-white shadow-2xl rounded-2xl p-6 sm:p-8 w-full max-w-lg">
-            <h1 className="text-xl lg:text-2xl font-bold mb-6 text-center text-black-600">سجل الدخول لحسابك</h1>
+        <div className="w-[70%] min-h-screen flex justify-center items-center">
+          <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
+            <h1 className="text-2xl font-bold mb-6 text-center text-black-600">سجل الدخول لحسابك</h1>
             <p className="mb-6 text-center text-gray-400">الرجاء تسجيل الدخول للمتابعة</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -138,8 +139,8 @@ const Login = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-right"
                 value={formData.email}
                 onChange={handleChange}
-                required
               />
+              {errors.email && <p className="text-red-500 text-sm text-right">{errors.email}</p>}
 
               <label dir="rtl" className="block m-3 text-right">كلمة المرور</label>
               <div className="relative">
@@ -149,7 +150,6 @@ const Login = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10 text-right"
                   value={formData.password}
                   onChange={handleChange}
-                  required
                 />
                 <span
                   onClick={togglePassword}
@@ -158,6 +158,7 @@ const Login = () => {
                   <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
                 </span>
               </div>
+              {errors.password && <p className="text-red-500 text-sm text-right">{errors.password}</p>}
 
               <p className="mb-6 text-right text-gray-400">
                 يجب أن تكون من 8 حروف وأرقام ورموز على الأقل
@@ -184,15 +185,7 @@ const Login = () => {
 
               <div className="bg-white rounded-lg border border-blue-900 p-2 hover:bg-blue-800 transition duration-200">
                 <GoogleLogin
-                  onSuccess={(credentialResponse) => {
-                    if (credentialResponse.credential) {
-                      const userInfo = jwtDecode(credentialResponse.credential);
-                      console.log("Google User Info:", userInfo);
-                      navigate("/landingpage");
-                    } else {
-                      console.error("No credential returned from Google");
-                    }
-                  }}
+                  onSuccess={handleGoogleLogin}
                   width="100%"
                 />
               </div>
