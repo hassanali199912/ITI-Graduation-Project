@@ -51,9 +51,8 @@ const ProfileSection = ({
                 {/* ✅ specialists (تخصصات) */}
                 <div className="flex flex-wrap gap-2 mt-2">
                   {specialists.map((specialist: any, index) => (
-                    <p key={specialist.id || index} className="text-sm text-gray-600">
-                      {specialist.name}
-                    </p>
+                      <Chip key={specialist.nameAr} label={specialist.nameAr} />
+
                   ))}
                 </div>
 

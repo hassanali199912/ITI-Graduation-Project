@@ -24,7 +24,7 @@ export const sessionsApi = api.injectEndpoints({
     }),
      acceptSessionRequest: builder.mutation<any, { sessionRequestId: string; teacherId: string; scheduledStartTime: string }>({
       query: (data) => ({
-        url: "/api/sessionId/accept",
+        url: "/api/sessions/accept",
         method: "POST",
         body: data,
       }),
