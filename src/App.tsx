@@ -11,7 +11,8 @@ import MentorsPage from './features/MentorsPage/MentorsPage';
 import MentorProfilePage from "./features/ProfileMentorForStudent/MentorProfilePage";
 import Index from "./view/Index"
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom'; 
+
 import Home from "./features/Home/Index";
 import DashboardAdmin from "./features/Home/dashboardAdmin";
 import DashboardMentor from "./features/Home/dashboardMentor";
@@ -24,7 +25,7 @@ function App() {
   return (
     <>
 
-      <Router>
+      
         <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<Login></Login>} />
@@ -49,7 +50,7 @@ function App() {
 
         </Routes>
         <Footer></Footer>
-      </Router>
+      
 
       <ToastContainer />
 

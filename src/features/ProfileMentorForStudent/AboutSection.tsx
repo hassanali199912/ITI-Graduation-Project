@@ -29,7 +29,7 @@ const AboutSection = ({bio}:AboutProps) => {
                         <ChatIcon fontSize="small" sx={{ color: '#0003C7' }} />
                         يمكنك مراسلة كاتالين لطرح أي أسئلة قبل حجز الخدمة
                     </div>
-                    <Button variant="contained" className="!bg-[#0003C7] hover:!bg-gray-900">
+                    <Button variant="contained" className="!bg-blue-600 hover:!bg-blue-700">
                         تواصل الآن
                     </Button>
                 </CardContent>
