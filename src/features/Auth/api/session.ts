@@ -22,7 +22,14 @@ export const sessionsApi = api.injectEndpoints({
         },
       }),
     }),
+     acceptSessionRequest: builder.mutation<any, { sessionRequestId: string; teacherId: string; scheduledStartTime: string }>({
+      query: (data) => ({
+        url: "/api/sessionId/accept",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;
+export const { useAcceptSessionRequestMutation , useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;

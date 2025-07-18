@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
-import { useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
+import { useAcceptSessionRequestMutation, useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
 import type { Session } from "../Auth/RegisterMentor/types";
+import { toast } from "react-toastify";
 
-
-// const students = [
-//  { name: "أحمد", email: "ahmed@gmail.com", major: "الذكاء الاصطناعي",hour:'12:00pm',salary:'100$' },
-//   { name: "سارة", email: "sara@yahoo.com", major: "تطوير الويب",hour:'3:00pm',salary:'200$' },
-//   { name: "محمد", email: "mohamed@yahoo.com", major: "UI/UX" ,hour:'6:00pm',salary:'300$' },
-//   { name: "مصطفى", email: "mostafa@yahoo.com", major: "أنظمة المعلومات",hour:'1:00pm',salary:'400$' },
-//    { name: "كريم", email: "karim@yahoo.com", major: "تطوير الويب",hour:'8:00pm',salary:'300$' },
-//     { name: "معز", email: "moaz@yahoo.com", major: "علوم البيانات " ,hour:'12:00pm',salary:'350$'},
-// ];
 
 const Overviewmentor = () => {
   const [trigger, result] = useLazyGetSessionRequestsByTeacherIdQuery();
  const [sessionData, setSessionData] = useState([]);
+ const [acceptSession, { isLoading: isAccepting }] = useAcceptSessionRequestMutation();
 
 
   useEffect(()=>{
@@ -126,11 +119,35 @@ const Overviewmentor = () => {
         </span>
 
         <div className="flex justify-end gap-4">
-          <button
-            className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-          >
-            قبول
-          </button>
+         <button
+  onClick={async () => {
+    const teacherId = localStorage.getItem("teacherId") ?? "";
+    try {
+      await acceptSession({
+        sessionRequestId: session.id,
+        teacherId: teacherId,
+        scheduledStartTime: new Date().toISOString(),
+      });
+
+      toast.success(" تم قبول الجلسة بنجاح");
+
+      // إعادة تحميل البيانات
+      trigger({
+        teacherId: teacherId,
+        pageNumber: 1,
+        pageSize: 10,
+      });
+    } catch (err) {
+      toast.error(" حدث خطأ أثناء القبول");
+      console.error(err);
+    }
+  }}
+  className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+>
+  {isAccepting ? "جارٍ القبول..." : "قبول"}
+</button>
+
+
           <button
             className="cursor-pointer bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
