@@ -58,7 +58,6 @@ const Login = () => {
       return;
     }
 
-
     try {
       const res = await trigger({
         email: formData.email,
@@ -79,6 +78,7 @@ const Login = () => {
           localStorage.setItem("studentId", personId);
         } else if (role === "Teacher") {
           localStorage.setItem("teacherId", personId);
+           window.dispatchEvent(new Event("roleUpdated"));
         }
 
         if (email?.toLowerCase() === "demo@gmail.com" && formData.password === "Admin@123") {
@@ -86,13 +86,13 @@ const Login = () => {
         } else if (role) {
           localStorage.setItem("role", role.toLowerCase());
           window.dispatchEvent(new Event("roleUpdated"));
+          
         }
 
         navigate("/landingpage");
       } else {
         console.error("Missing token or role in response.");
       }
-
     } catch (err) {
       console.error("Login error:", err);
       alert("البريد الإلكتروني أو كلمة المرور غير صحيحة. الرجاء المحاولة مرة أخرى.");
@@ -105,22 +105,28 @@ const Login = () => {
 
   return (
     <GoogleOAuthProvider clientId="176619199544-avcb45kd4c6erkb9ibhoms3eqd6nhg4u.apps.googleusercontent.com">
-      <div className="flex items-center justify-between min-h-screen bg-white gap-30 border border-gray-200 shadow-md w-full">
-        <div className='bg-blue-50 w-[30%] min-h-screen border border-gray-300 shadow-lg flex flex-col items-center justify-center' style={{
-          borderTopRightRadius: "7rem",
-          borderBottomRightRadius: "7rem"
-        }}>
-          <img src={img1} className='items-center justify-center w-70 h-70' alt="Login visual" />
-          <h3 className="text-xl font-bold mb-6 text-black-600 text-center">
-            من البداية وحتى الاحتراف، لست وحدك…
-            <br /> تعلم، اسأل، وتطوّر مع
-            <br /> الدعم الذي تحتاجه، في الوقت الذي تحتاجه
+      <div className="flex flex-col lg:flex-row items-center justify-between min-h-screen bg-white border border-gray-200 shadow-md w-full max-w-screen-xl mx-auto">
+        
+        {/* الصورة والجانب الأيسر */}
+        <div
+          className="bg-blue-50 w-full lg:w-[30%] min-h-[300px] lg:min-h-screen border border-gray-300 shadow-lg flex flex-col items-center justify-center px-4"
+          style={{
+            borderTopRightRadius: "3rem",
+            borderBottomRightRadius: "3rem"
+          }}
+        >
+          <img src={img1} className="w-60 h-60 object-contain mb-6" alt="Login visual" />
+          <h3 className="text-lg lg:text-xl font-bold text-black-600 text-center leading-relaxed">
+            من البداية وحتى الاحتراف، لست وحدك…<br />
+            تعلم، اسأل، وتطوّر مع<br />
+            الدعم الذي تحتاجه، في الوقت الذي تحتاجه
           </h3>
         </div>
 
-        <div className='w-[70%] min-h-screen flex justify-center items-center'>
-          <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
-            <h1 className="text-2xl font-bold mb-6 text-center text-black-600">سجل الدخول لحسابك</h1>
+        {/* الفورم */}
+        <div className="w-full lg:w-[70%] min-h-screen flex justify-center items-center px-4">
+          <div className="bg-white shadow-2xl rounded-2xl p-6 sm:p-8 w-full max-w-lg">
+            <h1 className="text-xl lg:text-2xl font-bold mb-6 text-center text-black-600">سجل الدخول لحسابك</h1>
             <p className="mb-6 text-center text-gray-400">الرجاء تسجيل الدخول للمتابعة</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -157,12 +163,12 @@ const Login = () => {
                 يجب أن تكون من 8 حروف وأرقام ورموز على الأقل
               </p>
 
-              <div className='flex justify-between'>
-                <div className='flex gap-3'>
+              <div className="flex justify-between">
+                <div className="flex gap-3">
                   <p className="text-gray-400 text-left">تذكرني</p>
-                  <input type='checkbox' className='mb-4' />
+                  <input type="checkbox" className="mb-4" />
                 </div>
-                <a href='/changepassword'>
+                <a href="/changepassword">
                   <p className="mb-6 text-right text-blue-400">نسيت كلمة السر؟</p>
                 </a>
               </div>
@@ -182,7 +188,6 @@ const Login = () => {
                     if (credentialResponse.credential) {
                       const userInfo = jwtDecode(credentialResponse.credential);
                       console.log("Google User Info:", userInfo);
-                      // يمكنك تخزين البيانات أو إرسالها للسيرفر إذا أردت
                       navigate("/landingpage");
                     } else {
                       console.error("No credential returned from Google");
@@ -194,9 +199,9 @@ const Login = () => {
 
               <hr />
 
-              <p className='text-gray-500 text-center'>
+              <p className="text-gray-500 text-center">
                 ليس لديك حساب ؟
-                <a href='/createAccount' className='text-blue-400'> انشاء حساب كمتعلم أو متدرب</a>
+                <a href="/createAccount" className="text-blue-400"> انشاء حساب كمتعلم أو متدرب</a>
               </p>
             </form>
           </div>

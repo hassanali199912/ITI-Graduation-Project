@@ -23,8 +23,8 @@ const Home: React.FC = () => {
   return (
     <>
     
-    <div className="bg-blue-50">
-<div className="relative w-fit mt-30 ml-30 ">
+    <div className="bg-blue-50 h-110 mt-15">
+<div className="relative w-fit mt ml-30 ">
  
   <img src={img2} alt="Mentor Image" className="mt-5 ml-55" />
 
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
     إبدأ رحلتك في البرمجة بدعم<br></br> مباشر من خبراء حقيقيين
   </div>
 </div>
-<div className="flex gap-4 justify-center mt-20 ">
+<div className="flex gap-4 justify-center mt-20 mb-5 ">
   
 <button
   type="button"
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
 </div>
 
 <div className="bg-blue-50 justify-center">
-   <h2 className="text-blue-800 text-2xl font-bold text-center mt-30">كيف يعمل الموقع؟ </h2>
+   <h2 className="text-blue-800 text-2xl font-bold text-center mt-5 ">كيف يعمل الموقع؟ </h2>
 <div className="flex justify-center items-center gap-10">
   
   <div className="grid grid-cols-2 gap-6">
@@ -131,7 +131,7 @@ const Home: React.FC = () => {
 
 
 <div >
-   <h2 className="text-blue-800 text-2xl font-bold text-center mt-30 mb-20">المجالات المتاحة</h2>
+   <h2 className="text-blue-800 text-2xl font-bold text-center mt-5 mb-20">المجالات المتاحة</h2>
    <div className="grid grid-cols-4 m-10 justify-center gap-10  max-w-4xl mx-auto"  >
     <div >
 <img src={img8}></img>
