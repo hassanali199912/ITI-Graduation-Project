@@ -124,6 +124,7 @@ export interface RatingSummary {
   totalComments: number;
 }
 export type Session = {
+  id: string;
   studentId: string;
   studentName: string;
   teacherId: string;
