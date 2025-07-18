@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
+import { useAcceptSessionRequestMutation, useLazyGetSessionRequestsByTeacherIdQuery } from "../Auth/api/session";
 import type { Session } from "../Auth/RegisterMentor/types";
 import { toast } from "react-toastify";
 
