@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import ChatModal from '../../features/Auth/ChatModal';
+
 
 const students = [
   { name: "أحمد", email: "ahmed@gmail.com", major: "الذكاء الاصطناعي", hour: '12:00pm', salary: '100$' },
@@ -11,10 +10,7 @@ const students = [
 ];
 
 const Overviewmentor = () => {
-  const [openChat, setOpenChat] = useState(false);
-  const [selectedStudent, setSelectedStudent] = useState<any>(null);
-
-  const currentUserId = localStorage.getItem('userId') || '';
+  
 
   return (
     <div className="p-6">
@@ -39,10 +35,8 @@ const Overviewmentor = () => {
                   <button className="bg-blue-500 hover:bg-blue-600  text-white  font-medium py-2 px-4 rounded border border-yellow-500 m-2">قبول</button>
                   <button
                     className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded border border-yellow-500 m-2"
-                    onClick={() => {
-                      setSelectedStudent(student);
-                      setOpenChat(true);
-                    }}
+                    
+                     
                   >
                     تواصل الان
                   </button>
@@ -54,14 +48,7 @@ const Overviewmentor = () => {
           </div>
         </div>
       </div>
-      {openChat && selectedStudent && (
-        <ChatModal
-          currentUserId={currentUserId}
-          otherUserId={selectedStudent.email}
-          otherUserName={selectedStudent.name}
-          onClose={() => setOpenChat(false)}
-        />
-      )}
+      
     </div>
 
   );

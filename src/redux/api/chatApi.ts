@@ -16,7 +16,7 @@ export const chatApi = api.injectEndpoints({
     sendMessage: builder.mutation<string, { currentUserId: string; otherUserId: string; message: string }>({
       query: ({ currentUserId, otherUserId, message }) => ({
         url: `/api/chat/sendMessage?currentUserId=${currentUserId}&otherUserId=${otherUserId}&message=${encodeURIComponent(message)}`,
-        method: "GET",
+        method: "POST",
       }),
       transformResponse: (response: any) => response.data.value, // بيرجع ID الرسالة
     }),

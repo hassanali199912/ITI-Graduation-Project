@@ -64,17 +64,13 @@ const Login = () => {
     }).then((res) => {
       console.log("this is res ", res);
       if (res?.data?.success && res.data.data) {
-        const { accessToken, email, personId, userId, firstName, lastName, roles } = res.data.data;
-      
+        const { accessToken, email, personId } = res.data.data;
+
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('teacherEmail', email);
         localStorage.setItem('teacherId', personId);
-      
-        // ✅ الإضافات الخاصة بالشات
-        localStorage.setItem('userId', userId); // مهم جدًا للشات
-        localStorage.setItem('firstName', firstName);
-        localStorage.setItem('lastName', lastName);
-        localStorage.setItem('role', roles?.[0] || '');
+
+
       }
     })
 
