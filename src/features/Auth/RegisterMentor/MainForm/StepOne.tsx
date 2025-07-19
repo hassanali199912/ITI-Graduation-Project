@@ -84,7 +84,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
       let url = response?.data?.fileUrl || ""
       console.log("jhhkhkkhkhk", response?.data?.data?.fileUrl);
       // 2) بعد الرفع، خزّن الـ URL بدل الـ File
-      setValue("profilePictureUrl", url, { shouldValidate: true });
+      setValue("profilePictureUrl", response?.data?.data?.fileUrl, { shouldValidate: true });
     } catch (err) {
       console.error("Upload error", err);
     }
@@ -105,7 +105,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
       id: s.id,
       name: s.name,
     }));
-  console.log(skillsOptions);
+  // console.log(skillsOptions);
   return (
     <div className="step-one mx-4">
       <div className="mt-8">
@@ -212,7 +212,7 @@ export default function StepOne({ data, updateData, triggerSubmit }: Props) {
             );
 
             return (
-              <Tags
+               <Tags
                 label="المهارات"
                 placeholder="اختر مهارة"
                 options={skillsOptions}

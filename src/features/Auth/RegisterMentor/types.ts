@@ -4,7 +4,7 @@ export const stepOneSchema = z
   .object({
     firstName: z.string().min(1, { message: "الإسم الأول مطلوب" }),
     lastName: z.string().min(1, { message: "الإسم الثانى مطلوب" }),
-    skills: z.array(z.string().uuid()).min(1, { message: "يجب اختيار مهارة" }),
+    skills: z.array(z.string().uuid()).optional(),
     email: z
       .string()
       .min(1, { message: "البريد الإلكتروني مطلوب" })
@@ -45,28 +45,28 @@ export const stepTwoSchema = z.object({
     })
   ),
 });
-
+const fileSchema = z
+  .instanceof(File)
+  .refine(
+    (f) =>
+      f.size <= 5 * 1024 * 1024 &&
+      ["image/jpeg", "image/png", "application/pdf"].includes(f.type),
+    {
+      message:
+        "يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 10 ميجابايت",
+    }
+  );
 export const stepThreeSchema = z.object({
   certificates: z
     .array(
       z.object({
         name: z.string().min(1, { message: "اسم الشهادة مطلوب" }),
         certificateUrl: z
-          .any()
-          .optional()
-          .refine(
-            (file) =>
-              !file ||
-              (file instanceof File &&
-                file.size <= 5 * 1024 * 1024 &&
-                ["image/jpeg", "image/png", "application/pdf"].includes(
-                  file.type
-                )),
-            {
-              message:
-                "يجب أن يكون الملف صورة (JPEG/PNG) أو PDF بحجم أقل من 5 ميجابايت",
-            }
-          ),
+          .object({
+            file: fileSchema,
+            url: z.string().url(),
+          })
+          .optional(),
         issuedBy: z.string().min(1, { message: "الجهة المانحة مطلوبة" }),
         issuedDate: z
           .string()
@@ -112,6 +112,7 @@ export interface Skill {
 
 // التخصص (Teaching Area)
 export interface Specialist {
+  name: ReactI18NextChildren | Iterable<ReactI18NextChildren>;
   teachingAreaId: string;
   nameAr: string;
   nameEn: string;
@@ -122,7 +123,34 @@ export interface RatingSummary {
   averageRating: number;
   totalComments: number;
 }
-
+export type Session = {
+  sessionId: string;
+  studentId: string;
+  studentName: string;
+  teacherId: string;
+  pointsAmount: number;
+  subject: string;
+  description: string;
+  estimatedDurationMinutes: number;
+  requestedDateTime: string;
+  status: number;
+  acceptedAt: string | null;
+  rejectedAt: string | null;
+  rejectionReason: string | null;
+};
+export type SessionResponse = {
+  acceptedAt: string;
+  description: string;
+  estimatedDurationMinutes: number;
+  id: string;
+  pointsAmount: number;
+  requestedDateTime: string;
+  status: number;
+  studentId: string;
+  studentName: string;
+  subject: string;
+  teacherId: string;
+};
 // الكيان الأساسي: Teacher / Mentor
 export interface Teacher {
   id: string;
@@ -151,8 +179,8 @@ export interface GetTeachersResponse {
     totalPages: number;
     PageSize: number;
     pageNumber: number;
-    hasPreviousPage:Boolean;
-    hasNextPage:Boolean
+    hasPreviousPage: Boolean;
+    hasNextPage: Boolean;
   };
 }
 

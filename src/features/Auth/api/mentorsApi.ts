@@ -1,5 +1,5 @@
 import { api } from "../../../config/apis";
-import type { GetTeachersArgs, GetTeachersResponse } from "../RegisterMentor/types";
+import { type Teacher, type GetTeachersArgs, type GetTeachersResponse } from "../RegisterMentor/types";
 export const mentorsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getMentors: builder.query<GetTeachersResponse, GetTeachersArgs>({
@@ -12,6 +12,12 @@ export const mentorsApi = api.injectEndpoints({
         },
       }),
     }),
+    getMentorById: builder.query<any, string>({
+   query: (id) => ({
+    url: `/api/teachers/${id}`, // ← غيّر المسار حسب API بتاعتك
+    method: "GET",
+  }),
+}), 
   }),
 });
-export const {useLazyGetMentorsQuery} = mentorsApi;
+export const {useLazyGetMentorsQuery,useLazyGetMentorByIdQuery , useGetMentorByIdQuery} = mentorsApi;

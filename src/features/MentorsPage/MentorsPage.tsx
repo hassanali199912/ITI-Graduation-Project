@@ -97,7 +97,7 @@ const availableSkills: string[] = useMemo(() => {
   <div className="rounded-xl p-6 h-full overflow-y-auto space-y-6">
 
     
-<MentorsList mentors={mentors} loading={isFetching} />
+<MentorsList mentors={filteredMentors} loading={isFetching} />
 
     {/* Pagination */}
     {totalPages > 1 && (

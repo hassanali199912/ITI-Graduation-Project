@@ -7,14 +7,13 @@ const DashboardMentor = () => {
     const [view, setView] = useState<'overview' | 'students' | 'mentors'>('overview');
     return (
        
-        <div className="flex">
-      <SidebarMentor setView={setView}></SidebarMentor>
-      <div className="flex-1 p-10">
-      
-      {view === 'students' && <Students/> }
-      {view === 'overview' && <Overviewmentor/> }
-      </div>
-    </div>
+        <div className="flex flex-row-reverse min-h-screen" dir="rtl">
+  <SidebarMentor setView={setView} />
+  <div className="flex-1 p-6 bg-gray-50">
+    {view === 'students' && <Students />}
+    {view === 'overview' && <Overviewmentor />}
+  </div>
+</div>
     );
 }
 

@@ -2,8 +2,11 @@
 import React from 'react';
 import { Button, Card, CardContent } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
+interface AboutProps  {
+    bio : string,
 
-const AboutSection = () => {
+}
+const AboutSection = ({bio}:AboutProps) => {
     return (
         <div dir="rtl" className="max-w-5xl mx-auto px-4 mt-16">
             {/* العنوان */}
@@ -11,9 +14,7 @@ const AboutSection = () => {
 
             {/* الفقرة التعريفية */}
             <p className="text-gray-700 leading-relaxed mb-4">
-                قائد تقني / مهندس برمجيات بخبرة تزيد عن 20 سنة في دورة التطوير الكاملة، مكرس لدعم نمو الآخرين من خلال الإرشاد.
-                <br />
-                خلال مسيرتي، طورت مهاراتي في تصميم البرمجيات، التطوير، وإدارة الفرق، أثناء العمل على مشاريع متنوعة من الشركات الناشئة وحتى المؤسسات الكبرى.
+                {bio}
             </p>
 
             {/* قراءة المزيد */}
@@ -28,7 +29,7 @@ const AboutSection = () => {
                         <ChatIcon fontSize="small" sx={{ color: '#0003C7' }} />
                         يمكنك مراسلة كاتالين لطرح أي أسئلة قبل حجز الخدمة
                     </div>
-                    <Button variant="contained" className="!bg-[#0003C7] hover:!bg-gray-900">
+                    <Button variant="contained" className="!bg-blue-600 hover:!bg-blue-700">
                         تواصل الآن
                     </Button>
                 </CardContent>

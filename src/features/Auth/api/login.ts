@@ -32,10 +32,6 @@ export const authApi = api.injectEndpoints({
                 },
             }),
         }),
-
-
-
-
         rejester: builder.query<any, any>({
             query: () => ({
                 url: `/rejester`,
@@ -63,5 +59,7 @@ export const {
     useForgetPasswordQuery, 
     useLazyForgetPasswordQuery,
     useVerifyEmialQuery,
-    useLazyVerifyEmialQuery
+    useLazyVerifyEmialQuery,
+  
 } = authApi;
+

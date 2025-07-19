@@ -69,6 +69,7 @@ export const {
   // teaching language
   useLazyGetTeachingLangQuery,
   useGetTeachingLangQuery,
+
   // skills 
   useLazyGetSkillsQuery
 } = lookupsApi;
