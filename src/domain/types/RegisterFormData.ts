@@ -4,14 +4,12 @@ export default interface RegisterFormData {
     email: string;
     password: string;
     confirmPassword: string;
-    //birthDate:string;
-    //nationalityId: string;
-    gender: number;
+    gender: number | null;
     residenceCountryId: string;
     profilePictureUrl: string;
     bio: string;
     github: string;
-    connectProgramming: boolean;
+    connectProgramming: boolean | null;
     levelId: string;
     graduationStatusId: string;
     specialistId: string;

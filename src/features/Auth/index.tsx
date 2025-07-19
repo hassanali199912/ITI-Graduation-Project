@@ -61,16 +61,17 @@ const Login = () => {
       const role = res?.data?.roles?.[0];
       const email = res?.data?.email;
       const personId = res?.data?.personId;
-
-      if (res?.data?.success && res.data.data) {
-        const { accessToken, email, personId } = res.data.data;
-
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('teacherEmail', email);
-        localStorage.setItem('teacherId', personId);
-
-
+      console.log("Response from API:", res);
+      if (res?.success && res?.data) {
+        const { accessToken, email, personId } = res.data;
+      
+        localStorage.setItem('accessToken', accessToken || '');
+        localStorage.setItem('teacherEmail', email || '');
+        localStorage.setItem('teacherId', personId || '');
+      
+        
       }
+      
 
       if (token) {
         localStorage.setItem("token", token);
@@ -84,6 +85,7 @@ const Login = () => {
 
         if (email?.toLowerCase() === "demo@gmail.com" && formData.password === "Admin@123") {
           localStorage.setItem("role", "admin");
+          window.dispatchEvent(new Event("roleUpdated"));
         } else if (role) {
           localStorage.setItem("role", role.toLowerCase());
           window.dispatchEvent(new Event("roleUpdated"));
