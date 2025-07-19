@@ -6,6 +6,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useLazyGetSessionsQuery, useLazyGetStudentsQuery, useLazyGetTeachersQuery } from '../Auth/api/dashboard';
 
 // =====================================
 // إعدادات عامة
