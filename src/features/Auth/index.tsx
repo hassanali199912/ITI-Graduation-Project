@@ -77,6 +77,8 @@ const Login = () => {
 
         if (role === "Student") {
           localStorage.setItem("studentId", personId);
+           window.dispatchEvent(new Event("roleUpdated"));
+
         } else if (role === "Teacher") {
           localStorage.setItem("teacherId", personId);
            window.dispatchEvent(new Event("roleUpdated"));

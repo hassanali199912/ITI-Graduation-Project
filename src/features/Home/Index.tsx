@@ -23,7 +23,7 @@ const Home: React.FC = () => {
   return (
     <>
     
-    <div className="bg-blue-50 h-110 mt-15">
+    <div className=" h-110 py-15">
 <div className="relative w-fit mt ml-30 ">
  
   <img src={img2} alt="Mentor Image" className="mt-5 ml-55" />
@@ -67,7 +67,7 @@ const Home: React.FC = () => {
 </div>
 </div>
 <div>
-  <h2 className="text-blue-800 text-2xl font-bold text-center mt-10">لماذا نحن؟</h2>
+  <h2 className="text-blue-800 text-2xl font-bold text-center py-10">لماذا نحن؟</h2>
   <div className="flex justify-center gap-40 items-start">
   {/* الصورة الجانبية */}
   <img src={img4} alt="Side Image" />
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
 
 </div>
 
-<div className="bg-blue-50 justify-center">
+<div className="bg-blue-50 justify-center py-15">
    <h2 className="text-blue-800 text-2xl font-bold text-center mt-5 ">كيف يعمل الموقع؟ </h2>
 <div className="flex justify-center items-center gap-10">
   
@@ -130,7 +130,7 @@ const Home: React.FC = () => {
 </div>
 
 
-<div >
+<div className="py-15">
    <h2 className="text-blue-800 text-2xl font-bold text-center mt-5 mb-20">المجالات المتاحة</h2>
    <div className="grid grid-cols-4 m-10 justify-center gap-10  max-w-4xl mx-auto"  >
     <div >
