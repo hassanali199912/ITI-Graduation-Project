@@ -5,11 +5,11 @@ import type { SessionResponse } from "../Auth/RegisterMentor/types";
 import { Tabs, Tab } from "@mui/material";
 
 const tabs = [
-  { label: "الكل", value: "all" },
-  { label: "قيد الانتظار", value: "pending" },
-  { label: "تم القبول", value: "accepted" },
-  { label: "مرفوضة", value: "rejected" },
-  { label: "منتهية", value: "ended" },
+{ label: "الكل", value: "all" },
+  { label: "قيد الانتظار", value: 0 },
+  { label: "تم القبول", value: 1 },
+  { label: "مرفوضة", value: 2 },
+  { label: "منتهية", value: 3 },
 ];
 
 const SessionsOverview = () => {

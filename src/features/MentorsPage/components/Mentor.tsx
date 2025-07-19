@@ -1,96 +1,108 @@
-// ------------- Mentor.tsx -------------
-// interface MentorProps {
-//   firstName: string;
-//   lastName: string;
-//   bio: string;
-//   position: string;
-//   skills: string[];
-//   salary: number;
-//   imgUrl?: string;
-//   compact?: boolean;              // ← جديد
-// }
-
-import { Box, Skeleton } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  Box,
+  Chip,
+  Button,
+  Skeleton,
+  CardActions,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 import type { Skill, Teacher } from "../../Auth/RegisterMentor/types";
-import { Link, useParams } from "react-router-dom";
+
 interface MentorCardProps extends Partial<Teacher> {
   loading?: boolean;
   compact?: boolean;
 }
+
 export default function Mentor(props: MentorCardProps) {
-   const {
+  const {
     id,
     firstName,
     lastName,
     bio,
-    stutas,
-    skills,   
+    skills,
     salary,
     profilePictureUrl,
     compact = false,
     loading = false,
   } = props;
-  
-  /* حجم العناصر يتغيّر لو compact */
-  const imgH = compact ? "h-32" : "h-60";
-  const nameSize = compact ? "text-lg" : "text-2xl";
-  const bioShown = compact ? bio?.slice(0, 60) + "..." : bio; // اختصار
+
+  const bioShown = compact ? bio?.slice(0, 60) + "..." : bio;
+
   if (loading) {
-    /* Skeleton كارت */
     return (
-      <Box sx={{ width: compact ? 220 : 300, p: 2 }}>
-        <Skeleton variant="rectangular" width="100%" height={compact ? 100 : 160} />
-        <Skeleton sx={{ mt: 1 }} />
-        <Skeleton width="60%" />
-      </Box>
+      <Card sx={{ width: compact ? 220 : 300, p: 2 }}>
+        <Skeleton variant="rectangular" height={compact ? 100 : 160} />
+        <CardContent>
+          <Skeleton width="80%" />
+          <Skeleton width="60%" />
+          <Skeleton width="40%" />
+        </CardContent>
+      </Card>
     );
   }
- 
 
   return (
-    <div
+    <Card
       dir="rtl"
-      className={`relative box p-4 transition-all duration-150 border border-gray-300 rounded-lg shadow-sm ${
-        compact ? "max-w-xs" : "max-w-4xl"
-      } mx-auto`}
+      sx={{
+        maxWidth: compact ? 240 : 400,
+        mx: "auto",
+        borderRadius: 2,
+        boxShadow: 3,
+        p: 1,
+      }}
     >
-      <img
-        src={profilePictureUrl || "/avatar.png"}
-        alt="Mentor"
-        className={`w-full ${imgH} object-cover rounded-md mb-3`}
+      <CardMedia
+        component="img"
+        height={compact ? "120" : "200"}
+        image={profilePictureUrl || "/avatar.png"}
+        alt="Mentor Image"
+        sx={{ borderRadius: 2 }}
       />
+      <CardContent>
+        <Typography variant={compact ? "h6" : "h5"} component="div" fontWeight="bold">
+          {firstName} {lastName}
+        </Typography>
 
-      <h3 className={`${nameSize} font-bold text-gray-900 mb-1`}>
-        {firstName} {lastName}
-      </h3>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          {bioShown}
+        </Typography>
 
-      <p className="text-xs text-gray-600 mb-2">{bio}</p>
+        <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+          {skills?.map((skill: Skill) => (
+            <Chip
+              key={skill.skillId}
+              label={skill.skillName}
+              size="small"
+              sx={{ bgcolor: "blue.100", fontSize: "10px" }}
+            />
+          ))}
+        </Box>
+      </CardContent>
 
-      <p className="text-xs leading-5 mb-3">{bioShown}</p>
-
-      <div className="flex flex-wrap gap-2 mb-4 justify-end">
-        {skills?.map((skill:Skill) => (
-          <span
-            key={skill.skillId}
-            className="bg-blue-100 text-gray-800 text-[10px] font-medium px-2 py-0.5 rounded-full"
-          >
-            {skill.skillName}
-          </span>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-bold">
+      <CardActions sx={{ px: 2, justifyContent: "space-between" }}>
+        <Typography fontWeight="bold" variant="body2">
           ${salary}
-          <span className="text-[10px] text-gray-500"> / شهر</span>
-        </span>
-        <Link
+          <Typography component="span" variant="caption" color="text.secondary">
+            {" "}
+            / شهر
+          </Typography>
+        </Typography>
+
+        <Button
+          component={Link}
           to={`/mentors/${id}`}
-          className="text-[10px] bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
+          variant="contained"
+          size="small"
+          sx={{ fontSize: "10px", borderRadius: 1 }}
         >
           عرض الملف
-        </Link>
-      </div>
-    </div>
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
