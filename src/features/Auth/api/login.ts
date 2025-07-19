@@ -32,10 +32,6 @@ export const authApi = api.injectEndpoints({
                 },
             }),
         }),
-
-
-
-
         rejester: builder.query<any, any>({
             query: () => ({
                 url: `/rejester`,

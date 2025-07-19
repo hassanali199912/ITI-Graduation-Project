@@ -11,29 +11,58 @@ export const sessionsApi = api.injectEndpoints({
         };
       },
     }),
-   getSessionRequestsByTeacherId: builder.query<any, { teacherId: string, pageNumber?: number, pageSize?: number }>({
+    getSessionRequestsByTeacherId: builder.query<
+      any,
+      { teacherId: string; pageNumber?: number; pageSize?: number }
+    >({
       query: ({ teacherId, pageNumber = 1, pageSize = 10 }) => ({
         url: `/api/GetSessionRequestByTeacherId`,
         method: "GET",
         params: {
           teacherId,
           pageNumber,
-          pageSize
+          pageSize,
         },
       }),
     }),
-     acceptSessionRequest: builder.mutation<any, { sessionRequestId: string; teacherId: string; scheduledStartTime: string }>({
-  query: ({ sessionRequestId, teacherId, scheduledStartTime }) => ({
-    url: "/api/sessions/accept",
-    method: "POST",
-    body: {
-      sessionRequestId,
-      teacherId,
-      scheduledStartTime,
-    },
-  }),
-}),
+    acceptSessionRequest: builder.mutation<
+      any,
+      {
+        sessionRequestId: string;
+        teacherId: string;
+        scheduledStartTime: string;
+      }
+    >({
+      query: ({ sessionRequestId, teacherId, scheduledStartTime }) => ({
+        url: "/api/sessions/accept",
+        method: "POST",
+        body: {
+          sessionRequestId,
+          teacherId,
+          scheduledStartTime,
+        },
+      }),
+    }),
+     GetSessionRequestByStudentId: builder.query<
+      any,
+      { studentId: string; pageNumber?: number; pageSize?: number }
+    >({
+      query: ({ studentId, pageNumber = 1, pageSize = 10 }) => ({
+        url: `/api/GetSessionRequestByStudentId`,
+        method: "GET",
+        params: {
+          studentId,
+          pageNumber,
+          pageSize,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useAcceptSessionRequestMutation , useRequestSessionMutation,useLazyGetSessionRequestsByTeacherIdQuery } = sessionsApi;
+export const {
+  useAcceptSessionRequestMutation,
+  useRequestSessionMutation,
+  useLazyGetSessionRequestsByTeacherIdQuery,
+  useGetSessionRequestByStudentIdQuery
+} = sessionsApi;

@@ -138,6 +138,19 @@ export type Session = {
   rejectedAt: string | null;
   rejectionReason: string | null;
 };
+export type SessionResponse = {
+  acceptedAt: string;
+  description: string;
+  estimatedDurationMinutes: number;
+  id: string;
+  pointsAmount: number;
+  requestedDateTime: string;
+  status: number;
+  studentId: string;
+  studentName: string;
+  subject: string;
+  teacherId: string;
+};
 // الكيان الأساسي: Teacher / Mentor
 export interface Teacher {
   id: string;

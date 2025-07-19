@@ -62,7 +62,11 @@ useEffect(() => {
             </>
           )}
           {role === "student" && (
+            <>
+            
             <Link to="/mentors" className="hover:text-white transition border border-blue-300 rounded-5 p-2 hover:bg-blue-800 cursor-pointer">المرشدين</Link>
+            <Link to="/sessions" className="hover:text-white transition border border-blue-300 rounded-5 p-2 hover:bg-blue-800 cursor-pointer">متابعة جلســـاتى</Link>
+            </>
           )}
         </nav>
 
