@@ -11,7 +11,7 @@ import MentorsPage from './features/MentorsPage/MentorsPage';
 import MentorProfilePage from "./features/ProfileMentorForStudent/MentorProfilePage";
 import Index from "./view/Index"
 
-import { Routes, Route } from 'react-router-dom'; 
+import { Routes, Route } from 'react-router-dom';
 
 import Home from "./features/Home/Index";
 import DashboardAdmin from "./features/Home/dashboardAdmin";
@@ -22,35 +22,37 @@ import Footer from "./features/Home/footer";
 import Mentor from "./features/MentorsPage/components/Mentor";
 import EditProfile from "./features/ProfileMentorForStudent/EditProfile";
 import SessionsOverview from "./features/Sessions/SessionsOverview";
+import Chat from "./features/Chat";
 function App() {
   return (
-    <>      
-        <Navbar></Navbar>
-        <Routes>
-          <Route path="/" element={<Login></Login>} />
-          <Route path="/changepassword" element={<ChangePassword></ChangePassword>} />
-          <Route path="/sendotp" element={<OtpPage></OtpPage>} />
-          <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
+    <>
+      <Navbar></Navbar>
+      <Routes>
+        <Route path="/" element={<Login></Login>} />
+        <Route path="/changepassword" element={<ChangePassword></ChangePassword>} />
+        <Route path="/sendotp" element={<OtpPage></OtpPage>} />
+        <Route path="/resetpassword" element={<ResetPassword></ResetPassword>} />
 
-          <Route path="/home" element={<Login></Login>} />
-          <Route path="/createAccount" element={<CreateAccount></CreateAccount>} />
-          <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
-          <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
+        <Route path="/home" element={<Login></Login>} />
+        <Route path="/createAccount" element={<CreateAccount></CreateAccount>} />
+        <Route path="/registerlearner" element={<RegisterLearner></RegisterLearner>}></Route>
+        <Route path="/registermentor" element={<RegisterMentor></RegisterMentor>}></Route>
 
-          <Route path="/landingpage" element={<Home></Home>}></Route>
-          <Route path="/dashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
-          <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
-          <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
-          <Route path="/sessions" element={<SessionsOverview></SessionsOverview>}></Route>
-          <Route path="/mentor/:name" element={<MentorDetails />} />
-          <Route path="/mentors/:id" element={<MentorProfilePage></MentorProfilePage>}></Route>
-          <Route path="/editprofile" element={<EditProfile></EditProfile>}></Route>
-          
-        
+        <Route path="/landingpage" element={<Home></Home>}></Route>
+        <Route path="/dashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
+        <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
+        <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
+        <Route path="/sessions" element={<SessionsOverview></SessionsOverview>}></Route>
+        <Route path="/mentor/:name" element={<MentorDetails />} />
+        <Route path="/mentors/:id" element={<MentorProfilePage></MentorProfilePage>}></Route>
+        <Route path="/editprofile" element={<EditProfile></EditProfile>}></Route>
+        <Route path="/chat" element={<Chat />}></Route>
 
-        </Routes>
-        <Footer></Footer>
-      
+
+
+      </Routes>
+      <Footer></Footer>
+
 
       <ToastContainer />
 

@@ -12,27 +12,27 @@ import MenteesReviews from "./MenteesReviews";
 import type { Skill } from "../Auth/RegisterMentor/types";
 
 const MentorProfilePage = () => {
-  const { id } = useParams<{ id: string }>();   
+  const { id } = useParams<{ id: string }>();
   const [triggerMentor, { data: mentorData, isFetching, error }] =
     useLazyGetMentorByIdQuery();
 
   useEffect(() => {
     if (id) {
-      triggerMentor(id);     
+      triggerMentor(id);
     }
   }, [id, triggerMentor]);
 
 
   const mentor = mentorData?.data;
   console.log(mentor)
-  if (!mentor) return null;    
+  if (!mentor) return null;
 
   return (
     <div className="bg-white">
       <ProfileSection {...mentor} />
-      <AboutSection bio={mentor.bio} />
-      <SkillsSection skills={mentor.skills}/>
-      <MenteesReviews  />
+      <AboutSection bio={mentor.bio} id={mentor?.userId} />
+      <SkillsSection skills={mentor.skills} />
+      <MenteesReviews />
     </div>
   );
 };

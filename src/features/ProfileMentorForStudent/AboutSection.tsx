@@ -2,11 +2,22 @@
 import React from 'react';
 import { Button, Card, CardContent } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
-interface AboutProps  {
-    bio : string,
+import { useNavigate } from 'react-router-dom';
+interface AboutProps {
+    bio: string,
+    id: string,
 
 }
-const AboutSection = ({bio}:AboutProps) => {
+const AboutSection = ({ bio, id }: AboutProps) => {
+
+
+    const navegator = useNavigate();
+    const NavigateToChat = (id: string) => {
+        
+        navegator("/chat");
+    }
+
+
     return (
         <div dir="rtl" className="max-w-5xl mx-auto px-4 mt-16">
             {/* العنوان */}
@@ -29,7 +40,9 @@ const AboutSection = ({bio}:AboutProps) => {
                         <ChatIcon fontSize="small" sx={{ color: '#0003C7' }} />
                         يمكنك مراسلة كاتالين لطرح أي أسئلة قبل حجز الخدمة
                     </div>
-                    <Button variant="contained" className="!bg-blue-600 hover:!bg-blue-700">
+                    <Button variant="contained"
+                        className="!bg-blue-600 hover:!bg-blue-700"
+                        onClick={() => NavigateToChat(id)}>
                         تواصل الآن
                     </Button>
                 </CardContent>
