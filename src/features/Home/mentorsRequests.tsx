@@ -100,19 +100,19 @@ const MentorsRequests = () => {
       alert('يرجى ملء جميع الحقول');
       return;
     }
-    const teacherEmail = localStorage.getItem('teacherEmail');
-    const teacherId = localStorage.getItem('teacherId');
+    //const teacherEmail = localStorage.getItem('teacherEmail');
+    //const teacherId = localStorage.getItem('teacherId');
     const dateISO = `${interviewDate}T${interviewTime}:00.000Z`;
 
     const payload = {
-      email: teacherEmail,
+      email: interviewMentor.email,  // إيميل المدرس المختار
       name: `${interviewMentor.firstName} ${interviewMentor.lastName}`,
       date: dateISO,
       time: interviewTime,
       link: meetingLink,
-      teacherId: teacherId
+      teacherId: interviewMentor.id  // ID الخاص بالمدرس المختار
     };
-
+    console.log('Payload being sent:', payload); 
     try {
       const res = await fetch('http://academix1.runasp.net/api/dashboard/interview/Create', {
         method: 'POST',
