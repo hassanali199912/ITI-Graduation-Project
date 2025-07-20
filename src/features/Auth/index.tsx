@@ -139,7 +139,7 @@ const Login = () => {
           </h3>
         </div>
 
-        <div className="w-[70%] min-h-screen flex justify-center items-center">
+        <div className="w-[70%] min-h-screen flex justify-center items-center my-10">
           <div className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg">
             <h1 className="text-2xl font-bold mb-6 text-center text-black-600">سجل الدخول لحسابك</h1>
             <p className="mb-6 text-center text-gray-400">الرجاء تسجيل الدخول للمتابعة</p>
