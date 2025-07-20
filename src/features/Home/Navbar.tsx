@@ -93,6 +93,12 @@ const Navbar = () => {
               >
                 متابعة جلســـاتى
               </Link>
+              <Link
+                to="/points"
+                className="transition hover:text-white border border-blue-300 px-3 py-1.5 rounded-md hover:bg-blue-800"
+              >
+                خطط النقــــاط
+              </Link>
             </>
           )}
         </nav>

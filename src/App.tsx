@@ -22,6 +22,7 @@ import Footer from "./features/Home/footer";
 import Mentor from "./features/MentorsPage/components/Mentor";
 import EditProfile from "./features/ProfileMentorForStudent/EditProfile";
 import SessionsOverview from "./features/Sessions/SessionsOverview";
+import PointsOverview from "./features/Points/PointsOverview";
 function App() {
   return (
     <>      
@@ -42,6 +43,7 @@ function App() {
           <Route path="/dashboardMentor" element={<DashboardMentor></DashboardMentor>}></Route>
           <Route path="/mentors" element={<MentorsPage></MentorsPage>}></Route>
           <Route path="/sessions" element={<SessionsOverview></SessionsOverview>}></Route>
+          <Route path="/points" element={<PointsOverview/>}></Route>
           <Route path="/mentor/:name" element={<MentorDetails />} />
           <Route path="/mentors/:id" element={<MentorProfilePage></MentorProfilePage>}></Route>
           <Route path="/editprofile" element={<EditProfile></EditProfile>}></Route>

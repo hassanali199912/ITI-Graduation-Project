@@ -5,7 +5,7 @@ import type { SessionResponse } from "../Auth/RegisterMentor/types";
 import { Tabs, Tab } from "@mui/material";
 
 const tabs = [
-{ label: "الكل", value: "all" },
+  { label: "الكل", value: "all" },
   { label: "قيد الانتظار", value: 0 },
   { label: "تم القبول", value: 1 },
   { label: "مرفوضة", value: 2 },
@@ -22,7 +22,8 @@ const SessionsOverview = () => {
     PageSize: 10,
   };
 
-  const { data, isLoading, isError } = useGetSessionRequestByStudentIdQuery(payload);
+  const { data, isLoading, isError } =
+    useGetSessionRequestByStudentIdQuery(payload);
 
   const filteredSessions = data?.data.sessionRequest.filter(
     (session: SessionResponse) => {
@@ -33,9 +34,10 @@ const SessionsOverview = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-right">جلساتي</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-right">
+        جلساتي
+      </h1>
 
-      {/* Layout Tabs right + content left */}
       <div className="flex flex-row-reverse gap-6">
         {/* Tabs on the right */}
         <div className="w-48">
@@ -60,13 +62,19 @@ const SessionsOverview = () => {
 
         {/* Content */}
         <div className="flex-1">
-          {isLoading && <p className="text-center text-gray-500">جارٍ التحميل...</p>}
-          {isError && <p className="text-center text-red-500">حدث خطأ أثناء جلب الجلسات.</p>}
+          {isLoading && (
+            <p className="text-center text-gray-500">جارٍ التحميل...</p>
+          )}
+          {isError && (
+            <p className="text-center text-red-500">
+              حدث خطأ أثناء جلب الجلسات.
+            </p>
+          )}
           {filteredSessions?.length === 0 && (
             <p className="text-center text-gray-600">لا توجد جلسات حالياً.</p>
           )}
 
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
             {filteredSessions?.map((session: SessionResponse) => (
               <SessionCard key={session.id} session={session} />
             ))}

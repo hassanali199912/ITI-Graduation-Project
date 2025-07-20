@@ -22,7 +22,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-				primary: ["IBM Plex Sans Arabic", "sans-serif"],
+				// primary: ["IBM Plex Sans Arabic", "sans-serif"],
+        zein: ['"Zein"', 'sans-serif'],
 			},
       screens: {
         xs: "480px",
