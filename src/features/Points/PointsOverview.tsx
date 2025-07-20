@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 
 export default function OffersPage() {
+const token = localStorage.getItem("token");
   const handlePurchase = async (pointsAmount: number) => {
     try {
       const response = await fetch(
@@ -15,6 +16,7 @@ export default function OffersPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+             "Authorization": `Bearer ${token}`
           },
           body: JSON.stringify({
             pointsAmount: pointsAmount,
@@ -31,9 +33,9 @@ export default function OffersPage() {
       }
 
       const data = await response.json();
-
-      if (data?.paymentUrl) {
-        window.open(data.paymentUrl, "_blank");
+      console.log(data);
+      if (data?.data.paymentUrl) {
+        window.open(data.data.paymentUrl, "_blank");
       } else {
         alert("الرابط غير موجود في الاستجابة");
       }
