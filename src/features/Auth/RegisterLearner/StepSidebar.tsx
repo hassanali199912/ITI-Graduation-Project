@@ -119,7 +119,7 @@ const StepSidebar = ({ data, countries, specialists, graduationStatuses, skills,
                 )}
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-medium text-[#A3A3A3]">النوع:</span> {data.gender ? (
+                <span className="font-medium text-[#A3A3A3]">النوع:</span> {data.gender !== null && data.gender !== undefined ? (
                   <p className="text-lg text-gray-500 ">{getNameById(genders, data.gender)}</p>
                 ) : (
                   <img

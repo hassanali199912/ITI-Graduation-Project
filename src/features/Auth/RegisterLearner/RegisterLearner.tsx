@@ -39,12 +39,12 @@ const RegisterLearner = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    gender: 0,
+    gender: null,
     residenceCountryId: "",
     profilePictureUrl: "",
     bio: "",
     github: "",
-    connectProgramming: false,
+    connectProgramming:  null,
     levelId: "",
     graduationStatusId: "",
     specialistId: "",
@@ -53,11 +53,8 @@ const RegisterLearner = () => {
     learningInterests: [],
   });
 
-  
-  
-
   const nextStep = () => {
-    const error = validateStep(step, formData);
+    const error = validateStep(step, formData, genders);
     console.log("validation error:", error);
     if (error) {
       MySwal.fire({
@@ -78,7 +75,6 @@ const RegisterLearner = () => {
     <div className=" min-h-screen" dir='rtl'>
       
       <ProgressBar activeStep={step} totalSteps={4} />
-      
       
       <div className=" mx-auto flex bg-white overflow-hidden ">
         <CircularSteps  activeStep={step}/>

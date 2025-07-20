@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { TextField, MenuItem } from "@mui/material";
-import type  RegisterFormData  from "../../../domain/types/RegisterFormData"; 
+import type RegisterFormData from "../../../domain/types/RegisterFormData";
 import type { LookupItem } from "../../../domain/types/LookupItem";
 import { useGetLookupByTypeQuery } from "../../../redux/api/lookupApi";
 
 interface Props {
-  data: RegisterFormData; 
-  setData: (val: RegisterFormData) => void; 
+  data: RegisterFormData;
+  setData: (val: RegisterFormData) => void;
   onNext: () => void;
   genders: { id: number; name: string }[];
-  
+
 }
 
 const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
@@ -18,10 +18,6 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
 
   const { data: countriesResponse } = useGetLookupByTypeQuery("country");
   const countries = countriesResponse?.value ?? [];
-  
-  
-  const { data: nationalitiesResponse } = useGetLookupByTypeQuery("nationality");
-  const nationalities = nationalitiesResponse?.value ?? [];
 
   const [preview, setPreview] = useState<string>(data.profilePictureUrl || "");
 
@@ -72,7 +68,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
         </div>
       </div>
 
-      <form onSubmit={(e) => {e.preventDefault(); onNext();}}
+      <form onSubmit={(e) => { e.preventDefault(); onNext(); }}
         className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5"
       >
         <div className="flex flex-col">
@@ -88,7 +84,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               style: {
                 backgroundColor: "#F4F9FB",
                 borderRadius: 8,
-                border: "none", 
+                border: "none",
               },
               notched: false,
             }}
@@ -113,9 +109,9 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               style: {
                 backgroundColor: "#F4F9FB",
                 borderRadius: 8,
-                border: "none", 
+                border: "none",
               },
-              notched: false, 
+              notched: false,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
@@ -139,9 +135,9 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               style: {
                 backgroundColor: "#F4F9FB",
                 borderRadius: 8,
-                border: "none", 
+                border: "none",
               },
-              notched: false, 
+              notched: false,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
@@ -165,9 +161,9 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               style: {
                 backgroundColor: "#F4F9FB",
                 borderRadius: 8,
-                border: "none", 
+                border: "none",
               },
-              notched: false, 
+              notched: false,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
@@ -191,9 +187,9 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
               style: {
                 backgroundColor: "#F4F9FB",
                 borderRadius: 8,
-                border: "none", 
+                border: "none",
               },
-              notched: false, 
+              notched: false,
             }}
             sx={{
               "& .MuiOutlinedInput-notchedOutline": {
@@ -203,68 +199,42 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
           />
         </div>
 
-        {/*<div className="col-span-2 flex flex-col">
-          <label className="text-sm font-medium text-gray-800 mb-1 text-right">
-            العمر <span className="text-red-500">*</span>
-          </label>
-          <TextField
-            type="date"
-            variant="outlined"
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            value={data.birthDate}
-            onChange={(e) => setData({ ...data, birthDate: e.target.value })}
-            InputProps={{
-              style: {
-                backgroundColor: "#F4F9FB",
-                borderRadius: 8,
-                border: "none", 
-              },
-              notched: false, 
-            }}
-            sx={{
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "none",
-              },
-            }}
-          />
-        </div>*/}
-
         <div className="flex flex-col">
-  <label className="text-sm font-medium text-gray-800 mb-1 text-right">
-    النوع <span className="text-red-500">*</span>
-  </label>
+          <label className="text-sm font-medium text-gray-800 mb-1 text-right">
+            النوع <span className="text-red-500">*</span>
+          </label>
 
-  {genders.length > 0 ? (
-    <TextField
-      select
-      variant="outlined"
-      fullWidth
-      value={data.gender}
-      onChange={(e) => setData({ ...data, gender: Number(e.target.value) })}
-      InputProps={{
-        style: {
-          backgroundColor: "#F4F9FB",
-          borderRadius: 8,
-        },
-        notched: false,
-      }}
-      sx={{
-        "& .MuiOutlinedInput-notchedOutline": {
-          border: "none",
-        },
-      }}
-    >
-      {genders.map((g: LookupItem) => (
-        <MenuItem key={g.id} value={g.id}>
-          {g.name}
-        </MenuItem>
-      ))}
-    </TextField>
-  ) : (
-    <p className="text-gray-400 text-sm">جاري تحميل النوع...</p>
-  )}
-</div>
+          {genders.length > 0 ? (
+            <TextField
+              select
+              variant="outlined"
+              fullWidth
+              value={data.gender ?? ""}
+              onChange={(e) => setData({ ...data, gender: Number(e.target.value) })}
+              InputProps={{
+                style: {
+                  backgroundColor: "#F4F9FB",
+                  borderRadius: 8,
+                },
+                notched: false,
+              }}
+              sx={{
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+              }}
+            >
+              
+              {genders.map((g: LookupItem) => (
+                <MenuItem key={g.id} value={g.id}>
+                  {g.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          ) : (
+            <p className="text-gray-400 text-sm">جاري تحميل النوع...</p>
+          )}
+        </div>
 
 
         <div className="flex flex-col">
@@ -285,35 +255,11 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
           >
             {countries.map((country: LookupItem) => (
               <MenuItem key={country.id} value={country.id}>
-              {country.name}
-            </MenuItem>
-            ))}
-          </TextField>
-        </div>
-
-        {/*<div className="col-span-2 flex flex-col">
-          <label className="text-sm font-medium text-gray-800 mb-1 text-right">
-            ما هي جنسيتك؟ <span className="text-red-500">*</span>
-          </label>
-          <TextField
-            select
-            variant="outlined"
-            fullWidth
-            value={data.nationalityId}
-            onChange={(e) => setData({ ...data, nationalityId: e.target.value })}
-            InputProps={{
-              style: {
-                borderRadius: 8,
-              },
-            }}
-          >
-            {nationalities.map((n: LookupItem) => (
-              <MenuItem key={n.id} value={n.id}>
-                {n.name}
+                {country.name}
               </MenuItem>
             ))}
           </TextField>
-        </div>*/}
+        </div>
 
         <div className="col-span-2 flex justify-between mt-6 items-center">
           <button
@@ -337,7 +283,7 @@ const Step1PersonalInfo = ({ data, setData, onNext }: Props) => {
             لديك حساب؟{" "}
             <span
               className="cursor-pointer text-[#A3A3A3] hover:text-[#0003C7] transition"
-              onClick={() => window.location.href = "/"} 
+              onClick={() => window.location.href = "/"}
             >
               سجل دخول
             </span>

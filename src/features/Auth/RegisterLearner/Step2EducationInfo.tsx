@@ -131,7 +131,13 @@ const Step2EducationInfo = ({ data, setData, onNext, onBack }: Props) => {
           </label>
           <RadioGroup
             row
-            value={data.connectProgramming ? "نعم" : "لا"}
+            value={
+              data.connectProgramming === null
+                ? ""               // ما فيش اختيار
+                : data.connectProgramming
+                ? "نعم"
+                : "لا"
+            }
             onChange={(e) =>
               setData({ ...data, connectProgramming: e.target.value === "نعم" })
             }
