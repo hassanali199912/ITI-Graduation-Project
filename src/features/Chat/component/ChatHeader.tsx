@@ -1,4 +1,8 @@
 import React from "react";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 interface ChatHeaderProps {
   avatar: string;
@@ -7,17 +11,20 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ avatar, name, status = "online" }) => (
-  <div className="flex items-center gap-3 p-4 border-b border-base-300 bg-base-100">
-    <div className="avatar">
-      <div className="w-10 rounded-full">
-        <img src={avatar} alt={name} />
-      </div>
-    </div>
-    <div>
-      <div className="font-semibold">{name}</div>
-      <div className="text-xs text-base-content/60">{status}</div>
-    </div>
-  </div>
+  <>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2, bgcolor: 'background.default', borderBottom: 1, borderColor: 'divider' }}>
+      <Avatar src={avatar} alt={name} sx={{ width: 40, height: 40, mr: 2 }} />
+      <Box>
+        <Typography variant="subtitle1" fontWeight={600}>
+          {name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {status}
+        </Typography>
+      </Box>
+    </Box>
+    <Divider />
+  </>
 );
 
 export default ChatHeader; 

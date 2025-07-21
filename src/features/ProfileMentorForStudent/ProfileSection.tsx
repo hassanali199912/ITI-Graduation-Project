@@ -7,6 +7,20 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import type { Teacher } from '../Auth/RegisterMentor/types';
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import Skeleton from '@mui/material/Skeleton';
+
+export const ProfileSectionSkeleton = () => (
+  <div className="bg-white p-6 rounded-lg shadow mb-6">
+    <div className="flex items-center gap-6">
+      <Skeleton variant="circular" width={80} height={80} />
+      <div className="flex-1">
+        <Skeleton variant="text" width={160} height={32} />
+        <Skeleton variant="text" width={100} height={24} />
+      </div>
+    </div>
+    <Skeleton variant="rectangular" width="100%" height={40} style={{ marginTop: 16 }} />
+  </div>
+);
 
 const ProfileSection = ({
   id,

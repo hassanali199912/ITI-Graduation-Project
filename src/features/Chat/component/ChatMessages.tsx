@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from "react";
+import Box from "@mui/material/Box";
+// TODO: Update Message component to use MUI
 import { Message } from "./Message";
 
 interface MessageType {
@@ -29,9 +31,18 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ className, messages }) => {
     }, [messages]);
 
     return (
-        <div
+        <Box
             ref={messagesContainerRef}
-            className={`flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-tl from-blue-800/15 to-white ${className || ''}`}
+            sx={{
+                flex: 1,
+                overflowY: 'auto',
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                background: 'linear-gradient(135deg, #1e3a8a22 0%, #fff 100%)',
+            }}
+            className={className}
         >
             {messages.map((message) => (
                 <Message
@@ -43,7 +54,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ className, messages }) => {
                     direction={message.direction}
                 />
             ))}
-        </div>
+        </Box>
     );
 };
 

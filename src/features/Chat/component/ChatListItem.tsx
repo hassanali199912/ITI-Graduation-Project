@@ -1,10 +1,19 @@
 import React from "react";
+import ListItem from "@mui/material/ListItem";
+import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import ListItemButton from "@mui/material/ListItemButton";
 
 interface Chat {
-  id: number;
-  name: string;
+  senderId: string;
+  receiverId: string;
   lastMessage: string;
-  avatar: string;
+  senderName: string;
+  receiverName: string;
+  sentAt: string;
+  profilePictureUrl: string | null;
+  messages: any[];
 }
 
 interface ChatListItemProps {
@@ -14,22 +23,33 @@ interface ChatListItemProps {
 }
 
 const ChatListItem: React.FC<ChatListItemProps> = ({ chat, isSelected = false, onClick }) => (
-  <li 
-    className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200 transition ${isSelected ? 'bg-base-200' : ''}`}
-    onClick={onClick}
-  >
-    <div className="avatar">
-      <div className="w-12 rounded-full">
-        <img src={chat.avatar} alt={chat.name} />
-      </div>
-    </div>
-    <div>
-      <div className="font-semibold">{chat.name}</div>
-      <div className="text-xs text-base-content/60 truncate max-w-[140px]">
-        {chat.lastMessage}
-      </div>
-    </div>
-  </li>
+  <ListItem disablePadding>
+    <ListItemButton
+      selected={isSelected}
+      onClick={onClick}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2,
+        px: 2,
+        py: 1.5,
+        cursor: 'pointer',
+        '&:hover': { backgroundColor: 'action.hover' },
+        backgroundColor: isSelected ? 'action.selected' : 'inherit',
+        transition: 'background-color 0.2s',
+      }}
+    >
+      <Avatar src={chat.profilePictureUrl || undefined} alt={chat.receiverName} sx={{ width: 48, height: 48, mr: 2 }} />
+      <Box>
+        <Typography variant="subtitle1" fontWeight={600} noWrap>
+          {chat.receiverName}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" noWrap sx={{ maxWidth: 140 }}>
+          {chat.lastMessage}
+        </Typography>
+      </Box>
+    </ListItemButton>
+  </ListItem>
 );
 
 export default ChatListItem; 

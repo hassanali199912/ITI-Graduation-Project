@@ -7,11 +7,11 @@ import { MdAddBox } from "react-icons/md"; // Material Icons
 
 
 type Props = {
-  setView: (view: 'overview' | 'students' | 'mentors'|'mentorsrequests'|'addskill'|'AcceptedMentors'|'RejectedMentors') => void;
+  setView: (view: 'overview' | 'students' | 'mentors' | 'mentorsrequests' | 'addskill' | 'AcceptedMentors' | 'RejectedMentors') => void;
 };
 
 const Sidebar: React.FC<Props> = ({ setView }) => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen w-64 bg-blue-800 text-white flex flex-col p-6 shadow-lg sticky top-0">
 
@@ -22,32 +22,36 @@ const Sidebar: React.FC<Props> = ({ setView }) => {
           <span>الصفحة الرئيسية</span>
           <FaHome />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('mentorsrequests')}>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('mentorsrequests')}>
           <span>الطلبات</span>
           <FaChalkboardTeacher />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('AcceptedMentors')}>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('AcceptedMentors')}>
           <span> الطلبات المقبوله</span>
           <FaChalkboardTeacher />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('RejectedMentors')}>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('RejectedMentors')}>
           <span> الطلبات المرفوضه</span>
           <FaChalkboardTeacher />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('overview')}>
-                  <span>لوحة التحكم</span>
-        <MdDashboard></MdDashboard>
-                </li>
-        
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('students')}>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('overview')}>
+          <span>لوحة التحكم</span>
+          <MdDashboard></MdDashboard>
+        </li>
+
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('students')}>
           <span>الطلاب</span>
           <FaUserGraduate />
         </li>
-        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer"onClick={() => setView('addskill')}>
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('addskill')}>
           <span>اضافة مهارة</span>
           <MdAddBox />
         </li>
-        
+        <li className="flex items-center justify-end gap-3 hover:text-yellow-400 cursor-pointer" onClick={() => setView('Messages')}>
+          <span>الرسائل</span>
+          <MdAddBox />
+        </li>
+
         <li className="flex items-center justify-end gap-3 hover:text-red-400 cursor-pointer mt-auto">
           <span>تسجيل الخروج</span>
           <FaSignOutAlt />

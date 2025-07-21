@@ -1,6 +1,7 @@
 import React from 'react';
 import { Chip } from '@mui/material';
 import type { Skill } from '../Auth/RegisterMentor/types';
+import Skeleton from '@mui/material/Skeleton';
 
 // const skills = [
 //     'C#', '.NET', 'SQL', 'AWS', 'Typescript', 'JavaScript', 'Angular', 'Coding',
@@ -43,5 +44,16 @@ const SkillsSection = ({skills}:SkillsSectionProps) => {
         </div>
     );
 };
+
+export const SkillsSectionSkeleton = () => (
+  <div className="p-4">
+    <Skeleton variant="text" width={100} height={32} style={{ marginBottom: 8 }} />
+    <div className="flex gap-2 flex-wrap">
+      {[...Array(4)].map((_, i) => (
+        <Skeleton key={i} variant="rectangular" width={80} height={32} style={{ borderRadius: 16 }} />
+      ))}
+    </div>
+  </div>
+);
 
 export default SkillsSection;

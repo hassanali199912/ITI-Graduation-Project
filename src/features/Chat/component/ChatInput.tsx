@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 interface ChatInputProps {
   onSendMessage: (content: string) => void;
@@ -16,18 +19,25 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-base-100 border-t border-base-300 flex gap-2">
-      <input
-        type="text"
+    <Box component="form" onSubmit={handleSubmit} sx={{ p: 2, bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider', display: 'flex', gap: 2 }}>
+      <TextField
+        fullWidth
         placeholder="Type a message"
-        className="input input-bordered flex-1"
+        size="small"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        variant="outlined"
       />
-      <button className="btn bg-blue-800 text-white" type="submit" disabled={!message.trim()}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={!message.trim()}
+        sx={{ minWidth: 90 }}
+      >
         Send
-      </button>
-    </form>
+      </Button>
+    </Box>
   );
 };
 

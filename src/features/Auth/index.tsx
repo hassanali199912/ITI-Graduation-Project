@@ -50,7 +50,7 @@ const Login = () => {
     if (!validate()) return;
 
     try {
-      const res = await trigger({
+      const res: any = await trigger({
         email: formData.email,
         password: formData.password,
       }).unwrap();
@@ -61,28 +61,31 @@ const Login = () => {
       const role = res?.data?.roles?.[0];
       const email = res?.data?.email;
       const personId = res?.data?.personId;
+      const userId = res?.data?.userId;
       console.log("Response from API:", res);
       if (res?.success && res?.data) {
         const { accessToken, email, personId } = res.data;
-      
+
         localStorage.setItem('accessToken', accessToken || '');
         localStorage.setItem('teacherEmail', email || '');
         localStorage.setItem('teacherId', personId || '');
-      
-        
+        localStorage.setItem('userId', userId || '');
+        localStorage.setItem('id', userId || '');
+
+
       }
-      
+
 
       if (token) {
         localStorage.setItem("token", token);
 
         if (role === "Student") {
           localStorage.setItem("studentId", personId);
-           window.dispatchEvent(new Event("roleUpdated"));
+          window.dispatchEvent(new Event("roleUpdated"));
 
         } else if (role === "Teacher") {
           localStorage.setItem("teacherId", personId);
-           window.dispatchEvent(new Event("roleUpdated"));
+          window.dispatchEvent(new Event("roleUpdated"));
         }
 
         if (email?.toLowerCase() === "demo@gmail.com" && formData.password === "Admin@123") {
@@ -91,7 +94,7 @@ const Login = () => {
         } else if (role) {
           localStorage.setItem("role", role.toLowerCase());
           window.dispatchEvent(new Event("roleUpdated"));
-          
+
         }
 
         navigate("/landingpage");

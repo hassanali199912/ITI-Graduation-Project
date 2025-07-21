@@ -6,10 +6,8 @@ import OtpPage from "./features/Auth/otpPage"
 import RegisterLearner from "./features/Auth/RegisterLearner/RegisterLearner";
 import RegisterMentor from "./features/Auth/RegisterMentor/RegisterMentor";
 import ResetPassword from "./features/Auth/resetPassword"
-import MentorsList from "./features/MentorsPage/components/MentorsList";
 import MentorsPage from './features/MentorsPage/MentorsPage';
 import MentorProfilePage from "./features/ProfileMentorForStudent/MentorProfilePage";
-import Index from "./view/Index"
 
 import { Routes, Route } from 'react-router-dom';
 
@@ -19,7 +17,6 @@ import DashboardMentor from "./features/Home/dashboardMentor";
 import MentorDetails from "./features/Home/dataofmentor";
 import Navbar from "./features/Home/Navbar";
 import Footer from "./features/Home/footer";
-import Mentor from "./features/MentorsPage/components/Mentor";
 import EditProfile from "./features/ProfileMentorForStudent/EditProfile";
 import SessionsOverview from "./features/Sessions/SessionsOverview";
 import Chat from "./features/Chat";

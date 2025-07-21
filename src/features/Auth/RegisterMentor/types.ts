@@ -154,6 +154,7 @@ export type SessionResponse = {
 // الكيان الأساسي: Teacher / Mentor
 export interface Teacher {
   id: string;
+  userId: string;
   firstName: string;
   lastName: string;
   bio: string;

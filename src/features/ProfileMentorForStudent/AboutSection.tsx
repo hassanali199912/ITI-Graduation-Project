@@ -1,21 +1,33 @@
 // components/AboutSection.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Card, CardContent } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Skeleton from '@mui/material/Skeleton';
+
 interface AboutProps {
     bio: string,
     id: string,
+    userId: string,
 
 }
-const AboutSection = ({ bio, id }: AboutProps) => {
+const AboutSection = ({ bio, id, userId }: AboutProps) => {
+    const [open, setOpen] = useState(false);
+    const navigator = useNavigate();
 
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
-    const navegator = useNavigate();
-    const NavigateToChat = (id: string) => {
-        
-        navegator("/chat");
-    }
+    const handleConfirm = () => {
+        setOpen(false);
+        console.log("tjis js sdjsj id", userId);
+        navigator("/chat", { state: { mentorId: id, teacherId: userId } });
+    };
 
 
     return (
@@ -40,19 +52,47 @@ const AboutSection = ({ bio, id }: AboutProps) => {
                         <ChatIcon fontSize="small" sx={{ color: '#0003C7' }} />
                         يمكنك مراسلة كاتالين لطرح أي أسئلة قبل حجز الخدمة
                     </div>
-                    <Button variant="contained"
+                    <Button
+                        variant="contained"
                         className="!bg-blue-600 hover:!bg-blue-700"
-                        onClick={() => NavigateToChat(id)}>
+                        onClick={handleOpen}
+                    >
                         تواصل الآن
                     </Button>
                 </CardContent>
             </Card>
 
+            {/* Confirmation Dialog */}
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>تأكيد التواصل</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        هل أنت متأكد أنك تريد التواصل مع هذا المرشد؟
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        إلغاء
+                    </Button>
+                    <Button onClick={handleConfirm} color="primary" autoFocus>
+                        نعم، تواصل
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             {/* الخط الفاصل الداخلي */}
             <div className="w-full h-[1.5px] bg-gray-200 my-12" />
         </div>
     );
 };
+
+export const AboutSectionSkeleton = () => (
+    <div className="max-w-5xl mx-auto px-4 mt-16">
+        <Skeleton variant="text" width={120} height={32} style={{ marginBottom: 8 }} />
+        <Skeleton variant="rectangular" width="100%" height={60} style={{ marginBottom: 16 }} />
+        <Skeleton variant="text" width={80} height={24} style={{ marginBottom: 16 }} />
+        <Skeleton variant="rectangular" width="100%" height={80} />
+    </div>
+);
 
 export default AboutSection;

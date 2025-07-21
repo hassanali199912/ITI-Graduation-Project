@@ -5,9 +5,9 @@ import {
   useLazyGetMentorByIdQuery,
 } from "../Auth/api/mentorsApi";
 
-import ProfileSection from "./ProfileSection";
-import AboutSection from "./AboutSection";
-import SkillsSection from "./SkillsSection";
+import ProfileSection, { ProfileSectionSkeleton } from "./ProfileSection";
+import AboutSection, { AboutSectionSkeleton } from "./AboutSection";
+import SkillsSection, { SkillsSectionSkeleton } from "./SkillsSection";
 import MenteesReviews from "./MenteesReviews";
 import type { Skill } from "../Auth/RegisterMentor/types";
 
@@ -22,15 +22,24 @@ const MentorProfilePage = () => {
     }
   }, [id, triggerMentor]);
 
-
   const mentor = mentorData?.data;
   console.log(mentor)
+  if (isFetching) {
+    return (
+      <div className="bg-white">
+        <ProfileSectionSkeleton />
+        <AboutSectionSkeleton />
+        <SkillsSectionSkeleton />
+      </div>
+    );
+  }
+
   if (!mentor) return null;
 
   return (
     <div className="bg-white">
       <ProfileSection {...mentor} />
-      <AboutSection bio={mentor.bio} id={mentor?.userId} />
+      <AboutSection bio={mentor?.bio} id={mentor?.userId || ""} userId={mentor?.userId || ""} />
       <SkillsSection skills={mentor.skills} />
       <MenteesReviews />
     </div>
