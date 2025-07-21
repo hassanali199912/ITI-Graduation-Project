@@ -24,7 +24,9 @@ const token = localStorage.getItem("token");
             currency: "",
             description: "",
             reference: "",
-          }),
+            successUrl: "http://localhost:5173/payment-success",
+            cancleUrl: "http://localhost:5173/payment-cancel"
+          })
         }
       );
 
@@ -57,7 +59,7 @@ const token = localStorage.getItem("token");
         variant="h4"
         align="center"
         gutterBottom
-        className="text-indigo-600 font-bold"
+        className="text-blue-700 font-bold"
       >
         خطط شراء النقاط
       </Typography>
@@ -79,7 +81,7 @@ const token = localStorage.getItem("token");
             sx={{ borderRadius: "16px" }}
           >
             <CardContent>
-              <Typography variant="h6" color="primary" gutterBottom>
+              <Typography variant="h6"  gutterBottom sx={{color:'#1D4ED8'}}>
                 {offer.title}
               </Typography>
 
@@ -92,16 +94,23 @@ const token = localStorage.getItem("token");
               </Typography>
             </CardContent>
 
-            <CardActions className="px-4 pb-4">
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={() => handlePurchase(offer.points)}
-              >
-                شراء الآن
-              </Button>
-            </CardActions>
+            <CardActions className="px-4 pb-4 ">
+  <Button
+    variant="contained"
+    fullWidth
+    onClick={() => handlePurchase(offer.points)}
+    sx={{
+      backgroundColor: '#1D4ED8', 
+      color: '#fff',
+      '&:hover': {
+        backgroundColor: '#1E40AF', 
+      },
+    }}
+  >
+    شراء الآن
+  </Button>
+</CardActions>
+
           </Card>
         ))}
       </div>

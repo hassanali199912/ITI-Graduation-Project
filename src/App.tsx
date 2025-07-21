@@ -21,6 +21,8 @@ import EditProfile from "./features/ProfileMentorForStudent/EditProfile";
 import SessionsOverview from "./features/Sessions/SessionsOverview";
 import Chat from "./features/Chat";
 import PointsOverview from "./features/Points/PointsOverview";
+import PaymentSuccess from "./features/Payment/payment";
+import PaymentCancel from "./features/Payment/paymentCancel";
 function App() {
   return (
     <>
@@ -46,6 +48,8 @@ function App() {
         <Route path="/mentors/:id" element={<MentorProfilePage></MentorProfilePage>}></Route>
         <Route path="/editprofile" element={<EditProfile></EditProfile>}></Route>
         <Route path="/chat" element={<Chat />}></Route>
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-cancel" element={<PaymentCancel />} />
 
 
 

@@ -14,9 +14,10 @@ interface AboutProps {
     bio: string,
     id: string,
     userId: string,
+    firstName: string
 
 }
-const AboutSection = ({ bio, id, userId }: AboutProps) => {
+const AboutSection = ({ bio, id, userId, firstName }: AboutProps) => {
     const [open, setOpen] = useState(false);
     const navigator = useNavigate();
 
@@ -50,7 +51,7 @@ const AboutSection = ({ bio, id, userId }: AboutProps) => {
                 <CardContent className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6">
                     <div className="text-gray-700 text-sm text-center sm:text-right">
                         <ChatIcon fontSize="small" sx={{ color: '#0003C7' }} />
-                        يمكنك مراسلة كاتالين لطرح أي أسئلة قبل حجز الخدمة
+                        يمكنك مراسلة {firstName} لطرح أي أسئلة قبل حجز الخدمة
                     </div>
                     <Button
                         variant="contained"

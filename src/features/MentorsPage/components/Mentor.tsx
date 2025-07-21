@@ -94,14 +94,26 @@ export default function Mentor(props: MentorCardProps) {
         </Typography>
 
         <Button
-          component={Link}
-          to={`/mentors/${id}`}
-          variant="contained"
-          size="small"
-          sx={{ fontSize: "10px", borderRadius: 1 }}
-        >
-          عرض الملف
-        </Button>
+  component={Link}
+  to={`/mentors/${id}`}
+  variant="contained"
+  size="small"
+  sx={{
+    fontSize: "11px",
+    borderRadius: "8px",
+    backgroundColor: "#1D4ED8", // blue-700
+    color: "#ffffff",
+    textTransform: "none",
+    px: 2,
+    py: 0.5,
+    '&:hover': {
+      backgroundColor: "#1E40AF", // blue-800
+    },
+  }}
+>
+  عرض الملف
+</Button>
+
       </CardActions>
     </Card>
   );
