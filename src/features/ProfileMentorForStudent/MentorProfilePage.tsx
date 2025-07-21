@@ -30,9 +30,9 @@ const MentorProfilePage = () => {
   return (
     <div className="bg-white">
       <ProfileSection {...mentor} />
-      <AboutSection bio={mentor.bio} id={mentor?.userId} />
+      <AboutSection bio={mentor.bio} id={mentor?.userId} firstName={mentor.firstName}/>
       <SkillsSection skills={mentor.skills} />
-      <MenteesReviews />
+      <MenteesReviews teacherId={id!} studentId={localStorage.getItem('studentId') || ''} />
     </div>
   );
 };

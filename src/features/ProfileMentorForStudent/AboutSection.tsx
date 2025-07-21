@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 interface AboutProps {
     bio: string,
     id: string,
+    firstName: string,
 
 }
-const AboutSection = ({ bio, id }: AboutProps) => {
+const AboutSection = ({ bio, id , firstName }: AboutProps) => {
 
 
     const navegator = useNavigate();
@@ -38,7 +39,7 @@ const AboutSection = ({ bio, id }: AboutProps) => {
                 <CardContent className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6">
                     <div className="text-gray-700 text-sm text-center sm:text-right">
                         <ChatIcon fontSize="small" sx={{ color: '#0003C7' }} />
-                        يمكنك مراسلة كاتالين لطرح أي أسئلة قبل حجز الخدمة
+                        يمكنك مراسلة {firstName} لطرح أي أسئلة قبل حجز الخدمة
                     </div>
                     <Button variant="contained"
                         className="!bg-blue-600 hover:!bg-blue-700"

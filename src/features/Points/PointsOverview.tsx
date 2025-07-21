@@ -24,7 +24,9 @@ const token = localStorage.getItem("token");
             currency: "",
             description: "",
             reference: "",
-          }),
+            successUrl: "http://localhost:5173/payment-success",
+            cancleUrl: "http://localhost:5173/payment-cancel"
+          })
         }
       );
 
