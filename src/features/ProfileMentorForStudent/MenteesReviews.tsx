@@ -116,6 +116,14 @@ const MenteesReviews: React.FC<MenteesReviewsProps> = ({ teacherId, studentId })
   const [comments, setComments] = React.useState<CommentData[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
+  // Get user role from localStorage
+  const userRole = localStorage.getItem('role');
+
+  // Don't render anything if user is a teacher
+  if (userRole === 'teacher') {
+    return null;
+  }
+
   // Fetch comments on component mount
   React.useEffect(() => {
     const fetchComments = async () => {
